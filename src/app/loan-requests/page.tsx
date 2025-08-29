@@ -1,7 +1,11 @@
+import TableGrid from "../components/forms/tableGrid"
+import loanInfo from "@/docs/loan_request_info.json"
+
 const LoanReq = () => {
-    return(
-        <div>
-            Loan
+    const tableTitle = ["loan_id", "name", "car", "borrow_date", "return_data"]
+    return (
+        <div className="mx-10 flex h-[calc(100vh-11rem)]">
+            <div className="flex-1"><TableGrid formTitle="Loan Requests" tableTitle={tableTitle} tableContent={loanInfo}></TableGrid></div>
         </div>
     )
 }
