@@ -7,7 +7,7 @@ export default function Home() {
   ]
   return (
     <div className="mx-10 flex h-[calc(100vh-11rem)]">
-      <div className="flex-1"><TableGrid formTitle="Vehicle" tableTitle={tableTitle} tableContent={vehicleContent}></TableGrid></div>
+      <div className="flex-1"><TableGrid formTitle="Vehicle" tableTitle={tableTitle} tableContent={vehicleContent} pushQuery={tableTitle[0]}></TableGrid></div>
     </div>
   );
 }
