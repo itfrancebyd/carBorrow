@@ -1,7 +1,8 @@
 'use client'
 import { useRouter, useSearchParams } from "next/navigation";
 import { FC, useEffect, useState } from "react"
-import PopModelForm from "./popModel";
+import PopModalForm from "./popModal";
+import Link from "next/link";
 
 interface tableGridProp {
     formTitle: string,
@@ -14,13 +15,14 @@ const TableGrid: FC<tableGridProp> = ({ formTitle, tableTitle, tableContent, pus
     const [isOpen, setIsOpen] = useState(false)
     const [currentNumber, setCurrentNumber] = useState('')
     const searchParam = useSearchParams()
-
     const router = useRouter()
+
     const handleClick = (getPushQuery: string) => {
         router.push(`?${pushQuery}=${getPushQuery}`)
         setCurrentNumber(getPushQuery)
         setIsOpen(true)
     }
+
     const handleClose = () => {
         const params = new URLSearchParams(window.location.search)
         params.delete(pushQuery)
@@ -30,7 +32,7 @@ const TableGrid: FC<tableGridProp> = ({ formTitle, tableTitle, tableContent, pus
         setIsOpen(false)
         setCurrentNumber('')
     }
-    
+
     useEffect(() => {
         if (searchParam.has(pushQuery)) {
             const requestQuery = searchParam.get(pushQuery)
@@ -44,7 +46,10 @@ const TableGrid: FC<tableGridProp> = ({ formTitle, tableTitle, tableContent, pus
     return (
         <div className="relative h-full text-[#494949]">
             <div className="bg-white h-full py-5 px-8 rounded-xl overflow-y-scroll">
-                <div className="font-semibold text-lg py-5">{formTitle}</div>
+                <div className="flex justify-between py-5">
+                    <div className="font-semibold text-lg">{formTitle}</div>
+                    <Link href={`/addvehicle`} className="bg-[#26361C] px-3 text-white cursor-pointer">add new</Link>
+                </div>
                 <table className="w-full table-fixed">
                     <thead>
                         <tr className="h-10 bg-[#26361C] text-white">
@@ -66,7 +71,7 @@ const TableGrid: FC<tableGridProp> = ({ formTitle, tableTitle, tableContent, pus
             </div>
             <div className={`${isOpen ? 'absolute top-0 left-1 w-full h-full bg-white z-40 p-7' : 'hidden'} `}>
                 <button onClick={handleClose} className="text-3xl hover:cursor-pointer absolute right-6">x</button>
-                <PopModelForm currentID={currentNumber}></PopModelForm>
+                <PopModalForm currentID={currentNumber}></PopModalForm>
             </div>
         </div>
     )
