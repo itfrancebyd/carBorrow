@@ -1,6 +1,6 @@
 const AddNew = () => {
     return (
-        <div className="bg-red-700">
+        <div>
             <>page</>
         </div>
     )

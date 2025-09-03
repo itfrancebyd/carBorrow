@@ -1,6 +1,6 @@
-import Modal from "@/app/components/modalUI";
+import Modal from "@/app/components/modalUI"
 
-const AddNewModal = () => {
+const Page = () => {
     return (
         <Modal>
             <div>form</div>
@@ -8,4 +8,4 @@ const AddNewModal = () => {
     )
 }
 
-export default AddNewModal
+export default Page

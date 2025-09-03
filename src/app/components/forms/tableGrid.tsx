@@ -48,7 +48,7 @@ const TableGrid: FC<tableGridProp> = ({ formTitle, tableTitle, tableContent, pus
             <div className="bg-white h-full py-5 px-8 rounded-xl overflow-y-scroll">
                 <div className="flex justify-between py-5">
                     <div className="font-semibold text-lg">{formTitle}</div>
-                    <Link href={`/addvehicle`} className="bg-[#26361C] px-3 text-white cursor-pointer">add new</Link>
+                    <Link href="/addvehicle" className="bg-[#26361C] px-3 text-white cursor-pointer">add new</Link>
                 </div>
                 <table className="w-full table-fixed">
                     <thead>
