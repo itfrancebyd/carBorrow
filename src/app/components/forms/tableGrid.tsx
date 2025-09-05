@@ -49,7 +49,11 @@ const TableGrid: FC<tableGridProp> = ({ formTitle, tableTitle, tableContent, pus
             <div className="bg-white h-full py-5 px-8 rounded-xl overflow-y-scroll">
                 <div className="flex justify-between py-5">
                     <div className="font-semibold text-lg">{formTitle}</div>
-                    <Link href={`/${buttonLink}`} className="bg-[#26361C] px-3 text-white cursor-pointer">add new</Link>
+                    <div className="flex gap-3">
+                        <button className="bg-[#26361C] hover:bg-[#7a856b] text-white px-3 cursor-pointer flex items-center">import</button>
+                        <button className="bg-[#26361C] hover:bg-[#7a856b] text-white px-3 cursor-pointer flex items-center">export</button>
+                        <Link href={`/${buttonLink}`} className="bg-[#26361C] hover:bg-[#7a856b] px-3 text-white cursor-pointer flex items-center">add new</Link>
+                    </div>
                 </div>
                 <table className="w-full table-fixed">
                     <thead>

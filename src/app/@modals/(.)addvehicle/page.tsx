@@ -1,9 +1,10 @@
 import Modal from "@/app/components/modalUI"
+import NewVehiclesForm from "@/app/components/forms/newVehiclesForm"
 
 const Page = () => {
     return (
-        <Modal title="Add New Vehicles">
-            <div>form</div>
+        <Modal title="Add New Vehicle">
+            <NewVehiclesForm></NewVehiclesForm>
         </Modal>
     )
 }
