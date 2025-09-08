@@ -1,15 +1,21 @@
 'use client'
 import Modal from "@/app/components/modalUI"
-import { useState } from "react"
+import { useRef, useState } from "react"
 
 const ImportVehicleModal = () => {
     const [fileEnter, setFileEnter] = useState(false)
     const [isFile, setFile] = useState<File>()
+    const fileInputRef = useRef<HTMLInputElement | null>(null)
 
     const handleDrop = (event: React.DragEvent) => {
         event.preventDefault()
         const item = event.dataTransfer
         console.log("🚀 ~ handleDrop ~ item:", item)
+        const files = Array.from(event.dataTransfer.files).filter(
+            (file) => file.name.endsWith(".xls") || file.name.endsWith(".xlsx")
+        );
+
+        console.log("Dropped Excel files:", files);
         // if (event.dataTransfer.items) {
         //     [...event.dataTransfer.items].forEach((item, i) => {
         //         if (item.kind === "file") {
@@ -28,10 +34,14 @@ const ImportVehicleModal = () => {
         // }
     }
     const handleSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-        if(event.target.files){
-            setFile(event.target.files[0])
-        }
+        // if (event.target.files) {
+        //     setFile(event.target.files[0])
+        // }
         console.log("file selected")
+        const files = Array.from(event.target.files ?? []).filter(
+            (file) => file.name.endsWith(".xls") || file.name.endsWith(".xlsx")
+        );
+        console.log("Selected Excel files:", files);
     }
 
     return (
@@ -52,10 +62,19 @@ const ImportVehicleModal = () => {
                             <div className="font-semibold">Drag and drop files to upload</div>
                             <div className="text-sm text-gray-500">Support file format: Excel</div>
                         </div>
-                        <form>
-                            <input type="file" onChange={handleSelect}></input>
-                        </form>
-                        <button className="bg-[#26361C] text-white px-3 py-2 rounded-xl hover:bg-[#7a856b] cursor-pointer">Select files</button>
+                        <input
+                            type="file"
+                            onChange={handleSelect}
+                            ref={fileInputRef}
+                            accept=".xls,.xlsx,application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                            className="hidden"
+                        ></input>
+                        <button
+                            type="button"
+                            className="bg-[#26361C] text-white px-3 py-2 rounded-xl hover:bg-[#7a856b] cursor-pointer"
+                            onClick={() => fileInputRef.current?.click()}
+                        >Select files
+                        </button>
                     </div>
                 </div>
                 <div className="border border-[#26361C] rounded-2xl">
