@@ -1,23 +1,42 @@
 [
     {
-        "loan_id": "1245677fsf8",
-        "name": "hhhhhhhh",
-        "car": "red",
-        "borrow_date": "blue",
-        "return_data": "blue"
+        "loan_id": "LN-1001",
+        "name": "Alice Dupont",
+        "car": "Tesla Model 3",
+        "borrow_date": "2025-09-01",
+        "return_date": "2025-09-05",
+        "edit": "enable"
     },
     {
-        "loan_id": "1245677fsf8",
-        "name": "hhhhhhhh",
-        "car": "red",
-        "borrow_date": "blue",
-        "return_data": "blue"
+        "loan_id": "LN-1002",
+        "name": "Mohamed Ali",
+        "car": "BMW X5",
+        "borrow_date": "2025-08-20",
+        "return_date": "2025-08-27",
+        "edit": "enable"
     },
     {
-        "loan_id": "1245677fsf8",
-        "name": "hhhhhhhh",
-        "car": "red",
-        "borrow_date": "blue",
-        "return_data": "blue"
+        "loan_id": "LN-1003",
+        "name": "Sophie Martin",
+        "car": "Renault Clio",
+        "borrow_date": "2025-09-03",
+        "return_date": "2025-09-04",
+        "edit": "disable"
+    },
+    {
+        "loan_id": "LN-1004",
+        "name": "John Smith",
+        "car": "Peugeot 3008",
+        "borrow_date": "2025-08-28",
+        "return_date": "2025-09-02",
+        "edit": "enable"
+    },
+    {
+        "loan_id": "LN-1005",
+        "name": "Emma Rossi",
+        "car": "Audi A3",
+        "borrow_date": "2025-09-06",
+        "return_date": "2025-09-10",
+        "edit": "enable"
     }
 ]

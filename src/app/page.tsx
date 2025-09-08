@@ -3,7 +3,7 @@ import vehicleContent from "@/docs/vehicle_info.json"
 
 export default function Home() {
   const tableTitle = [
-    "plat_number", "VIN", "exterior_color", "interior_color"
+    "plate_number", "VIN", "exterior_color", "interior_color", "action"
   ]
   return (
     <div className="mx-10 flex h-[calc(100vh-11rem)]">

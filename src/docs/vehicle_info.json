@@ -1,56 +1,65 @@
 [
     {
-        "plat_number": "1245677fsf8",
-        "VIN": "hhhhhhhh",
-        "exterior_color": "red",
-        "interior_color": "blue"
+        "plate_number": "AB-123-CD",
+        "VIN": "VF7AC9HZ0DJ123456",
+        "exterior_color": "Black",
+        "interior_color": "Beige",
+        "edit": "enable"
     },
     {
-        "plat_number": "124sdf56778",
-        "VIN": "hhhhhhhh",
-        "exterior_color": "red",
-        "interior_color": "blue"
+        "plate_number": "EF-456-GH",
+        "VIN": "WBA3A9C58DF987654",
+        "exterior_color": "White",
+        "interior_color": "Black",
+        "edit": "enable"
     },
     {
-        "plat_number": "12456gt778",
-        "VIN": "hhhhhhhh",
-        "exterior_color": "red",
-        "interior_color": "blue"
+        "plate_number": "IJ-789-KL",
+        "VIN": "1HGCM82633A004352",
+        "exterior_color": "Red",
+        "interior_color": "Gray",
+        "edit": "enable"
     },
     {
-        "plat_number": "1245677fsf8",
-        "VIN": "hhhhhhhh",
-        "exterior_color": "red",
-        "interior_color": "blue"
+        "plate_number": "MN-321-OP",
+        "VIN": "2C3KA53G76H123987",
+        "exterior_color": "Blue",
+        "interior_color": "Black",
+        "edit": "disable"
     },
     {
-        "plat_number": "124sdf56778",
-        "VIN": "hhhhhhhh",
-        "exterior_color": "red",
-        "interior_color": "blue"
+        "plate_number": "QR-654-ST",
+        "VIN": "3FAHP0HA8AR298734",
+        "exterior_color": "Silver",
+        "interior_color": "Brown",
+        "edit": "enable"
     },
     {
-        "plat_number": "12456gt778",
-        "VIN": "hhhhhhhh",
-        "exterior_color": "red",
-        "interior_color": "blue"
+        "plate_number": "UV-987-WX",
+        "VIN": "5YJSA1E26HF001256",
+        "exterior_color": "Green",
+        "interior_color": "Gray",
+        "edit": "enable"
     },
     {
-        "plat_number": "1245677fsf8",
-        "VIN": "hhhhhhhh",
-        "exterior_color": "red",
-        "interior_color": "blue"
+        "plate_number": "YZ-147-BC",
+        "VIN": "1FTFW1EF1EKE12345",
+        "exterior_color": "White",
+        "interior_color": "Blue",
+        "edit": "enable"
     },
     {
-        "plat_number": "124sdf56778",
-        "VIN": "hhhhhhhh",
-        "exterior_color": "red",
-        "interior_color": "blue"
+        "plate_number": "DE-258-FG",
+        "VIN": "SALVP2BG1FH123456",
+        "exterior_color": "Gray",
+        "interior_color": "Black",
+        "edit": "disable"
     },
     {
-        "plat_number": "12456gt778",
-        "VIN": "hhhhhhhh",
-        "exterior_color": "red",
-        "interior_color": "blue"
+        "plate_number": "HI-369-JK",
+        "VIN": "JHMCM56557C404453",
+        "exterior_color": "Yellow",
+        "interior_color": "Black",
+        "edit": "enable"
     }
 ]

@@ -1,6 +1,6 @@
 'use client'
 import { useRouter, useSearchParams } from "next/navigation";
-import { FC, useEffect, useState } from "react"
+import React, { FC, useEffect, useState } from "react"
 import PopModalForm from "./popModal";
 import Link from "next/link";
 
@@ -32,6 +32,10 @@ const TableGrid: FC<tableGridProp> = ({ formTitle, tableTitle, tableContent, pus
         router.replace(queryString ? `?${queryString}` : currentPath)
         setIsOpen(false)
         setCurrentNumber('')
+    }
+
+    const handleEdit = (event: React.MouseEvent) => {
+        event.stopPropagation()
     }
 
     useEffect(() => {
@@ -66,8 +70,20 @@ const TableGrid: FC<tableGridProp> = ({ formTitle, tableTitle, tableContent, pus
                     <tbody>
                         {tableContent.map((item, index) => (
                             <tr onClick={() => handleClick(item[pushQuery])} key={index} className="h-10 border-b-2 border-[#F3F5F7] hover:bg-[#B6C6A1] hover:cursor-pointer">
-                                {tableTitle.map((field: string) => (
-                                    <td key={field} className="px-3">{item[field as keyof typeof item]}</td>
+                                {tableTitle.map((field) => (
+                                    field.toLowerCase() === "action" ? (
+                                        <td key={field} className="px-3">
+                                            <button
+                                                disabled={item.edit === "disable"}
+                                                className={`px-1 py-1 rounded-md ${item.edit == 'enable' ? 'bg-[#26361C] hover:bg-[#4f693d] hover:cursor-pointer' : 'bg-[#cdcdcd] hover:cursor-not-allowed'}`}
+                                                onClick={(e) => handleEdit(e)}
+                                            >
+                                                <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5380" width="16" height="16"><path d="M800 531.52a32 32 0 0 1 64 0v305.92A90.56 90.56 0 0 1 773.44 928H186.88A90.88 90.88 0 0 1 96 837.44V250.88A90.88 90.88 0 0 1 186.88 160h288a32 32 0 0 1 0 64h-288A26.56 26.56 0 0 0 160 250.88v586.56A26.56 26.56 0 0 0 186.88 864h586.56A26.56 26.56 0 0 0 800 837.44z" fill="#ffffff" p-id="5381"></path><path d="M825.28 209.92l-43.2-43.2-405.12 405.12-13.76 56.96 56.96-13.76zM444.16 675.2L327.36 704A32 32 0 0 1 288 664.64l28.16-116.8a32 32 0 0 1 8.32-15.04l424-423.04a48 48 0 0 1 67.2 0l66.56 66.88a47.68 47.68 0 0 1 0 66.88L459.2 666.56a33.92 33.92 0 0 1-15.04 8.64z" fill="#ffffff" p-id="5382"></path></svg>
+                                            </button>
+                                        </td>
+                                    ) : (
+                                        <td key={field} className="px-3">{item[field as keyof typeof item]}</td>
+                                    )
                                 ))}
                             </tr>
                         ))}
