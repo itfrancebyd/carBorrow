@@ -9,10 +9,11 @@ interface tableGridProp {
     tableTitle: Array<string>,
     tableContent: Record<string, string>[], // safer type
     pushQuery: string,
+    dragDropLink: string,
     buttonLink: string
 }
 
-const TableGrid: FC<tableGridProp> = ({ formTitle, tableTitle, tableContent, pushQuery, buttonLink }) => {
+const TableGrid: FC<tableGridProp> = ({ formTitle, tableTitle, tableContent, pushQuery, dragDropLink, buttonLink }) => {
     const [isOpen, setIsOpen] = useState(false)
     const [currentNumber, setCurrentNumber] = useState('')
     const searchParam = useSearchParams()
@@ -54,7 +55,7 @@ const TableGrid: FC<tableGridProp> = ({ formTitle, tableTitle, tableContent, pus
                 <div className="flex justify-between py-5">
                     <div className="font-semibold text-lg">{formTitle}</div>
                     <div className="flex gap-3">
-                        <button className="bg-[#26361C] hover:bg-[#7a856b] text-white px-3 cursor-pointer flex items-center">import</button>
+                        <Link href={`/${dragDropLink}`} className="bg-[#26361C] hover:bg-[#7a856b] text-white px-3 cursor-pointer flex items-center">import</Link>
                         <button className="bg-[#26361C] hover:bg-[#7a856b] text-white px-3 cursor-pointer flex items-center">export</button>
                         <Link href={`/${buttonLink}`} className="bg-[#26361C] hover:bg-[#7a856b] px-3 text-white cursor-pointer flex items-center">add new</Link>
                     </div>
