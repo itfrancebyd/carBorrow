@@ -6,15 +6,14 @@ const ImportVehicleModal = () => {
     const [fileEnter, setFileEnter] = useState(false)
     const [isFile, setFile] = useState<File>()
     const fileInputRef = useRef<HTMLInputElement | null>(null)
+    const [fileName, setFileName] = useState('')
 
     const handleDrop = (event: React.DragEvent) => {
         event.preventDefault()
-        const item = event.dataTransfer
-        console.log("🚀 ~ handleDrop ~ item:", item)
         const files = Array.from(event.dataTransfer.files).filter(
             (file) => file.name.endsWith(".xls") || file.name.endsWith(".xlsx")
         );
-
+        setFileName(files[0].name)
         console.log("Dropped Excel files:", files);
         // if (event.dataTransfer.items) {
         //     [...event.dataTransfer.items].forEach((item, i) => {
@@ -34,14 +33,11 @@ const ImportVehicleModal = () => {
         // }
     }
     const handleSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
-        // if (event.target.files) {
-        //     setFile(event.target.files[0])
-        // }
-        console.log("file selected")
         const files = Array.from(event.target.files ?? []).filter(
             (file) => file.name.endsWith(".xls") || file.name.endsWith(".xlsx")
         );
-        console.log("Selected Excel files:", files);
+        setFileName(files[0].name)
+        console.log("Selected Excel files:", files[0].name);
     }
 
     return (
@@ -49,7 +45,7 @@ const ImportVehicleModal = () => {
             <div className="flex flex-col gap-5">
                 <div
                     onDragOver={(e) => { e.preventDefault(); setFileEnter(true) }}
-                    onDragLeave={(e) => setFileEnter(false)}
+                    onDragLeave={() => setFileEnter(false)}
                     onDragEnd={(e) => { e.preventDefault(); setFileEnter(false) }}
                     onDrop={handleDrop}
                     className={`border-4 border-dotted ${fileEnter ? 'border-[#26361C]' : 'border-gray-300'} bg-gray-100 rounded-2xl`}
@@ -73,12 +69,17 @@ const ImportVehicleModal = () => {
                             type="button"
                             className="bg-[#26361C] text-white px-3 py-2 rounded-xl hover:bg-[#7a856b] cursor-pointer"
                             onClick={() => fileInputRef.current?.click()}
-                        >Select files
+                        >click to browse
                         </button>
                     </div>
                 </div>
-                <div className="border border-[#26361C] rounded-2xl">
+                <div className="border border-[#26361C] rounded-2xl flex items-center">
                     <div className="py-5 px-5">File Uploaded</div>
+                    <div className="text-sm">{fileName}</div>
+                </div>
+                <div className="flex items-center justify-end gap-3">
+                    <button className="border border-[#26361C] py-2 px-2 rounded-xl cursor-pointer">Cancle</button>
+                    <button className="bg-[#26361C] border border-[#26361C] text-white py-2 px-2 rounded-xl hover:bg-[#7a856b] cursor-pointer">Import</button>
                 </div>
             </div>
         </Modal>
