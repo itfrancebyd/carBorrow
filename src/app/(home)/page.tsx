@@ -1,4 +1,4 @@
-import TableGrid from "./components/forms/tableGrid";
+import TableGrid from "../components/forms/tableGrid";
 import vehicleContent from "@/docs/vehicle_info.json"
 
 export default function Home() {

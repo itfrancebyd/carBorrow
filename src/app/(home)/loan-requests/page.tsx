@@ -1,4 +1,4 @@
-import TableGrid from "../components/forms/tableGrid"
+import TableGrid from "../../components/forms/tableGrid"
 import loanInfo from "@/docs/loan_request_info.json"
 
 const LoanReq = () => {
