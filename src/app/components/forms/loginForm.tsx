@@ -1,17 +1,32 @@
 'use client'
+import { createClient } from "@/utils/supabase/client"
 import React, { useRef, useState } from "react"
-import z from "zod"
+import { useRouter } from "next/navigation"
 
 const LoginForm = () => {
     const [isShowPass, setShowPass] = useState(false)
     const formRef = useRef<HTMLFormElement>(null)
+    const [errorMsg, setErrorMsg] = useState<string | null>(null)
+    const router = useRouter()
 
-    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+    const supabase = createClient()
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         if (!formRef.current) return // check null guard
         const formData = new FormData(formRef.current)
-        const userName = formData.get("username")
-        const passWord = formData.get("password")
+        const email = formData.get("email")?.toString() || ""
+        const passWord = formData.get("password")?.toString() || ""
+        let { data, error } = await supabase.auth.signInWithPassword({
+            email: email,
+            password: passWord
+        })
+        if (error) {
+            setErrorMsg(error.message)
+            return
+        }
+
+        router.push('/')
     }
 
     return (
@@ -23,12 +38,12 @@ const LoginForm = () => {
                 </div>
                 <div className="flex flex-col gap-4">
                     <div className="flex flex-col gap-1">
-                        <label className="font-semibold text-sm">User name</label>
+                        <label className="font-semibold text-sm">Email</label>
                         <input
-                            name="username"
+                            name="email"
                             type="text"
                             className="border border-gray-300 rounded-md px-2 py-1 text-sm"
-                            placeholder="Enter your user name"
+                            placeholder="Enter your email"
                         ></input>
                     </div>
                     <div className="flex flex-col gap-1">
