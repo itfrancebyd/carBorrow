@@ -1,12 +1,22 @@
 'use client'
-import { useState } from "react"
+import React, { useRef, useState } from "react"
+import z from "zod"
 
 const LoginForm = () => {
     const [isShowPass, setShowPass] = useState(false)
+    const formRef = useRef<HTMLFormElement>(null)
+
+    const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        if (!formRef.current) return // check null guard
+        const formData = new FormData(formRef.current)
+        const userName = formData.get("username")
+        const passWord = formData.get("password")
+    }
 
     return (
         <div className="bg-gray-100/50 border border-gray-300 shadow-2xl py-7 px-5 rounded-xl w-1/3 min-w-[315px]">
-            <form className="text-gray-600 flex flex-col gap-7">
+            <form className="text-gray-600 flex flex-col gap-7" ref={formRef} onSubmit={handleSubmit}>
                 <div className="flex flex-row justify-center items-center gap-2">
                     <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4523" width="16" height="16"><path d="M409.002667 469.333333L300.8 361.130667 361.130667 300.8l211.2 211.2-211.2 211.2-60.330667-60.330667L409.002667 554.666667H128v-85.333334h281.002667zM469.333333 128h341.333334c46.933333 0 85.333333 38.4 85.333333 85.333333v597.333334c0 46.933333-38.4 85.333333-85.333333 85.333333h-341.333334v-85.333333h341.333334V213.333333h-341.333334V128z" fill="#26361C" p-id="4524"></path></svg>
                     <div className="font-bold">Login</div>
@@ -15,6 +25,7 @@ const LoginForm = () => {
                     <div className="flex flex-col gap-1">
                         <label className="font-semibold text-sm">User name</label>
                         <input
+                            name="username"
                             type="text"
                             className="border border-gray-300 rounded-md px-2 py-1 text-sm"
                             placeholder="Enter your user name"
@@ -24,6 +35,7 @@ const LoginForm = () => {
                         <label className="font-semibold text-sm">Password</label>
                         <div className="flex relative items-center">
                             <input
+                                name="password"
                                 type={`${isShowPass ? 'text' : 'password'}`}
                                 className="flex-1 border border-gray-300 rounded-md px-2 py-1 text-sm"
                                 placeholder="Enter your password"
@@ -39,7 +51,7 @@ const LoginForm = () => {
                         </div>
                     </div>
                 </div>
-                <button type="button" className="bg-[#26361C] hover:bg-[#7a856b] cursor-pointer text-white py-2 rounded-md">Login</button>
+                <button type="submit" className="bg-[#26361C] hover:bg-[#7a856b] cursor-pointer text-white py-2 rounded-md">Login</button>
             </form>
         </div>
     )
