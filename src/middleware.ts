@@ -34,7 +34,7 @@ export async function middleware(request: NextRequest) {
 
     const { data: { user } } = await supabase.auth.getUser()
 
-    // 允许 /login 不需要鉴权
+    // allow /login no need authentication
     if (!user && request.nextUrl.pathname !== '/login') {
         return NextResponse.redirect(new URL('/login', request.url))
     }
@@ -43,5 +43,5 @@ export async function middleware(request: NextRequest) {
 }
 
 export const config = {
-    matcher: ['/((?!login).*)'], // 保护所有路径，除了 /login
+    matcher: ['/((?!_next|favicon\\.ico|.*\\..*|login).*)'], // protect all the path，rather than /login
 }
