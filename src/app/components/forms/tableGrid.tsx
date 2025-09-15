@@ -6,7 +6,7 @@ import Link from "next/link";
 
 interface tableGridProp {
     formTitle: string,
-    tableTitle: Array<string>,
+    tableTitle: Array<{ key: string; label: string; }>,
     tableContent: Record<string, string>[], // safer type
     pushQuery: string,
     dragDropLink: string,
@@ -50,10 +50,10 @@ const TableGrid: FC<tableGridProp> = ({ formTitle, tableTitle, tableContent, pus
     }, [])
 
     return (
-        <div className="relative h-full w-full min-w-[980px] text-[#494949]">
+        <div className="relative h-full w-full min-w-[980px] text-[#494949] text-sm">
             <div className="bg-white h-full py-5 px-8 overflow-y-auto">
                 <div className="flex justify-between py-5">
-                    <div className="font-semibold text-lg">{formTitle}</div>
+                    <div className="font-semibold text-base">{formTitle}</div>
                     <div className="flex gap-3">
                         <Link href={`/${dragDropLink}`} className="bg-[#26361C] hover:bg-[#7a856b] text-white px-3 cursor-pointer flex items-center">import</Link>
                         <button className="bg-[#26361C] hover:bg-[#7a856b] text-white px-3 cursor-pointer flex items-center">export</button>
@@ -63,17 +63,17 @@ const TableGrid: FC<tableGridProp> = ({ formTitle, tableTitle, tableContent, pus
                 <table className="w-full table-fixed">
                     <thead>
                         <tr className="h-10 bg-[#26361C] text-white">
-                            {tableTitle.map((title, index) =>
-                                <th key={index} className="text-start px-3">{title}</th>
+                            {tableTitle.map((item, index) =>
+                                <th key={index} className="text-start px-3">{item.label}</th>
                             )}
                         </tr>
                     </thead>
                     <tbody>
-                        {tableContent.map((item, index) => (
-                            <tr onClick={() => handleClick(item[pushQuery])} key={index} className="h-10 border-b-2 border-[#F3F5F7] hover:bg-[#B6C6A1] hover:cursor-pointer">
+                        {tableContent.map((item) => (
+                            <tr onClick={() => handleClick(item[pushQuery])} key={item.key} className="h-10 border-b-2 border-[#F3F5F7] hover:bg-[#B6C6A1] hover:cursor-pointer">
                                 {tableTitle.map((field) => (
-                                    field.toLowerCase() === "action" ? (
-                                        <td key={field} className="px-3">
+                                    field.key.toLowerCase() === "action" ? (
+                                        <td key={field.key} className="px-3">
                                             <button
                                                 disabled={item.edit === "disable"}
                                                 className={`px-1 py-1 rounded-md ${item.edit == 'enable' ? 'bg-[#26361C] hover:bg-[#4f693d] hover:cursor-pointer' : 'bg-[#cdcdcd] hover:cursor-not-allowed'}`}
@@ -83,7 +83,7 @@ const TableGrid: FC<tableGridProp> = ({ formTitle, tableTitle, tableContent, pus
                                             </button>
                                         </td>
                                     ) : (
-                                        <td key={field} className="px-3">{item[field as keyof typeof item]}</td>
+                                        <td key={field.key} className="px-3">{item[field.key as keyof typeof item]}</td>
                                     )
                                 ))}
                             </tr>
