@@ -51,7 +51,7 @@ const TableGrid: FC<tableGridProp> = ({ formTitle, tableTitle, tableContent, pus
 
     return (
         <div className="relative h-full w-full min-w-[980px] text-[#494949] text-sm">
-            <div className="bg-white h-full py-5 px-8 overflow-y-auto">
+            <div className="bg-white h-full px-8 overflow-y-auto">
                 <div className="flex justify-between py-5">
                     <div className="font-semibold text-base">{formTitle}</div>
                     <div className="flex gap-3">
