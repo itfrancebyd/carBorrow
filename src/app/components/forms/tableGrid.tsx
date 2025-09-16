@@ -69,8 +69,8 @@ const TableGrid: FC<tableGridProp> = ({ formTitle, tableTitle, tableContent, pus
                         </tr>
                     </thead>
                     <tbody>
-                        {tableContent.map((item) => (
-                            <tr onClick={() => handleClick(item[pushQuery])} key={item.key} className="h-10 border-b-2 border-[#F3F5F7] hover:bg-[#B6C6A1] hover:cursor-pointer">
+                        {tableContent.map((item,index) => (
+                            <tr onClick={() => handleClick(item[pushQuery])} key={index} className="h-10 border-b-2 border-[#F3F5F7] hover:bg-[#B6C6A1] hover:cursor-pointer">
                                 {tableTitle.map((field) => (
                                     field.key.toLowerCase() === "action" ? (
                                         <td key={field.key} className="px-3">

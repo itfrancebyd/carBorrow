@@ -17,7 +17,7 @@ const ModelPage = () => {
             <SubTitle subTitleName="Loan Requests"></SubTitle>
             <DataMeasure></DataMeasure>
             <Filter></Filter>
-            <div className="flex-1"><TableGrid formTitle="Loan Requests" tableTitle={tableTitle} tableContent={model_info} pushQuery={"model"} dragDropLink="importModel" buttonLink="addModel"></TableGrid></div>
+            <div className="flex-1"><TableGrid formTitle="Loan Requests" tableTitle={tableTitle} tableContent={model_info} pushQuery={"model"} dragDropLink="importModel" buttonLink="addmodel"></TableGrid></div>
         </div>
     )
 }
