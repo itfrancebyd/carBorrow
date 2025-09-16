@@ -5,15 +5,16 @@ import PopModalForm from "./popModal";
 import Link from "next/link";
 
 interface tableGridProp {
-    formTitle: string,
-    tableTitle: Array<{ key: string; label: string; }>,
-    tableContent: Record<string, any>[], // safer type
-    pushQuery: string,
-    dragDropLink: string,
-    buttonLink: string
+    formTitle: string;
+    tableTitle: Array<{ key: string; label: string; }>;
+    tableContent: Record<string, any>[]; // safer type
+    pushQuery: string;
+    dragDropLink: string;
+    buttonLink: string;
+    fetchDetailWithId: any;
 }
 
-const TableGrid: FC<tableGridProp> = ({ formTitle, tableTitle, tableContent, pushQuery, dragDropLink, buttonLink }) => {
+const TableGrid: FC<tableGridProp> = ({ formTitle, tableTitle, tableContent, pushQuery, dragDropLink, buttonLink, fetchDetailWithId }) => {
     const [isOpen, setIsOpen] = useState(false)
     const [currentNumber, setCurrentNumber] = useState('')
     const searchParam = useSearchParams()
@@ -50,7 +51,7 @@ const TableGrid: FC<tableGridProp> = ({ formTitle, tableTitle, tableContent, pus
     }, [])
 
     return (
-        <div className="relative h-full w-full text-[#494949] text-sm">
+        <div className="h-full w-full text-[#494949] text-sm">
             <div className="bg-white h-full px-8 overflow-y-auto">
                 <div className="flex justify-between py-5">
                     <div className="font-semibold text-base">{formTitle}</div>
@@ -69,7 +70,7 @@ const TableGrid: FC<tableGridProp> = ({ formTitle, tableTitle, tableContent, pus
                         </tr>
                     </thead>
                     <tbody>
-                        {tableContent.map((item,index) => (
+                        {tableContent.map((item, index) => (
                             <tr onClick={() => handleClick(item.id)} key={index} className="h-10 border-b-2 border-[#F3F5F7] hover:bg-[#B6C6A1] hover:cursor-pointer">
                                 {tableTitle.map((field) => (
                                     field.key.toLowerCase() === "action" ? (
@@ -91,9 +92,8 @@ const TableGrid: FC<tableGridProp> = ({ formTitle, tableTitle, tableContent, pus
                     </tbody>
                 </table>
             </div>
-            <div className={`${isOpen ? 'absolute top-0 left-1 w-full h-full bg-white z-40 p-7' : 'hidden'} `}>
-                <button onClick={handleClose} className="text-3xl hover:cursor-pointer absolute right-6">x</button>
-                <PopModalForm currentID={currentNumber}></PopModalForm>
+            <div className={`${isOpen ? 'absolute top-0 right-0 w-full h-full bg-gray-400/50 z-40 p-7' : 'hidden'} `}>
+                <PopModalForm closeEvent={handleClose} currentID={currentNumber} fetchData={fetchDetailWithId} tableTitle={tableTitle}></PopModalForm>
             </div>
         </div>
     )

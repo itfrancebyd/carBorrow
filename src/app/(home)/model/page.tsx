@@ -37,6 +37,17 @@ const ModelPage = () => {
         fetchVehicleModels()
     }, [])
 
+    // fetch detail with id
+    const fetchVehicleDetail = async (id: string) => {
+        const { data, error } = await supabase
+            .from("vehicle_model")
+            .select("*")
+            .eq("id", id)
+            .single()
+        if (error) throw error
+        return data;
+    };
+
     const tableTitle = [
         { key: "modelName", label: "Model Name" },
         { key: "versionName", label: "Version Name" },
@@ -56,7 +67,7 @@ const ModelPage = () => {
                         Loading...
                     </div>
                     :
-                    <TableGrid formTitle="Loan Requests" tableTitle={tableTitle} tableContent={modelData} pushQuery={"model"} dragDropLink="importModel" buttonLink="addmodel"></TableGrid>
+                    <TableGrid formTitle="Loan Requests" tableTitle={tableTitle} tableContent={modelData} pushQuery={"model"} dragDropLink="importModel" buttonLink="addmodel" fetchDetailWithId={fetchVehicleDetail}></TableGrid>
                 }
             </div>
         </div>
