@@ -1,10 +1,42 @@
+'use client'
 import DataMeasure from "@/app/components/DataMeasure"
 import Filter from "@/app/components/filter"
 import TableGrid from "@/app/components/forms/tableGrid"
 import SubTitle from "@/app/components/subTitle"
 import model_info from "@/docs/vehicle_model.json"
+import { createClient } from "@/utils/supabase/client"
+import { useEffect, useState } from "react"
+
+interface Model {
+    id: string;
+    modelName: string;
+    versionName: string;
+    exteriorColour: string;
+    interiorColour: string;
+    status: string;
+    lastOperationUser: string;
+}
+
 
 const ModelPage = () => {
+    const [modelData, setModelData] = useState<Model[]>([])
+    const [isLoading, setLoading] = useState(true)
+    const supabase = createClient()
+
+    useEffect(() => {
+        const fetchVehicleModels = async () => {
+            setLoading(true)
+            let { data: vehicle_model, error } = await supabase.from('vehicle_model').select('*')
+            if (error) {
+                console.error("Error fetching vehicle models: ", error)
+            } else if (vehicle_model) {
+                setModelData(vehicle_model)
+            }
+            setLoading(false)
+        }
+        fetchVehicleModels()
+    }, [])
+
     const tableTitle = [
         { key: "modelName", label: "Model Name" },
         { key: "versionName", label: "Version Name" },
@@ -17,7 +49,16 @@ const ModelPage = () => {
             <SubTitle subTitleName="Loan Requests"></SubTitle>
             <DataMeasure></DataMeasure>
             <Filter></Filter>
-            <div className="flex-1"><TableGrid formTitle="Loan Requests" tableTitle={tableTitle} tableContent={model_info} pushQuery={"model"} dragDropLink="importModel" buttonLink="addmodel"></TableGrid></div>
+            <div className="flex-1">
+                {isLoading
+                    ?
+                    <div className="flex items-center justify-center bg-[#7a856b] mx-8 mt-6 py-6 h-full text-white">
+                        Loading...
+                    </div>
+                    :
+                    <TableGrid formTitle="Loan Requests" tableTitle={tableTitle} tableContent={modelData} pushQuery={"model"} dragDropLink="importModel" buttonLink="addmodel"></TableGrid>
+                }
+            </div>
         </div>
     )
 }

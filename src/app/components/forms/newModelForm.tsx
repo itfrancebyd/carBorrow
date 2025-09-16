@@ -1,4 +1,5 @@
 'use client'
+import { createClient } from "@/utils/supabase/client";
 import { useRef } from "react";
 
 const normalizeKey = (label: string) =>
@@ -6,13 +7,16 @@ const normalizeKey = (label: string) =>
 
 const NewModelForm = () => {
     const formRef = useRef<HTMLFormElement>(null)
+    const supabase = createClient()
+
     const vehicleModelInfo = [
         "Model Name",
         "Version Name",
         "Interior Colour",
         "Exterior Colour"
-    ];
-    const handleSubmit = (event: React.MouseEvent) => {
+    ]
+
+    const handleSubmit = async (event: React.MouseEvent) => {
         event.preventDefault()
         if (!formRef.current) return // check null guard
         const formData = new FormData(formRef.current)
@@ -23,6 +27,8 @@ const NewModelForm = () => {
             exteriorColour: formData.get(normalizeKey(vehicleModelInfo[3])),
             status: formData.get('status')
         }]
+
+        const { data, error } = await supabase.from('vehicle_model').insert(newModel).select()
     }
 
     return (

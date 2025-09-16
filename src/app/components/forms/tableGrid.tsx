@@ -7,7 +7,7 @@ import Link from "next/link";
 interface tableGridProp {
     formTitle: string,
     tableTitle: Array<{ key: string; label: string; }>,
-    tableContent: Record<string, string>[], // safer type
+    tableContent: Record<string, any>[], // safer type
     pushQuery: string,
     dragDropLink: string,
     buttonLink: string
@@ -70,7 +70,7 @@ const TableGrid: FC<tableGridProp> = ({ formTitle, tableTitle, tableContent, pus
                     </thead>
                     <tbody>
                         {tableContent.map((item,index) => (
-                            <tr onClick={() => handleClick(item[pushQuery])} key={index} className="h-10 border-b-2 border-[#F3F5F7] hover:bg-[#B6C6A1] hover:cursor-pointer">
+                            <tr onClick={() => handleClick(item.id)} key={index} className="h-10 border-b-2 border-[#F3F5F7] hover:bg-[#B6C6A1] hover:cursor-pointer">
                                 {tableTitle.map((field) => (
                                     field.key.toLowerCase() === "action" ? (
                                         <td key={field.key} className="px-3">
