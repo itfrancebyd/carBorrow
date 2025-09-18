@@ -29,6 +29,12 @@ const NewModelForm = () => {
         }]
 
         const { data, error } = await supabase.from('vehicle_model').insert(newModel).select()
+        if (error) {
+            console.error("Insert error:", error.message);
+            return;
+        }
+        formRef.current.reset() //reset form
+        window.location.href = '/model'
     }
 
     return (

@@ -3,7 +3,6 @@ import DataMeasure from "@/app/components/DataMeasure"
 import Filter from "@/app/components/filter"
 import TableGrid from "@/app/components/forms/tableGrid"
 import SubTitle from "@/app/components/subTitle"
-import model_info from "@/docs/vehicle_model.json"
 import { createClient } from "@/utils/supabase/client"
 import { useEffect, useState } from "react"
 
