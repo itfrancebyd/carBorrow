@@ -31,7 +31,8 @@ const PopModalForm: FC<PopModalFormProp> = ({ currentID, closeEvent, fetchData, 
 
     const handleDelete = () => {
         actionDelete(currentID)
-        console.log("deleted")
+        alert("Deleted successfully")
+        window.location.href='/model'
     }
 
     return (
