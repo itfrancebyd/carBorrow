@@ -1,16 +1,64 @@
 {
     "Model Name": [
         "ATTO 2",
-        "ATTO 3"
+        "ATTO 3",
+        "ATTO 3 2025",
+        "DENZA D9",
+        "DENZA Z9 GT",
+        "DOLPHIN",
+        "Dolphin Surf",
+        "ETP3",
+        "HAN",
+        "SEAL",
+        "SEAL 6 DM-i Sedan",
+        "SEAL 6 DM-i Wagon",
+        "SEAL U",
+        "SEAL U DM-i",
+        "SEALION 7",
+        "TANG",
+        "TANG 2024",
+        "Yangwang U8"
     ],
     "Version Name": [
         "Boost",
-        "Active"
+        "Active",
+        "Sealion 7 Excellence",
+        "Sealion 7 Design",
+        "Sealion 7 Comfort",
+        "SEAL U DM-I Design",
+        "SEAL U DM-I Boost",
+        "SEAL Excellence-AWD-LHD",
+        "SEAL Design RWD LHD",
+        "Polar White",
+        "Obsidian Black",
+        "Flagship",
+        "Executive",
+        "Excellence",
+        "Design",
+        "Comfort",
+        "Comfort Lite",
+        "AWD Comfort",
+        "AWD 7P",
+        "ATTO3 2025 Design-LHD",
+        "Atlantis Blue"
     ],
-    "Interior Colour":[
+    "Interior Colour": [
         "Black"
     ],
-    "Exterior Colour":[
-        "Hiking Green"
+    "Exterior Colour": [
+        "Hiking Green",
+        "Atlantis Blue",
+        "Atlantis Grey",
+        "Black",
+        "Blue",
+        "Black Emerald",
+        "Blue&Black",
+        "Climbing Gray",
+        "Climbing Grey",
+        "Cosmos Black",
+        "Boundless Cloud",
+        "Cream White",
+        "Delan Black",
+        "Emperor Red"
     ]
 }
