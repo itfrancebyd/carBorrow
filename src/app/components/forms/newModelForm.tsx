@@ -21,10 +21,10 @@ const NewModelForm = () => {
         if (!formRef.current) return // check null guard
         const formData = new FormData(formRef.current)
         const newModel = [{
-            modelName: formData.get(normalizeKey(vehicleModelInfo[0])),
-            versionName: formData.get(normalizeKey(vehicleModelInfo[1])),
-            interiorColour: formData.get(normalizeKey(vehicleModelInfo[2])),
-            exteriorColour: formData.get(normalizeKey(vehicleModelInfo[3])),
+            model_name: formData.get(normalizeKey(vehicleModelInfo[0])),
+            version_name: formData.get(normalizeKey(vehicleModelInfo[1])),
+            interior_colour: formData.get(normalizeKey(vehicleModelInfo[2])),
+            exterior_colour: formData.get(normalizeKey(vehicleModelInfo[3])),
             status: formData.get('status')
         }]
 

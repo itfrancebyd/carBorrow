@@ -48,10 +48,10 @@ const ModelPage = () => {
     };
 
     const tableTitle = [
-        { key: "modelName", label: "Model Name" },
-        { key: "versionName", label: "Version Name" },
-        { key: "interiorColour", label: "Interior Colour" },
-        { key: "exteriorColour", label: "Exterior Colour" }
+        { key: "model_name", label: "Model Name" },
+        { key: "version_name", label: "Version Name" },
+        { key: "interior_colour", label: "Interior Colour" },
+        { key: "exterior_colour", label: "Exterior Colour" }
     ]
 
     return (
