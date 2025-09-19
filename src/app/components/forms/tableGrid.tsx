@@ -12,9 +12,10 @@ interface tableGridProp {
     dragDropLink: string;
     buttonLink: string;
     fetchDetailWithId: any;
+    actionDelete: any
 }
 
-const TableGrid: FC<tableGridProp> = ({ formTitle, tableTitle, tableContent, pushQuery, dragDropLink, buttonLink, fetchDetailWithId }) => {
+const TableGrid: FC<tableGridProp> = ({ formTitle, tableTitle, tableContent, pushQuery, dragDropLink, buttonLink, fetchDetailWithId, actionDelete }) => {
     const [isOpen, setIsOpen] = useState(false)
     const [currentNumber, setCurrentNumber] = useState('')
     const searchParam = useSearchParams()
@@ -93,7 +94,7 @@ const TableGrid: FC<tableGridProp> = ({ formTitle, tableTitle, tableContent, pus
                 </table>
             </div>
             <div className={`${isOpen ? 'absolute top-0 right-0 w-full h-full bg-gray-400/50 z-40 p-7' : 'hidden'} `}>
-                <PopModalForm closeEvent={handleClose} currentID={currentNumber} fetchData={fetchDetailWithId} tableTitle={tableTitle}></PopModalForm>
+                <PopModalForm closeEvent={handleClose} currentID={currentNumber} fetchData={fetchDetailWithId} tableTitle={tableTitle} actionDelete={actionDelete}></PopModalForm>
             </div>
         </div>
     )

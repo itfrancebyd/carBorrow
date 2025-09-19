@@ -47,6 +47,13 @@ const ModelPage = () => {
         return data;
     };
 
+    const deleteVehicle = async (id: string) => {
+        const { error } = await supabase
+            .from('vehicle_model')
+            .delete()
+            .eq('id', id)
+    }
+
     const tableTitle = [
         { key: "model_name", label: "Model Name" },
         { key: "version_name", label: "Version Name" },
@@ -66,7 +73,7 @@ const ModelPage = () => {
                         Loading...
                     </div>
                     :
-                    <TableGrid formTitle="Loan Requests" tableTitle={tableTitle} tableContent={modelData} pushQuery={"model"} dragDropLink="importModel" buttonLink="addmodel" fetchDetailWithId={fetchVehicleDetail}></TableGrid>
+                    <TableGrid formTitle="Loan Requests" tableTitle={tableTitle} tableContent={modelData} pushQuery={"model"} dragDropLink="importModel" buttonLink="addmodel" fetchDetailWithId={fetchVehicleDetail} actionDelete={deleteVehicle}></TableGrid>
                 }
             </div>
         </div>
