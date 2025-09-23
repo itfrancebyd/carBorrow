@@ -13,7 +13,8 @@ interface tableGridProp {
     buttonLink: string;
     fetchDetailWithId: any;
     actionDelete: any;
-    actionEdit: any
+    actionEdit: any;
+    selectInfo: any
 }
 
 const TableGrid: FC<tableGridProp> = ({
@@ -25,7 +26,8 @@ const TableGrid: FC<tableGridProp> = ({
     buttonLink,
     fetchDetailWithId,
     actionDelete,
-    actionEdit
+    actionEdit,
+    selectInfo
 }) => {
     const [isOpen, setIsOpen] = useState(false)
     const [currentNumber, setCurrentNumber] = useState('')
@@ -112,6 +114,7 @@ const TableGrid: FC<tableGridProp> = ({
                     tableTitle={tableTitle}
                     actionDelete={actionDelete}
                     actionEdit={actionEdit}
+                    selectInfo={selectInfo}
                 ></PopModalForm>
             </div>
         </div>

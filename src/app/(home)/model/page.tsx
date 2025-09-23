@@ -5,6 +5,7 @@ import TableGrid from "@/app/components/forms/tableGrid"
 import SubTitle from "@/app/components/subTitle"
 import { createClient } from "@/utils/supabase/client"
 import { useEffect, useState } from "react"
+import modelInfoJson from "@/docs/modelInfo.json"
 
 interface Model {
     id: string;
@@ -16,12 +17,12 @@ interface Model {
     lastOperationUser: string;
 }
 
-
 const ModelPage = () => {
     const [modelData, setModelData] = useState<Model[]>([])
     const [isLoading, setLoading] = useState(true)
     const [isFilterInfo, setFilterInfo] = useState([])
     const supabase = createClient()
+    const modelInfo = modelInfoJson as Record<string, string[]>
 
     useEffect(() => {
         const fetchVehicleModels = async () => {
@@ -112,7 +113,7 @@ const ModelPage = () => {
         <div className="flex flex-col min-h-full">
             <SubTitle subTitleName="Loan Requests"></SubTitle>
             <DataMeasure></DataMeasure>
-            <Filter setFilterInfo={setFilterInfo}></Filter>
+            <Filter setFilterInfo={setFilterInfo} selectInfo={modelInfo}></Filter>
             <div className="flex-1">
                 {isLoading
                     ?
@@ -120,7 +121,18 @@ const ModelPage = () => {
                         Loading...
                     </div>
                     :
-                    <TableGrid formTitle="Loan Requests" tableTitle={tableTitle} tableContent={modelData} pushQuery={"model"} dragDropLink="importModel" buttonLink="addmodel" fetchDetailWithId={fetchVehicleDetail} actionDelete={deleteVehicle} actionEdit={editModel}></TableGrid>
+                    <TableGrid
+                        formTitle="Loan Requests"
+                        tableTitle={tableTitle}
+                        tableContent={modelData}
+                        pushQuery={"model"}
+                        dragDropLink="importModel"
+                        buttonLink="addmodel"
+                        fetchDetailWithId={fetchVehicleDetail}
+                        actionDelete={deleteVehicle}
+                        actionEdit={editModel}
+                        selectInfo={modelInfo}
+                    ></TableGrid>
                 }
             </div>
         </div>

@@ -1,4 +1,3 @@
-import { createClient } from "@/utils/supabase/client";
 import { FC, useEffect, useState } from "react"
 
 interface PopModalFormProp {
@@ -7,7 +6,8 @@ interface PopModalFormProp {
     fetchData: (id: string) => Promise<any>;
     tableTitle: Array<{ key: string; label: string; }>;
     actionDelete: any;
-    actionEdit: any
+    actionEdit: any;
+    selectInfo: any
 }
 
 const PopModalForm: FC<PopModalFormProp> = ({
@@ -16,7 +16,8 @@ const PopModalForm: FC<PopModalFormProp> = ({
     fetchData,
     tableTitle,
     actionDelete,
-    actionEdit
+    actionEdit,
+    selectInfo
 }) => {
     const [data, setData] = useState<any>(null)
     const [error, setError] = useState<string | null>(null)
@@ -60,7 +61,6 @@ const PopModalForm: FC<PopModalFormProp> = ({
         }
     }
 
-
     return (
         <div className="bg-white w-1/3 h-full absolute right-0 top-0 shadow-2xl">
             <div className="mt-3 mx-6">
@@ -98,20 +98,26 @@ const PopModalForm: FC<PopModalFormProp> = ({
                                     <label className="text-[#26361C] font-semibold">Vehicle Id:</label>
                                     <input readOnly value={currentID} className="border border-[#26361C] bg-[#bac7b2] px-2 py-1 rounded-sm"></input>
                                 </div>
-                                {tableTitle.map((item, index) => (
+                                {tableTitle.map((title, index) => (
                                     <div key={index} className="flex flex-col gap-1">
-                                        <label className="text-[#26361C] font-semibold">{item.label}</label>
-                                        <input
-                                            readOnly={!isEdit}
-                                            value={data[item.key]}
-                                            className="border border-[#26361C] px-2 py-1 rounded-sm"
+                                        <label className="text-[#26361C] font-semibold">{title.label}</label>
+                                        <select
+                                            disabled={!isEdit}
+                                            value={data[title.key]}
+                                            className={`border border-[#26361C] px-2 py-1 rounded-sm ${isEdit ? 'cursor-pointer' : 'cursor-not-allowed'}`}
                                             onChange={(e) =>
                                                 setData((prev: any) => ({
                                                     ...prev,
-                                                    [item.key]: e.target.value,
+                                                    [title.key]: e.target.value,
                                                 }))
                                             }
-                                        ></input>
+                                        >
+                                            {(selectInfo[title.label] ?? []).map((item: string) => (
+                                                <option key={item} value={item}>
+                                                    {item}
+                                                </option>
+                                            ))}
+                                        </select>
                                     </div>
                                 ))}
                                 {isEdit ?

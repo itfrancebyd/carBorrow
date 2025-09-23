@@ -1,12 +1,16 @@
 'use client'
 
-import { useRef } from "react"
+import { FC, useRef } from "react"
 import { normalizeKey } from "./forms/newModelForm"
 import modelInfoJson from "@/docs/modelInfo.json"
 
-const Filter = ({ setFilterInfo }: { setFilterInfo: any }) => {
+interface FilterProps {
+    setFilterInfo: any;
+    selectInfo: any
+}
+
+const Filter: FC<FilterProps> = ({ setFilterInfo, selectInfo }) => {
     const formRef = useRef<HTMLFormElement>(null)
-    const modelInfo = modelInfoJson as Record<string, string[]>
 
     const vehicleModelInfo = [
         "Model Name",
@@ -48,7 +52,7 @@ const Filter = ({ setFilterInfo }: { setFilterInfo: any }) => {
                             <option value="" disabled>
                                 -- please select --
                             </option>
-                            {(modelInfo[title] ?? []).map((option) => (
+                            {(selectInfo[title] ?? []).map((option: string) => (
                                 <option key={option} value={option}>
                                     {option}
                                 </option>
