@@ -35,7 +35,7 @@ const Filter = ({ setFilterInfo }: { setFilterInfo: any }) => {
         setFilterInfo(newModel)
     }
     return (
-        <div className="mx-8 py-3  text-xs">
+        <div className="mx-8 text-xs">
             <form className="grid grid-cols-9 gap-3" ref={formRef}>
                 {vehicleModelInfo.map((title) => (
                     <div key={title} className="col-span-2 flex flex-col gap-1">
