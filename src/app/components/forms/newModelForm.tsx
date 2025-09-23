@@ -5,7 +5,7 @@ import modelInfoJson from "@/docs/modelInfo.json";
 
 const modelInfo = modelInfoJson as Record<string, string[]>
 
-const normalizeKey = (label: string) =>
+export const normalizeKey = (label: string) =>
     label.toLowerCase().replace(/\s+/g, '');
 
 const NewModelForm = () => {

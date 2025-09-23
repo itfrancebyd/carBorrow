@@ -20,21 +20,48 @@ interface Model {
 const ModelPage = () => {
     const [modelData, setModelData] = useState<Model[]>([])
     const [isLoading, setLoading] = useState(true)
+    const [isFilterInfo, setFilterInfo] = useState([])
     const supabase = createClient()
 
     useEffect(() => {
         const fetchVehicleModels = async () => {
             setLoading(true)
-            let { data: vehicle_model, error } = await supabase.from('vehicle_model').select('*')
-            if (error) {
-                console.error("Error fetching vehicle models: ", error)
-            } else if (vehicle_model) {
-                setModelData(vehicle_model)
+
+            if (isFilterInfo.length === 0 || !isFilterInfo) {
+                let { data: vehicle_model, error } = await supabase
+                    .from('vehicle_model')
+                    .select('*')
+                if (error) {
+                    console.error("Error fetching vehicle models: ", error)
+                } else if (vehicle_model) {
+                    setModelData(vehicle_model)
+                }
+                setLoading(false)
+                return
             }
-            setLoading(false)
+            //filter the info
+            const f = isFilterInfo[0]
+            let query = supabase.from("vehicle_model").select("*")
+            // add eq condition: not null && not empty string
+            Object.entries(f).forEach(([key, value]) => {
+                if (value !== null && value !== "") {
+                    query = query.eq(key, value as string)
+                }
+            })
+
+            const { data, error } = await query
+
+            if (error) {
+                console.error("Error while filtering:", error.message)
+                setModelData([])
+                return
+            } else {
+                setModelData(data ?? []);
+            }
+            setLoading(false);
         }
         fetchVehicleModels()
-    }, [])
+    }, [isFilterInfo])
 
     // fetch detail with id
     const fetchVehicleDetail = async (id: string) => {
@@ -65,7 +92,7 @@ const ModelPage = () => {
         <div className="flex flex-col min-h-full">
             <SubTitle subTitleName="Loan Requests"></SubTitle>
             <DataMeasure></DataMeasure>
-            <Filter></Filter>
+            <Filter setFilterInfo={setFilterInfo}></Filter>
             <div className="flex-1">
                 {isLoading
                     ?
