@@ -2,7 +2,6 @@
 
 import { FC, useRef } from "react"
 import { normalizeKey } from "./forms/newModelForm"
-import modelInfoJson from "@/docs/modelInfo.json"
 
 interface FilterProps {
     setFilterInfo: any;

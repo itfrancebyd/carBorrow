@@ -1,10 +1,17 @@
+'use client'
+
 import TableGrid from "../components/forms/tableGrid";
 import vehicleContent from "@/docs/vehicle_info.json"
 import SubTitle from "../components/subTitle";
 import DataMeasure from "../components/DataMeasure";
 import Filter from "../components/filter";
+import { useState } from "react";
+import modelInfoJson from "@/docs/modelInfo.json"
 
 export default function Home() {
+  const [isVehicleInfo, setVehicleInfo] = useState([])
+  const modelInfo = modelInfoJson as Record<string, string[]>
+
   const tableTitle = [
     { key: "plate_number", label: "Plate Number" },
     { key: "VIN", label: "VIN" },
@@ -17,7 +24,7 @@ export default function Home() {
     <div className="flex flex-col min-h-full">
       <SubTitle subTitleName="Vehicles"></SubTitle>
       <DataMeasure></DataMeasure>
-      <Filter></Filter>
+      <Filter setFilterInfo={setVehicleInfo} selectInfo={modelInfo}></Filter>
       <div className="flex-1"><TableGrid formTitle="Vehicle" tableTitle={tableTitle} tableContent={vehicleContent} pushQuery={"plate_number"} dragDropLink="importvehicle" buttonLink="addvehicle"></TableGrid></div>
     </div>
   );
