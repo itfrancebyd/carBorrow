@@ -60,5 +60,9 @@
         "Cream White",
         "Delan Black",
         "Emperor Red"
+    ],
+    "Status": [
+        "enable",
+        "disable"
     ]
 }

@@ -87,19 +87,19 @@ const TableGrid: FC<tableGridProp> = ({
                         {tableContent.map((item, index) => (
                             <tr onClick={() => handleClick(item.id)} key={index} className="h-10 border-b-2 border-[#F3F5F7] hover:bg-[#B6C6A1] hover:cursor-pointer">
                                 {tableTitle.map((field) => (
-                                    field.key.toLowerCase() === "action" ? (
-                                        <td key={field.key} className="px-3">
-                                            <button
-                                                disabled={item.edit === "disable"}
-                                                className={`px-1 py-1 rounded-md ${item.edit == 'enable' ? 'bg-[#26361C] hover:bg-[#4f693d] hover:cursor-pointer' : 'bg-[#cdcdcd] hover:cursor-not-allowed'}`}
-                                                onClick={(e) => handleEdit(e)}
-                                            >
-                                                <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5380" width="16" height="16"><path d="M800 531.52a32 32 0 0 1 64 0v305.92A90.56 90.56 0 0 1 773.44 928H186.88A90.88 90.88 0 0 1 96 837.44V250.88A90.88 90.88 0 0 1 186.88 160h288a32 32 0 0 1 0 64h-288A26.56 26.56 0 0 0 160 250.88v586.56A26.56 26.56 0 0 0 186.88 864h586.56A26.56 26.56 0 0 0 800 837.44z" fill="#ffffff" p-id="5381"></path><path d="M825.28 209.92l-43.2-43.2-405.12 405.12-13.76 56.96 56.96-13.76zM444.16 675.2L327.36 704A32 32 0 0 1 288 664.64l28.16-116.8a32 32 0 0 1 8.32-15.04l424-423.04a48 48 0 0 1 67.2 0l66.56 66.88a47.68 47.68 0 0 1 0 66.88L459.2 666.56a33.92 33.92 0 0 1-15.04 8.64z" fill="#ffffff" p-id="5382"></path></svg>
-                                            </button>
-                                        </td>
-                                    ) : (
-                                        <td key={field.key} className="px-3">{item[field.key as keyof typeof item]}</td>
-                                    )
+                                    field.key.toLowerCase() === "status"
+                                        ? (
+                                            <td key={field.key} className="px-3">
+                                                {item.status === "enable" ? (
+                                                    <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5933" width="16" height="16"><path d="M510.567403 63.852903c-246.304387 0-446.663336 200.358949-446.663336 446.663336 0 246.304387 200.358949 446.663336 446.663336 446.663336 246.304387 0 446.765664-200.358949 446.765664-446.663336C957.230738 264.211852 756.87179 63.852903 510.567403 63.852903L510.567403 63.852903zM787.979614 386.084941 454.593784 719.573099c-7.981613 7.981613-20.977316 7.981613-28.958929 0l-43.694214-43.694214c0 0 0 0 0 0L237.145998 531.084241c-7.981613-7.981613-7.981613-20.977316 0-28.958929l43.694214-43.694214c7.981613-7.981613 20.977316-7.981613 28.958929 0L440.063156 588.592785 715.326471 313.329469c7.981613-7.981613 20.977316-7.981613 29.061257 0L787.979614 357.126012C796.063556 365.107625 796.063556 378.103328 787.979614 386.084941L787.979614 386.084941z" p-id="5934" fill="#26361C"></path></svg>
+                                                ) : (
+                                                    <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1490" width="16" height="16"><path d="M 506.56 25.92 C 239.68 25.92 23.36 242.24 23.36 509.12 s 216.32 483.2 483.2 483.2 s 483.2 -216.32 483.2 -483.2 C 989.44 242.24 773.12 25.92 506.56 25.92 Z m 239.04 663.68 l -81.28 81.28 l -157.76 -157.76 l -157.76 157.76 l -81.28 -81.28 l 157.76 -157.76 l -157.76 -157.76 l 81.28 -81.28 l 157.76 157.76 l 157.76 -157.76 l 81.28 81.28 l -157.76 157.76 l 157.76 157.76 Z" fill="#d81e06" p-id="1491"></path></svg>
+                                                )}
+                                            </td>
+                                        )
+                                        : (
+                                            <td key={field.key} className="px-3">{item[field.key as keyof typeof item]}</td>
+                                        )
                                 ))}
                             </tr>
                         ))}

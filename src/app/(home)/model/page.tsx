@@ -106,12 +106,13 @@ const ModelPage = () => {
         { key: "model_name", label: "Model Name" },
         { key: "version_name", label: "Version Name" },
         { key: "interior_colour", label: "Interior Colour" },
-        { key: "exterior_colour", label: "Exterior Colour" }
+        { key: "exterior_colour", label: "Exterior Colour" },
+        { key: "status", label: "Status" }
     ]
 
     return (
         <div className="flex flex-col min-h-full">
-            <SubTitle subTitleName="Loan Requests"></SubTitle>
+            <SubTitle subTitleName="Vehicle Models"></SubTitle>
             <DataMeasure></DataMeasure>
             <Filter setFilterInfo={setFilterInfo} selectInfo={modelInfo}></Filter>
             <div className="flex-1">
@@ -122,7 +123,7 @@ const ModelPage = () => {
                     </div>
                     :
                     <TableGrid
-                        formTitle="Loan Requests"
+                        formTitle="Vehicle Models"
                         tableTitle={tableTitle}
                         tableContent={modelData}
                         pushQuery={"model"}
