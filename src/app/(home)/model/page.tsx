@@ -81,6 +81,26 @@ const ModelPage = () => {
             .eq('id', id)
     }
 
+    const editModel = async (
+        table: string,
+        id: string,
+        updateData: Record<string, any>
+    ) => {
+        const { data, error } = await supabase
+            .from(table)
+            .update(updateData)
+            .eq("id", id)
+            .select();
+
+        if (error) {
+            console.error(`Update error in ${table}:`, error.message);
+            throw new Error(error.message);
+        }
+
+        return data;
+    };
+
+
     const tableTitle = [
         { key: "model_name", label: "Model Name" },
         { key: "version_name", label: "Version Name" },
@@ -100,7 +120,7 @@ const ModelPage = () => {
                         Loading...
                     </div>
                     :
-                    <TableGrid formTitle="Loan Requests" tableTitle={tableTitle} tableContent={modelData} pushQuery={"model"} dragDropLink="importModel" buttonLink="addmodel" fetchDetailWithId={fetchVehicleDetail} actionDelete={deleteVehicle}></TableGrid>
+                    <TableGrid formTitle="Loan Requests" tableTitle={tableTitle} tableContent={modelData} pushQuery={"model"} dragDropLink="importModel" buttonLink="addmodel" fetchDetailWithId={fetchVehicleDetail} actionDelete={deleteVehicle} actionEdit={editModel}></TableGrid>
                 }
             </div>
         </div>
