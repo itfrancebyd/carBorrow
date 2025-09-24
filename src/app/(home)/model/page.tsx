@@ -133,7 +133,7 @@ const ModelPage = () => {
         <div className="flex flex-col min-h-full">
             <SubTitle subTitleName="Vehicle Models"></SubTitle>
             <DataMeasure dataMeasure={dataMeasure}></DataMeasure>
-            <Filter setFilterInfo={setFilterInfo} selectInfo={modelInfo}></Filter>
+            <Filter setFilterInfo={setFilterInfo} selectInfo={modelInfo} filterItems={tableTitle}></Filter>
             <div className="flex-1">
                 {isLoading
                     ?
