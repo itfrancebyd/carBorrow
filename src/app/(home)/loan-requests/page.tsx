@@ -15,7 +15,7 @@ const LoanReq = () => {
     return (
         <div className="flex flex-col min-h-full">
             <SubTitle subTitleName="Loan Requests"></SubTitle>
-            <div className="flex-1"><TableGrid formTitle="Loan Requests" tableTitle={tableTitle} tableContent={loanInfo} pushQuery={"loan_id"} dragDropLink="importLoan" buttonLink="addloanrequest"></TableGrid></div>
+            {/* <div className="flex-1"><TableGrid formTitle="Loan Requests" tableTitle={tableTitle} tableContent={loanInfo} pushQuery={"loan_id"} dragDropLink="importLoan" buttonLink="addloanrequest"></TableGrid></div> */}
         </div>
     )
 }

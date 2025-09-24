@@ -3,10 +3,10 @@
 import TableGrid from "../components/forms/tableGrid";
 import vehicleContent from "@/docs/vehicle_info.json"
 import SubTitle from "../components/subTitle";
-import DataMeasure from "../components/DataMeasure";
 import Filter from "../components/filter";
 import { useState } from "react";
 import modelInfoJson from "@/docs/modelInfo.json"
+import DataMeasure from "@/app/components/dataMeasure"
 
 export default function Home() {
   const [isVehicleInfo, setVehicleInfo] = useState([])
@@ -23,9 +23,9 @@ export default function Home() {
   return (
     <div className="flex flex-col min-h-full">
       <SubTitle subTitleName="Vehicles"></SubTitle>
-      <DataMeasure></DataMeasure>
+      {/* <DataMeasure></DataMeasure> */}
       <Filter setFilterInfo={setVehicleInfo} selectInfo={modelInfo}></Filter>
-      <div className="flex-1"><TableGrid formTitle="Vehicle" tableTitle={tableTitle} tableContent={vehicleContent} pushQuery={"plate_number"} dragDropLink="importvehicle" buttonLink="addvehicle"></TableGrid></div>
+      {/* <div className="flex-1"><TableGrid formTitle="Vehicle" tableTitle={tableTitle} tableContent={vehicleContent} pushQuery={"plate_number"} dragDropLink="importvehicle" buttonLink="addvehicle"></TableGrid></div> */}
     </div>
   );
 }

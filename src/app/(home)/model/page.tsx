@@ -1,11 +1,11 @@
 'use client'
-import DataMeasure from "@/app/components/DataMeasure"
 import Filter from "@/app/components/filter"
 import TableGrid from "@/app/components/forms/tableGrid"
 import SubTitle from "@/app/components/subTitle"
 import { createClient } from "@/utils/supabase/client"
 import { useEffect, useState } from "react"
 import modelInfoJson from "@/docs/modelInfo.json"
+import DataMeasure from "@/app/components/dataMeasure"
 
 interface Model {
     id: string;
@@ -19,15 +19,29 @@ interface Model {
 
 const ModelPage = () => {
     const [modelData, setModelData] = useState<Model[]>([])
+    const [dataSum, setDataSum] = useState<Model[]>([])
     const [isLoading, setLoading] = useState(true)
     const [isFilterInfo, setFilterInfo] = useState([])
     const supabase = createClient()
     const modelInfo = modelInfoJson as Record<string, string[]>
 
     useEffect(() => {
+        const fetchData = async () => {
+            let { data: vehicle_model, error } = await supabase
+                .from('vehicle_model')
+                .select('*')
+            if (error) {
+                console.error("Error fetching vehicle models: ", error)
+            } else if (vehicle_model) {
+                setDataSum(vehicle_model)
+            }
+        }
+        fetchData()
+    }, [])
+
+    useEffect(() => {
         const fetchVehicleModels = async () => {
             setLoading(true)
-
             if (isFilterInfo.length === 0 || !isFilterInfo) {
                 let { data: vehicle_model, error } = await supabase
                     .from('vehicle_model')
@@ -99,8 +113,7 @@ const ModelPage = () => {
         }
 
         return data;
-    };
-
+    }
 
     const tableTitle = [
         { key: "model_name", label: "Model Name" },
@@ -110,10 +123,16 @@ const ModelPage = () => {
         { key: "status", label: "Status" }
     ]
 
+    const dataMeasure = [
+        { title: "Total models", dataCount: dataSum.length, color: "bg-blue-600" },
+        { title: "Active models", dataCount: dataSum.filter((item) => item.status === "enable").length, color: "bg-green-400" },
+        { title: "Disabled models", dataCount: dataSum.filter((item) => item.status === "disable").length, color: "bg-red-600" }
+    ]
+
     return (
         <div className="flex flex-col min-h-full">
             <SubTitle subTitleName="Vehicle Models"></SubTitle>
-            <DataMeasure></DataMeasure>
+            <DataMeasure dataMeasure={dataMeasure}></DataMeasure>
             <Filter setFilterInfo={setFilterInfo} selectInfo={modelInfo}></Filter>
             <div className="flex-1">
                 {isLoading
