@@ -18,10 +18,12 @@ export default function AuthLayout({
   children: React.ReactNode;
 }) {
   return (
-    <body
-      className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col gap-7`}
-    >
-      {children}
-    </body>
-  );
+    <html lang="en">
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col gap-7`}
+      >
+        {children}
+      </body>
+    </html>
+  )
 }
