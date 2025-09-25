@@ -22,7 +22,7 @@ const Filter: FC<FilterProps> = ({ setFilterInfo, selectInfo, filterItems }) => 
                 ...acc,
                 [item.key]: formData.get(normalizeKey(item.label)),
             }),
-            {} as Record<string, FormDataEntryValue | null>
+            {} as Record<string, FormDataEntryValue | null> //set a default value {}: key is a string，value is a FormDataEntryValue（form value）or null
         )
         setFilterInfo(newModel)
     }

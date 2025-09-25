@@ -13,19 +13,30 @@ export default function Home() {
   const modelInfo = modelInfoJson as Record<string, string[]>
 
   const tableTitle = [
+    { key: "vin", label: "VIN" },
     { key: "plate_number", label: "Plate Number" },
-    { key: "VIN", label: "VIN" },
-    { key: "exterior_color", label: "Exterior Color" },
-    { key: "interior_color", label: "Interior Color" },
-    { key: "action", label: "Action" }
+    { key: "model_name", label: "Model Name" },
+    { key: "status", label: "status" }
   ]
 
   return (
     <div className="flex flex-col min-h-full">
       <SubTitle subTitleName="Vehicles"></SubTitle>
       {/* <DataMeasure></DataMeasure> */}
-      <Filter setFilterInfo={setVehicleInfo} selectInfo={modelInfo}></Filter>
-      {/* <div className="flex-1"><TableGrid formTitle="Vehicle" tableTitle={tableTitle} tableContent={vehicleContent} pushQuery={"plate_number"} dragDropLink="importvehicle" buttonLink="addvehicle"></TableGrid></div> */}
+      <Filter setFilterInfo={setVehicleInfo} selectInfo={modelInfo} filterItems={tableTitle}></Filter>
+      <div className="flex-1">
+        <TableGrid
+          formTitle="Vehicle"
+          tableTitle={tableTitle}
+          tableContent={vehicleContent}
+          pushQuery={"plate_number"}
+          dragDropLink="importvehicle"
+          buttonLink="addvehicle"
+          fetchDetailWithId={''}
+          actionDelete={''}
+          actionEdit={''}
+          selectInfo={modelInfo}
+        ></TableGrid></div>
     </div>
   );
 }
