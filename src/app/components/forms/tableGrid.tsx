@@ -50,10 +50,6 @@ const TableGrid: FC<tableGridProp> = ({
         setCurrentNumber('')
     }
 
-    const handleEdit = (event: React.MouseEvent) => {
-        event.stopPropagation()
-    }
-
     useEffect(() => {
         if (searchParam.has(pushQuery)) {
             const requestQuery = searchParam.get(pushQuery)
@@ -65,10 +61,10 @@ const TableGrid: FC<tableGridProp> = ({
     }, [])
 
     return (
-        <div className="h-full w-full text-[#494949] text-sm">
-            <div className="bg-white h-full px-8 overflow-y-auto">
+        <div className="h-full w-full px-8 text-[#494949] text-xs lg:text-sm">
+            <div className="bg-white h-full overflow-y-auto">
                 <div className="flex justify-between py-5">
-                    <div className="font-semibold text-base">{formTitle}</div>
+                    <div className="font-semibold text-sm lg:text-base">{formTitle}</div>
                     <div className="flex gap-3">
                         <Link href={`/${dragDropLink}`} className="bg-[#26361C] hover:bg-[#7a856b] text-white px-3 cursor-pointer flex items-center">import</Link>
                         <button className="bg-[#26361C] hover:bg-[#7a856b] text-white px-3 cursor-pointer flex items-center">export</button>
@@ -79,13 +75,17 @@ const TableGrid: FC<tableGridProp> = ({
                     <thead>
                         <tr className="h-10 bg-[#26361C] text-white">
                             {tableTitle.map((item, index) =>
-                                <th key={index} className="text-start px-3">{item.label}</th>
+                                <th key={index} className="text-start px-3 whitespace-nowrap">{item.label}</th>
                             )}
                         </tr>
                     </thead>
                     <tbody>
                         {tableContent.map((item, index) => (
-                            <tr onClick={() => handleClick(item.id)} key={index} className="h-10 border-b-2 border-[#F3F5F7] hover:bg-[#B6C6A1] hover:cursor-pointer">
+                            <tr
+                                key={index}
+                                onClick={() => handleClick(item.id)}
+                                className="h-10 border-b-2 border-[#F3F5F7] whitespace-nowrap hover:bg-[#B6C6A1] hover:cursor-pointer"
+                            >
                                 {tableTitle.map((field) => (
                                     field.key.toLowerCase() === "status"
                                         ? (
@@ -98,7 +98,7 @@ const TableGrid: FC<tableGridProp> = ({
                                             </td>
                                         )
                                         : (
-                                            <td key={field.key} className="px-3">{item[field.key as keyof typeof item]}</td>
+                                            <td key={field.key} className="px-3 whitespace-nowrap">{item[field.key as keyof typeof item]}</td>
                                         )
                                 ))}
                             </tr>

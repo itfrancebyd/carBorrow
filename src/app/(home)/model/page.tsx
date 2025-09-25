@@ -134,7 +134,7 @@ const ModelPage = () => {
             <SubTitle subTitleName="Vehicle Models"></SubTitle>
             <DataMeasure dataMeasure={dataMeasure}></DataMeasure>
             <Filter setFilterInfo={setFilterInfo} selectInfo={modelInfo} filterItems={tableTitle}></Filter>
-            <div className="flex-1">
+            <div>
                 {isLoading
                     ?
                     <div className="flex items-center justify-center bg-[#7a856b] mx-8 mt-6 py-6 h-full text-white">

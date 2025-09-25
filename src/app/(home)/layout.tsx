@@ -28,12 +28,12 @@ export default function HomeLayout({
   return (
     <html lang="en">
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased grid grid-cols-10 min-h-screen`}
+        className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex`}
       >
-        <div className="col-span-2 min-w-[200px]">
+        <div className="w-14 lg:w-60 fixed top-0 left-0 h-screen bg-gray-100">
           <SideBar></SideBar>
         </div>
-        <div className="col-span-8">
+        <div className="flex-1 ml-14 lg:ml-60 p-6">
           {children}
         </div>
         {modals}
