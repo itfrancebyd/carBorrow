@@ -55,10 +55,9 @@ const ModelPage = () => {
                 return
             }
             //filter the info
-            const f = isFilterInfo[0]
             let query = supabase.from("vehicle_model").select("*")
             // add eq condition: not null && not empty string
-            Object.entries(f).forEach(([key, value]) => {
+            Object.entries(isFilterInfo).forEach(([key, value]) => {
                 if (value !== null && value !== "") {
                     query = query.eq(key, value as string)
                 }

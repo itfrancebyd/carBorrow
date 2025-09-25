@@ -12,32 +12,18 @@ interface FilterProps {
 const Filter: FC<FilterProps> = ({ setFilterInfo, selectInfo, filterItems }) => {
     const formRef = useRef<HTMLFormElement>(null)
 
-    const vehicleModelInfo = [
-        "Model Name",
-        "Version Name",
-        "Interior Colour",
-        "Exterior Colour"
-    ]
-
     const handleFilterSubmit = (event: React.MouseEvent) => {
         event.preventDefault()
         if (!formRef.current) return
         const formData = new FormData(formRef.current)
-        const modelName = formData.get(normalizeKey(filterItems[0].label))
-        const versionName = formData.get(normalizeKey(filterItems[1].label))
-        const interiorColour = formData.get(normalizeKey(filterItems[2].label))
-        const exteriorColour = formData.get(normalizeKey(filterItems[3].label))
-        const status = formData.get(normalizeKey(filterItems[4].label))
 
-        const newModel = [
-            {
-                model_name: modelName,
-                version_name: versionName,
-                interior_colour: interiorColour,
-                exterior_colour: exteriorColour,
-                status: status
-            }
-        ]
+        const newModel = filterItems.reduce(
+            (acc: { key: string, label: string }, item: { key: string, label: string }) => ({
+                ...acc,
+                [item.key]: formData.get(normalizeKey(item.label)),
+            }),
+            {} as Record<string, FormDataEntryValue | null>
+        )
         setFilterInfo(newModel)
     }
     return (
