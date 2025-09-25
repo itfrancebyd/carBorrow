@@ -56,6 +56,7 @@ const PopModalForm: FC<PopModalFormProp> = ({
             await actionEdit("vehicle_model", currentID, data)
             alert("Changes saved successfully")
             setEdit(false)
+            window.location.href = '/model'
         } catch (err) {
             alert("Failed to save changes")
         }
