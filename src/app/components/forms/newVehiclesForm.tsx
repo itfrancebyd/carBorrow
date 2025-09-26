@@ -1,4 +1,26 @@
+'use client'
+import { createClient } from "@/utils/supabase/client"
+import { useEffect, useState } from "react"
+import type { ModelProps } from "@/app/(home)/model/page"
+
 const NewVehiclesForm = () => {
+    const [fetchedModelInfo, setFetchedModelInfo] = useState<ModelProps[]>()
+    const supabase = createClient()
+
+    useEffect(() => {
+        const fetchData = async () => {
+            let { data: vehicle_model, error } = await supabase
+                .from('vehicle_model')
+                .select('*')
+            if (error) {
+                console.error("Error fetching vehicle models: ", error)
+            } else if (vehicle_model) {
+                setFetchedModelInfo(vehicle_model)
+            }
+        }
+        fetchData()
+    }, [])
+
     const vehiclesInfo = [
         {
             subtitle: "Identification",
@@ -6,7 +28,7 @@ const NewVehiclesForm = () => {
         },
         {
             subtitle: "Model Information",
-            fields: ["Model Name", "Version Name", "Interior Color", "Exterior Color"],
+            fields: ["Model Name", "Version Name", "Interior Colour", "Exterior Colour"],
         },
         {
             subtitle: "Usage & Battery",

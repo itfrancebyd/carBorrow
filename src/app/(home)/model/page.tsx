@@ -7,7 +7,7 @@ import { useEffect, useState } from "react"
 import modelInfoJson from "@/docs/modelInfo.json"
 import DataMeasure from "@/app/components/dataMeasure"
 
-interface Model {
+export interface ModelProps {
     id: string;
     modelName: string;
     versionName: string;
@@ -18,8 +18,8 @@ interface Model {
 }
 
 const ModelPage = () => {
-    const [modelData, setModelData] = useState<Model[]>([])
-    const [dataSum, setDataSum] = useState<Model[]>([])
+    const [modelData, setModelData] = useState<ModelProps[]>([])
+    const [dataSum, setDataSum] = useState<ModelProps[]>([])
     const [isLoading, setLoading] = useState(true)
     const [isFilterInfo, setFilterInfo] = useState([])
     const supabase = createClient()
