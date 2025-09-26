@@ -14,7 +14,7 @@ interface Model {
     exteriorColour: string;
     interiorColour: string;
     status: string;
-    lastOperationUser: string;
+    modified_by: string;
 }
 
 const ModelPage = () => {

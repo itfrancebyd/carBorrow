@@ -1,30 +1,47 @@
 const NewVehiclesForm = () => {
     const vehiclesInfo = [
-        "Arrival Date",
-        "Status",
-        "Model",
-        "Trim",
-        "Exterior Color",
-        "Interior Color",
-        "Vin",
-        "Plate Number",
-        "Insurance",
-        "Pool Flag",
-        "Mileage",
-        "Update Rate",
-        "Key 1",
-        "Key 2",
-        "Current Location"
-    ];
+        {
+            subtitle: "Identification",
+            fields: ["VIN", "Plate Number", "Plate Registration Date"],
+        },
+        {
+            subtitle: "Model Information",
+            fields: ["Model Name", "Version Name", "Interior Color", "Exterior Color"],
+        },
+        {
+            subtitle: "Usage & Battery",
+            fields: ["Km", "Battery %", "Update Date"],
+        },
+        {
+            subtitle: "Key & Location",
+            fields: ["Key 1", "Key 2", "Current Location"],
+        },
+        {
+            subtitle: "Status",
+            fields: ["Status"],
+        },
+    ]
+
 
     return (
         <div className="flex flex-col gap-3">
-            <div className="text-xs text-gray-400">VEHICLES DETAILS</div>
-            <form className="text-sm grid grid-cols-2 gap-x-5 gap-y-3">
-                {vehiclesInfo.map((title) => (
-                    <div key={title} className="flex flex-col">
-                        <label className="text-gray-600">{title}</label>
-                        <input type="text" name={title.toLocaleLowerCase()} className="border-1 border-gray-400 rounded-md py-1 px-2"></input>
+            <div className="text-xs text-gray-400 font-semibold">VEHICLES DETAILS</div>
+            <form className="text-sm flex flex-col gap-4">
+                {vehiclesInfo.map((group) => (
+                    <div key={group.subtitle} className="flex flex-col gap-1">
+                        <div className="text-gray-400 text-xs font-semibold">{group.subtitle}</div>
+                        <div className="grid grid-cols-4 gap-x-3">
+                            {group.fields.map((field) => (
+                                <div key={field} className="flex flex-col">
+                                    <label className="text-gray-500 text-xs">{field}</label>
+                                    <input
+                                        type="text"
+                                        name={field.toLowerCase().replace(/\s+/g, "_")}
+                                        className="border border-gray-400 rounded-md py-1 px-2"
+                                    />
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 ))}
             </form>
