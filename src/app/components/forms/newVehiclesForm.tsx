@@ -1,11 +1,31 @@
 'use client'
 import { createClient } from "@/utils/supabase/client"
 import { useEffect, useState } from "react"
-import type { ModelProps } from "@/app/(home)/model/page"
+
+interface ModelDatabaseProps {
+    model_name: string;
+    version_name: string;
+    exterior_colour: string;
+    interior_colour: string;
+    status: string;
+    id: string
+}
 
 const NewVehiclesForm = () => {
-    const [fetchedModelInfo, setFetchedModelInfo] = useState<ModelProps[]>()
+    const [fetchedModelInfo, setFetchedModelInfo] = useState<ModelDatabaseProps[]>()
+    const [findVersionName, setFindVersionName] = useState<ModelDatabaseProps[] | null>(null)
+    const [findExteriorColo, setFindExteriorColo] = useState<ModelDatabaseProps[] | null>(null)
+    const [findInteriorColo, setFindInteriorColo] = useState<ModelDatabaseProps[] | null>(null)
+    const [selectedModel, setSelectedModel] = useState<string>("")
+    const [selectedVersion, setSelectedVersion] = useState<string>("")
+    const [selectedExterior, setSelectedExterior] = useState<string>("")
+    const [selectedInterior, setSelectedInterior] = useState<string>("")
+    const [selectedModelId, setSelectedModelId] = useState<string | null>(null)
     const supabase = createClient()
+
+    useEffect(() => {
+        setSelectedModelId(null)
+    }, [selectedModel, selectedVersion, selectedExterior])
 
     useEffect(() => {
         const fetchData = async () => {
@@ -28,7 +48,7 @@ const NewVehiclesForm = () => {
         },
         {
             subtitle: "Model Information",
-            fields: ["Model Name", "Version Name", "Interior Colour", "Exterior Colour"],
+            fields: ["Model Name", "Version Name", "Exterior Colour", "Interior Colour"],
         },
         {
             subtitle: "Usage & Battery",
@@ -44,6 +64,56 @@ const NewVehiclesForm = () => {
         },
     ]
 
+    const handleModelChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const selected = event.target.value
+        setSelectedModel(selected)
+
+        const found = fetchedModelInfo?.filter(
+            (item) => item.model_name === selected
+        )
+        setFindVersionName(found ?? null) // fallback if not found
+
+        // reset lower levels
+        setFindExteriorColo(null)
+        setFindInteriorColo(null)
+
+        setSelectedVersion("")
+        setSelectedExterior("")
+        setSelectedInterior("")
+    }
+
+    const handleVersionChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const selected = event.target.value
+        setSelectedVersion(selected)
+
+        const found = findVersionName?.filter(
+            (item) => item.version_name === selected
+        )
+        setFindExteriorColo(found ?? null)
+
+        setSelectedExterior("")
+        setSelectedInterior("")
+    }
+
+    const handleExteriorChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const selected = event.target.value
+        setSelectedExterior(selected)
+
+        const found = findExteriorColo?.filter(
+            (item) => item.exterior_colour === selected
+        )
+        setFindInteriorColo(found ?? null)
+        setSelectedInterior("")
+    }
+
+    const handleInteriorChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+        const selected = event.target.value
+        setSelectedInterior(selected)
+        const found = findInteriorColo?.find(
+            (item) => item.interior_colour === selected
+        )
+        setSelectedModelId(found ? found.id : null)
+    }
 
     return (
         <div className="flex flex-col gap-3">
@@ -53,22 +123,113 @@ const NewVehiclesForm = () => {
                     <div key={group.subtitle} className="flex flex-col gap-1">
                         <div className="text-gray-400 text-xs font-semibold">{group.subtitle}</div>
                         <div className="grid grid-cols-4 gap-x-3">
-                            {group.fields.map((field) => (
-                                <div key={field} className="flex flex-col">
-                                    <label className="text-gray-500 text-xs">{field}</label>
-                                    <input
-                                        type="text"
-                                        name={field.toLowerCase().replace(/\s+/g, "_")}
-                                        className="border border-gray-400 rounded-md py-1 px-2"
-                                    />
-                                </div>
-                            ))}
+                            {group.subtitle === "Model Information"
+                                ?
+                                <>
+                                    <div className="flex flex-col">
+                                        <label className="text-gray-500 text-xs">Model Name</label>
+                                        <select
+                                            value={selectedModel}
+                                            name="modelname"
+                                            className="border border-gray-400 rounded-md py-1 px-1 text-xs"
+                                            onChange={handleModelChange}
+                                        >
+                                            <option className="text-xs" value="" disabled>
+                                                -- please select --
+                                            </option>
+                                            {[...new Set(fetchedModelInfo?.map((car) => car.model_name))].map(
+                                                (uniqueModel) => (
+                                                    <option className="text-xs" key={uniqueModel} value={uniqueModel}>
+                                                        {uniqueModel}
+                                                    </option>
+                                                )
+                                            )}
+                                        </select>
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <label className="text-gray-500 text-xs">Version Name</label>
+                                        <select
+                                            disabled={!findVersionName}
+                                            value={selectedVersion}
+                                            name="versionname"
+                                            className={`border border-gray-400 rounded-md py-1 px-2 text-xs ${findVersionName ? '' : 'bg-[#4f6244] cursor-not-allowed'}`}
+                                            onChange={handleVersionChange}
+                                        >
+                                            <option className="text-xs" value="" disabled>
+                                                -- please select --
+                                            </option>
+                                            {[...new Set(findVersionName?.map((car) => car.version_name))].map(
+                                                (uniqueVersion) => (
+                                                    <option className="text-xs" key={uniqueVersion} value={uniqueVersion}>
+                                                        {uniqueVersion}
+                                                    </option>
+                                                )
+                                            )}
+                                        </select>
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <label className="text-gray-500 text-xs">Exterior Colour</label>
+                                        <select
+                                            disabled={!findExteriorColo}
+                                            value={selectedExterior}
+                                            name="exteriorcolour"
+                                            className={`border border-gray-400 rounded-md py-1 px-1 text-xs ${findExteriorColo ? '' : 'bg-[#4f6244] cursor-not-allowed'}`}
+                                            onChange={handleExteriorChange}
+                                        >
+                                            <option className="text-xs" value="" disabled>
+                                                -- please select --
+                                            </option>
+                                            {[...new Set(findExteriorColo?.map((car) => car.exterior_colour))].map(
+                                                (uniqueExterior) => (
+                                                    <option className="text-xs" key={uniqueExterior} value={uniqueExterior}>
+                                                        {uniqueExterior}
+                                                    </option>
+                                                )
+                                            )}
+                                        </select>
+                                    </div>
+                                    <div className="flex flex-col">
+                                        <label className="text-gray-500 text-xs">Interior Colour</label>
+                                        <select
+                                            disabled={!findInteriorColo}
+                                            value={selectedInterior}
+                                            name="interiorcolour"
+                                            className={`border border-gray-400 rounded-md py-1 px-1 text-xs ${findInteriorColo ? '' : 'bg-[#4f6244] cursor-not-allowed'}`}
+                                            onChange={handleInteriorChange}
+                                        >
+                                            <option className="text-xs" value="" disabled>
+                                                -- please select --
+                                            </option>
+                                            {[...new Set(findInteriorColo?.map((car) => car.interior_colour))].map(
+                                                (uniqueInterior) => (
+                                                    <option className="text-xs" key={uniqueInterior} value={uniqueInterior}>
+                                                        {uniqueInterior}
+                                                    </option>
+                                                )
+                                            )}
+                                        </select>
+                                    </div>
+                                </>
+                                :
+                                <>
+                                    {group.fields.map((field) => (
+                                        <div key={field} className="flex flex-col">
+                                            <label className="text-gray-500 text-xs">{field}</label>
+                                            <input
+                                                type="text"
+                                                name={field.toLowerCase().replace(/\s+/g, "_")}
+                                                className="border border-gray-400 rounded-md py-1 px-2 text-xs"
+                                            />
+                                        </div>
+                                    ))}
+                                </>}
                         </div>
                     </div>
-                ))}
-            </form>
-            <button className="bg-[#26361C] hover:bg-[#7a856b] text-white hover:text-black font-semibold px-4 py-2 cursor-pointer">Submit</button>
-        </div>
+                ))
+                }
+            </form >
+            <button className="bg-[#26361C] hover:bg-[#7a856b] text-white hover:text-black font-semibold px-4 py-2 cursor-pointer text-xs">Submit</button>
+        </div >
     )
 }
 export default NewVehiclesForm
