@@ -28,7 +28,7 @@ const NewVehiclesForm = () => {
     const formRef = useRef<HTMLFormElement>(null)
     const supabase = createClient()
 
-    const handleVehicleSubmit = (event: React.MouseEvent<HTMLButtonElement>) => {
+    const handleVehicleSubmit = async (event: React.MouseEvent<HTMLButtonElement>) => {
         event.preventDefault()
         setError({ vin: null, plate_number: null }) //reset error
 
@@ -47,7 +47,7 @@ const NewVehiclesForm = () => {
         const current_location = formData.get("current_location")
         const status = formData.get("status")
 
-        const submitData = [
+        const fields = [
             { key: "vin", label: "VIN", value: vin },
             { key: "plate_number", label: "Plate Number", value: plate_number },
             { key: "plate_registration_date", label: "Plate Registration Date", value: plate_registration_date },
@@ -68,16 +68,44 @@ const NewVehiclesForm = () => {
             hasError = true
         }
 
-        const empty = submitData.find(
+        const empty = fields.find(
             (f) => !f.value || (typeof f.value === "string" && f.value.trim() === "")
-        );
+        )
 
         if (empty) {
             alert(`Please fill in the "${empty.label}" field before submitting.`);
-            return;
+            return
         }
 
         if (hasError) return
+
+        const submitData = [
+            {
+                vin,
+                plate_number,
+                plate_registration_date,
+                model_information,
+                km,
+                battery,
+                update_date,
+                key_1,
+                key_2,
+                current_location,
+                status
+            }
+        ]
+
+        const { data, error } = await supabase
+            .from('car_fleet')
+            .insert(submitData)
+            .select()
+        if (error) {
+            console.error("Insert error:", error.message)
+            alert("error add new vehicle")
+            return
+        }
+        formRef.current.reset()
+        window.location.href = '/'
     }
 
     useEffect(() => {
