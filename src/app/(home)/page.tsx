@@ -118,11 +118,25 @@ export default function Home() {
   const fetchVehicleDetail = async (id: string) => {
     const { data, error } = await supabase
       .from("car_fleet")
-      .select("*")
+      .select(
+          `id,
+            vin,
+            plate_number,
+            model_information(model_name,version_name,interior_colour,exterior_colour),
+            plate_registration_date,
+            km,
+            battery,
+            usage_update_date,
+            key_1,
+            key_2,
+            current_location,
+            status
+            `
+      )
       .eq("id", id)
       .single()
     if (error) throw error
-    return [data]
+    return flattenData([data])
   }
 
   const tableTitle = [
@@ -155,14 +169,15 @@ export default function Home() {
           pushQuery={"plate_number"}
           dragDropLink="importvehicle"
           buttonLink="addvehicle"
-        ></TableGrid>
-        <VehiclePopModal
-          fetchData={fetchVehicleDetail}
-          popupWindowInfo={popupWindowInfo}
-          actionDelete={''}
-          actionEdit={''}
-          selectInfo={''}
-        ></VehiclePopModal>
+        >
+          <VehiclePopModal
+            fetchData={fetchVehicleDetail}
+            popupWindowInfo={popupWindowInfo}
+            actionDelete={''}
+            actionEdit={''}
+            selectInfo={vehicleInfo}
+          ></VehiclePopModal>
+        </TableGrid>
       </div>
     </div>
   );
