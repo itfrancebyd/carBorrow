@@ -41,7 +41,7 @@ const NewVehiclesForm = () => {
         const model_information = selectedModelId
         const km = formData.get("km")
         const battery = formData.get("battery")
-        const update_date = formData.get("update_date")
+        const usage_update_date = formData.get("usage_update_date")
         const key_1 = formData.get("key_1")
         const key_2 = formData.get("key_2")
         const current_location = formData.get("current_location")
@@ -54,7 +54,7 @@ const NewVehiclesForm = () => {
             { key: "model_information", label: "Model Information", value: model_information },
             { key: "km", label: "Km", value: km },
             { key: "battery", label: "Battery %", value: battery },
-            { key: "update_date", label: "Update Date", value: update_date },
+            { key: "usage_update_date", label: "Usage Update Date", value: usage_update_date },
             { key: "key_1", label: "Key 1", value: key_1 },
             { key: "key_2", label: "Key 2", value: key_2 },
             { key: "current_location", label: "Current Location", value: current_location },
@@ -87,7 +87,7 @@ const NewVehiclesForm = () => {
                 model_information,
                 km,
                 battery,
-                update_date,
+                usage_update_date,
                 key_1,
                 key_2,
                 current_location,
@@ -206,7 +206,7 @@ const NewVehiclesForm = () => {
                 return (
                     <>
                         <div className="flex flex-col">
-                            <label className="text-gray-500 text-xs">vin</label>
+                            <label className="text-gray-500 text-xs">Vin</label>
                             <input
                                 required
                                 type="text"
@@ -345,10 +345,10 @@ const NewVehiclesForm = () => {
                             />
                         </div>
                         <div className="flex flex-col">
-                            <label className="text-gray-500 text-xs">Update Date</label>
+                            <label className="text-gray-500 text-xs">Usage Update Date</label>
                             <input
                                 type="date"
-                                name="update_date"
+                                name="usage_update_date"
                                 className="border border-gray-400 rounded-md py-1 px-2 text-xs"
                             />
                         </div>
@@ -376,7 +376,7 @@ const NewVehiclesForm = () => {
                     <>
                         {group.fields.map((field) => (
                             <div key={field} className="flex flex-col">
-                                <label className="text-gray-500 text-xs">{field.toLowerCase().replace(/\s+/g, "_")}</label>
+                                <label className="text-gray-500 text-xs">{field}</label>
                                 <input
                                     type="text"
                                     name={field.toLowerCase().replace(/\s+/g, "_")}

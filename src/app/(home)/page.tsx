@@ -12,11 +12,21 @@ import { createClient } from "@/utils/supabase/client";
 interface carFleet {
   id: string;
   vin: string;
-  plat_number: string;
-  model_name: string;
-  plate_registration_date: string;
+  plate_number: string;
+  plate_registration_date: Date;
+  model_information?: {
+    model_name?: string;
+    version_name?: string;
+  };
+  model_name?: string;
+  version_name?: string;
+  km: number;
+  battery: number;
+  usage_update_date: Date;
+  key_1: string;
+  key_2: string;
   status: string;
-  modified_by: string;
+  current_location?: string;
 }
 
 export default function Home() {
@@ -27,6 +37,14 @@ export default function Home() {
   const [isFilterInfo, setFilterInfo] = useState([])
   const supabase = createClient()
   const modelInfo = modelInfoJson as Record<string, string[]>
+
+
+  const flattenData = (data: any[]) =>
+    data.map(({ model_information, ...rest }) => ({
+      ...rest,
+      model_name: model_information?.model_name ?? undefined,
+      version_name: model_information?.version_name ?? undefined,
+    }))
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,11 +66,24 @@ export default function Home() {
       if (isFilterInfo.length === 0 || !isFilterInfo) {
         let { data: car_fleet, error } = await supabase
           .from('car_fleet')
-          .select('*')
+          .select(
+            `id,
+            vin,
+            plate_number,
+            model_information(model_name,version_name),
+            plate_registration_date,
+            km,
+            battery,
+            usage_update_date,
+            key_1,
+            key_2,
+            current_location,
+            status
+            `)
         if (error) {
           console.error("Error fetching car fleet: ", error)
         } else if (car_fleet) {
-          setVehicleInfo(car_fleet)
+          setVehicleInfo(flattenData(car_fleet))
         }
         setLoading(false)
         return
@@ -88,13 +119,14 @@ export default function Home() {
       .eq("id", id)
       .single()
     if (error) throw error
-    return data;
-  };
+    return data
+  }
 
   const tableTitle = [
     { key: "vin", label: "VIN" },
     { key: "plate_number", label: "Plate Number" },
     { key: "model_name", label: "Model Name" },
+    { key: "version_name", label: "Version Name" },
     { key: "status", label: "Status" }
   ]
 
