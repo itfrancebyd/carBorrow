@@ -24,6 +24,8 @@ const VehiclePopModal: FC<VehiclePopModalProp> = ({
     const [loading, setLoading] = useState(false)
     const [isEdit, setEdit] = useState(false)
 
+    const immutableKeys = ["id", "model_name", "version_name", "interior_colour", "exterior_colour"]
+
     useEffect(() => {
         if (!currentID) return
 
@@ -56,7 +58,7 @@ const VehiclePopModal: FC<VehiclePopModalProp> = ({
             await actionEdit("vehicle_model", currentID, data)
             alert("Changes saved successfully")
             setEdit(false)
-            window.location.href = '/model'
+            window.location.href = '/'
         } catch (err) {
             alert("Failed to save changes")
         }
@@ -95,18 +97,14 @@ const VehiclePopModal: FC<VehiclePopModalProp> = ({
                                 </button>
                             </div>
                             <form className="flex flex-col gap-2">
-                                <div className="flex flex-col gap-1">
-                                    <label className="text-[#26361C] font-semibold">{popupWindowInfo[0].label}</label>
-                                    <input readOnly value={currentID} className="border border-[#26361C] bg-[#bac7b2] px-2 py-1 rounded-sm"></input>
-                                </div>
                                 {popupWindowInfo.map((title, index) => (
                                     // {[title.key] ==="id"?<div></div>:}
                                     <div key={index} className="flex flex-col gap-1">
                                         <label className="text-[#26361C] font-semibold">{title.label}</label>
                                         <input
-                                            disabled={!isEdit}
+                                            disabled={immutableKeys.includes(title.key) || !isEdit}
                                             value={data[title.key]}
-                                            className={`border border-[#26361C] px-2 py-1 rounded-sm ${isEdit ? 'cursor-pointer' : 'cursor-not-allowed'}`}
+                                            className={`border border-[#26361C] ${immutableKeys.includes(title.key) ? 'bg-[#bac7b2]' : ''} px-2 py-1 rounded-sm ${isEdit ? 'cursor-pointer' : 'cursor-not-allowed'}`}
                                             onChange={(e) =>
                                                 setData((prev: any) => ({
                                                     ...prev,

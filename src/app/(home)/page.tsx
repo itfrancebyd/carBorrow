@@ -119,7 +119,7 @@ export default function Home() {
     const { data, error } = await supabase
       .from("car_fleet")
       .select(
-          `id,
+        `id,
             vin,
             plate_number,
             model_information(model_name,version_name,interior_colour,exterior_colour),
@@ -147,12 +147,20 @@ export default function Home() {
     { key: "status", label: "Status" }
   ]
   const popupWindowInfo = [
+    { key: "id", label: "Vehicle Id" },
     { key: "vin", label: "VIN" },
     { key: "plate_number", label: "Plate Number" },
+    { key: "plate_registration_date", label: "Plate Number" },
     { key: "model_name", label: "Model Name" },
     { key: "version_name", label: "Version Name" },
     { key: "interior_colour", label: "Interior Colour" },
     { key: "exterior_colour", label: "Exterior Colour" },
+    { key: "km", label: "Km" },
+    { key: "battery", label: "Battery" },
+    { key: "usage_update_date", label: "Usage Update Date" },
+    { key: "key_1", label: "Key 1" },
+    { key: "key_2", label: "Key 2" },
+    { key: "current_location", label: "Current Location" },
     { key: "status", label: "Status" }
   ]
 
