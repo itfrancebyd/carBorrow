@@ -6,6 +6,7 @@ import { createClient } from "@/utils/supabase/client"
 import { useEffect, useState } from "react"
 import modelInfoJson from "@/docs/modelInfo.json"
 import DataMeasure from "@/app/components/dataMeasure"
+import PopModalForm from "@/app/components/forms/popModal"
 
 export interface ModelProps {
     id: string;
@@ -147,11 +148,15 @@ const ModelPage = () => {
                         pushQuery={"model"}
                         dragDropLink="importModel"
                         buttonLink="addmodel"
-                        fetchDetailWithId={fetchVehicleDetail}
-                        actionDelete={deleteVehicle}
-                        actionEdit={editModel}
-                        selectInfo={modelInfo}
-                    ></TableGrid>
+                    >
+                        <PopModalForm
+                            fetchData={fetchVehicleDetail}
+                            popupWindowInfo={tableTitle}
+                            actionDelete={deleteVehicle}
+                            actionEdit={editModel}
+                            selectInfo={modelInfo}
+                        ></PopModalForm>
+                    </TableGrid>
                 }
             </div>
         </div>

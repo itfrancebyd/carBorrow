@@ -8,6 +8,7 @@ import { useEffect, useState } from "react";
 import modelInfoJson from "@/docs/modelInfo.json"
 import DataMeasure from "@/app/components/dataMeasure"
 import { createClient } from "@/utils/supabase/client";
+import VehiclePopModal from "../components/forms/vehiclePopModal";
 
 interface carFleet {
   id: string;
@@ -44,6 +45,8 @@ export default function Home() {
       ...rest,
       model_name: model_information?.model_name ?? undefined,
       version_name: model_information?.version_name ?? undefined,
+      interior_colour: model_information?.interior_colour ?? undefined,
+      exterior_colour: model_information?.exterior_colour ?? undefined
     }))
 
   useEffect(() => {
@@ -70,7 +73,7 @@ export default function Home() {
             `id,
             vin,
             plate_number,
-            model_information(model_name,version_name),
+            model_information(model_name,version_name,interior_colour,exterior_colour),
             plate_registration_date,
             km,
             battery,
@@ -119,7 +122,7 @@ export default function Home() {
       .eq("id", id)
       .single()
     if (error) throw error
-    return data
+    return [data]
   }
 
   const tableTitle = [
@@ -127,6 +130,15 @@ export default function Home() {
     { key: "plate_number", label: "Plate Number" },
     { key: "model_name", label: "Model Name" },
     { key: "version_name", label: "Version Name" },
+    { key: "status", label: "Status" }
+  ]
+  const popupWindowInfo = [
+    { key: "vin", label: "VIN" },
+    { key: "plate_number", label: "Plate Number" },
+    { key: "model_name", label: "Model Name" },
+    { key: "version_name", label: "Version Name" },
+    { key: "interior_colour", label: "Interior Colour" },
+    { key: "exterior_colour", label: "Exterior Colour" },
     { key: "status", label: "Status" }
   ]
 
@@ -143,11 +155,15 @@ export default function Home() {
           pushQuery={"plate_number"}
           dragDropLink="importvehicle"
           buttonLink="addvehicle"
-          fetchDetailWithId={fetchVehicleDetail}
+        ></TableGrid>
+        <VehiclePopModal
+          fetchData={fetchVehicleDetail}
+          popupWindowInfo={popupWindowInfo}
           actionDelete={''}
           actionEdit={''}
-          selectInfo={modelInfo}
-        ></TableGrid></div>
+          selectInfo={''}
+        ></VehiclePopModal>
+      </div>
     </div>
   );
 }

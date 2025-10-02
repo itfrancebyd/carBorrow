@@ -1,16 +1,16 @@
 import { FC, useEffect, useState } from "react"
 
-interface PopModalFormProp {
+interface VehiclePopModalProp {
     currentID?: string;
     closeEvent?: () => void;
     fetchData: (id: string) => Promise<any>;
-    popupWindowInfo: Array<{ key: string; label: string; }>;
+    popupWindowInfo: Array<{ key: string; label: string }>;
     actionDelete: any;
     actionEdit: any;
     selectInfo: any
 }
 
-const PopModalForm: FC<PopModalFormProp> = ({
+const VehiclePopModal: FC<VehiclePopModalProp> = ({
     currentID,
     closeEvent,
     fetchData,
@@ -31,7 +31,7 @@ const PopModalForm: FC<PopModalFormProp> = ({
         setError(null)
 
         fetchData(currentID)
-            .then((res) => setData(res))
+            .then((res) => setData(res[0]))
             .catch((err) => {
                 console.error("Failed to fetch data:", err);
                 setError(err instanceof Error ? err.message : "Something went wrong");
@@ -63,13 +63,13 @@ const PopModalForm: FC<PopModalFormProp> = ({
     }
 
     return (
-        <div className="bg-white w-1/3 h-screen absolute right-0 top-0 bottom-0 shadow-2xl">
-            <div className="mt-3 mx-6">
+        <div className="bg-white w-1/3 h-screen absolute right-0 top-0 bottom-0 shadow-2xl overflow-y-auto">
+            <div className="my-3 mx-6">
                 <button onClick={closeEvent} className="text-3xl hover:cursor-pointer absolute right-6">
                     <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6469" width="32" height="32"><path d="M551.424 512l195.072-195.072c9.728-9.728 9.728-25.6 0-36.864l-1.536-1.536c-9.728-9.728-25.6-9.728-35.328 0L514.56 475.136 319.488 280.064c-9.728-9.728-25.6-9.728-35.328 0l-1.536 1.536c-9.728 9.728-9.728 25.6 0 36.864L477.696 512 282.624 707.072c-9.728 9.728-9.728 25.6 0 36.864l1.536 1.536c9.728 9.728 25.6 9.728 35.328 0L514.56 548.864l195.072 195.072c9.728 9.728 25.6 9.728 35.328 0l1.536-1.536c9.728-9.728 9.728-25.6 0-36.864L551.424 512z" fill="#26361C" p-id="6470"></path></svg>
                 </button>
                 <div className="pt-7">
-                    <div className="text-[#26361C] font-extrabold border-b-1 pb-2">Vehicle Model Info</div>
+                    <div className="text-[#26361C] font-extrabold border-b-1 pb-2">Vehicle Info</div>
                     {error && (
                         <div className="text-red-600 font-medium mt-2">
                             Error: {error}
@@ -96,13 +96,14 @@ const PopModalForm: FC<PopModalFormProp> = ({
                             </div>
                             <form className="flex flex-col gap-2">
                                 <div className="flex flex-col gap-1">
-                                    <label className="text-[#26361C] font-semibold">Vehicle Id:</label>
+                                    <label className="text-[#26361C] font-semibold">{popupWindowInfo[0].label}</label>
                                     <input readOnly value={currentID} className="border border-[#26361C] bg-[#bac7b2] px-2 py-1 rounded-sm"></input>
                                 </div>
                                 {popupWindowInfo.map((title, index) => (
+                                    // {[title.key] ==="id"?<div></div>:}
                                     <div key={index} className="flex flex-col gap-1">
                                         <label className="text-[#26361C] font-semibold">{title.label}</label>
-                                        <select
+                                        <input
                                             disabled={!isEdit}
                                             value={data[title.key]}
                                             className={`border border-[#26361C] px-2 py-1 rounded-sm ${isEdit ? 'cursor-pointer' : 'cursor-not-allowed'}`}
@@ -113,16 +114,11 @@ const PopModalForm: FC<PopModalFormProp> = ({
                                                 }))
                                             }
                                         >
-                                            {(selectInfo[title.label] ?? []).map((item: string) => (
-                                                <option key={item} value={item}>
-                                                    {item}
-                                                </option>
-                                            ))}
-                                        </select>
+                                        </input>
                                     </div>
                                 ))}
                                 {isEdit ?
-                                    <div className="grid grid-cols-2 gap-2">
+                                    <div className="grid grid-cols-2 gap-2 mt-2">
                                         <button onClick={handleCancel} className="bg-white text-[#26361C] border border-[#26361C] py-1 cursor-pointer">Cancel</button>
                                         <button onClick={handleSave} className="bg-[#26361C] text-white py-1 cursor-pointer">Save</button>
                                     </div>
@@ -138,4 +134,4 @@ const PopModalForm: FC<PopModalFormProp> = ({
     )
 }
 
-export default PopModalForm
+export default VehiclePopModal

@@ -1,6 +1,6 @@
 'use client'
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { FC, useEffect, useState } from "react"
+import React, { cloneElement, FC, ReactNode, useEffect, useState } from "react"
 import PopModalForm from "./popModal";
 import Link from "next/link";
 
@@ -11,10 +11,7 @@ interface tableGridProp {
     pushQuery: string;
     dragDropLink: string;
     buttonLink: string;
-    fetchDetailWithId: any;
-    actionDelete: any;
-    actionEdit: any;
-    selectInfo: any
+    children?: ReactNode
 }
 
 const TableGrid: FC<tableGridProp> = ({
@@ -24,10 +21,7 @@ const TableGrid: FC<tableGridProp> = ({
     pushQuery,
     dragDropLink,
     buttonLink,
-    fetchDetailWithId,
-    actionDelete,
-    actionEdit,
-    selectInfo
+    children
 }) => {
     const [isOpen, setIsOpen] = useState(false)
     const [currentNumber, setCurrentNumber] = useState('')
@@ -107,15 +101,11 @@ const TableGrid: FC<tableGridProp> = ({
                 </table>
             </div>
             <div className={`${isOpen ? 'fixed inset-0 w-full h-screen overflow-hidden bg-gray-400/50 z-40 p-7' : 'hidden'} `}>
-                <PopModalForm
-                    closeEvent={handleClose}
-                    currentID={currentNumber}
-                    fetchData={fetchDetailWithId}
-                    tableTitle={tableTitle}
-                    actionDelete={actionDelete}
-                    actionEdit={actionEdit}
-                    selectInfo={selectInfo}
-                ></PopModalForm>
+                {children &&
+                    cloneElement(children as React.ReactElement<any>, {
+                        closeEvent: handleClose,
+                        currentID: currentNumber
+                    })}
             </div>
         </div>
     )
