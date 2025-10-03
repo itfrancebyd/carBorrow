@@ -19,7 +19,8 @@ const VehiclePopModal: FC<VehiclePopModalProp> = ({
     actionEdit,
     selectInfo
 }) => {
-    const [data, setData] = useState<any>(null)
+    const [data, setData] = useState<Record<string, any> | null>(null)
+    const [originalData, setOriginalData] = useState<Record<string, any> | null>(null);
     const [error, setError] = useState<string | null>(null)
     const [loading, setLoading] = useState(false)
     const [isEdit, setEdit] = useState(false)
@@ -36,7 +37,7 @@ const VehiclePopModal: FC<VehiclePopModalProp> = ({
         setError(null)
 
         fetchData(currentID)
-            .then((res) => setData(res[0]))
+            .then((res) => { setData(res[0]); setOriginalData(res[0]) })
             .catch((err) => {
                 console.error("Failed to fetch data:", err);
                 setError(err instanceof Error ? err.message : "Something went wrong");
@@ -57,8 +58,17 @@ const VehiclePopModal: FC<VehiclePopModalProp> = ({
     }
     const handleSave = async (event: React.MouseEvent) => {
         event.preventDefault()
+
+        if (!data || !originalData) return
+        const updatePayload: Record<string, any> = {}
+        Object.keys(data).forEach((key) => {
+            if (data[key] !== originalData[key]) {
+                updatePayload[key] = data[key]
+            }
+        })
+
         try {
-            await actionEdit("car_fleet", currentID, data)
+            await actionEdit("car_fleet", currentID, updatePayload)
             alert("Changes saved successfully")
             setEdit(false)
             window.location.href = '/'
