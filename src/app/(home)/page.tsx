@@ -218,5 +218,5 @@ export default function Home() {
         </TableGrid>
       </div>
     </div>
-  );
+  )
 }

@@ -120,6 +120,7 @@ const NewVehiclesForm = () => {
             let { data: vehicle_model, error } = await supabase
                 .from('vehicle_model')
                 .select('*')
+                .neq('status', 'disable')
             if (error) {
                 console.error("Error fetching vehicle models: ", error)
             } else if (vehicle_model) {
