@@ -25,6 +25,9 @@ const VehiclePopModal: FC<VehiclePopModalProp> = ({
     const [isEdit, setEdit] = useState(false)
 
     const immutableKeys = ["id", "model_name", "version_name", "interior_colour", "exterior_colour"]
+    const dateType = ["plate_registration_date", "usage_update_date"]
+    const selectKeys = ["status"]
+    const statusOptions = ["enable", "disable"]
 
     useEffect(() => {
         if (!currentID) return
@@ -44,7 +47,7 @@ const VehiclePopModal: FC<VehiclePopModalProp> = ({
     const handleDelete = () => {
         actionDelete(currentID)
         alert("Deleted successfully")
-        window.location.href = '/model'
+        window.location.href = '/'
     }
     const handleEdit = () => {
         setEdit(true)
@@ -55,7 +58,7 @@ const VehiclePopModal: FC<VehiclePopModalProp> = ({
     const handleSave = async (event: React.MouseEvent) => {
         event.preventDefault()
         try {
-            await actionEdit("vehicle_model", currentID, data)
+            await actionEdit("car_fleet", currentID, data)
             alert("Changes saved successfully")
             setEdit(false)
             window.location.href = '/'
@@ -98,21 +101,46 @@ const VehiclePopModal: FC<VehiclePopModalProp> = ({
                             </div>
                             <form className="flex flex-col gap-2">
                                 {popupWindowInfo.map((title, index) => (
-                                    // {[title.key] ==="id"?<div></div>:}
                                     <div key={index} className="flex flex-col gap-1">
                                         <label className="text-[#26361C] font-semibold">{title.label}</label>
-                                        <input
-                                            disabled={immutableKeys.includes(title.key) || !isEdit}
-                                            value={data[title.key]}
-                                            className={`border border-[#26361C] ${immutableKeys.includes(title.key) ? 'bg-[#bac7b2]' : ''} px-2 py-1 rounded-sm ${isEdit ? 'cursor-pointer' : 'cursor-not-allowed'}`}
-                                            onChange={(e) =>
-                                                setData((prev: any) => ({
-                                                    ...prev,
-                                                    [title.key]: e.target.value,
-                                                }))
-                                            }
-                                        >
-                                        </input>
+                                        {selectKeys.includes(title.key)
+                                            ?
+                                            (<select
+                                                disabled={immutableKeys.includes(title.key) || !isEdit}
+                                                value={data[title.key]}
+                                                className={`border border-[#26361C] ${immutableKeys.includes(title.key) ? "bg-[#bac7b2]" : ""
+                                                    } px-2 py-1 rounded-sm ${isEdit ? "cursor-pointer" : "cursor-not-allowed"}`}
+                                                onChange={(e) =>
+                                                    setData((prev: any) => ({
+                                                        ...prev,
+                                                        [title.key]: e.target.value,
+                                                    }))
+                                                }
+                                            >
+                                                <option value="" disabled>
+                                                    -- select status --
+                                                </option>
+                                                {statusOptions.map((opt) => (
+                                                    <option key={opt} value={opt}>
+                                                        {opt}
+                                                    </option>
+                                                ))}
+                                            </select>)
+                                            :
+                                            <input
+                                                disabled={immutableKeys.includes(title.key) || !isEdit}
+                                                value={data[title.key]}
+                                                type={dateType.includes(title.key) ? "date" : "text"}
+                                                className={`border border-[#26361C] ${immutableKeys.includes(title.key) ? 'bg-[#bac7b2]' : ''} px-2 py-1 rounded-sm ${isEdit ? 'cursor-pointer' : 'cursor-not-allowed'}`}
+                                                onChange={(e) =>
+                                                    setData((prev: any) => ({
+                                                        ...prev,
+                                                        [title.key]: e.target.value,
+                                                    }))
+                                                }
+                                            >
+                                            </input>
+                                        }
                                     </div>
                                 ))}
                                 {isEdit ?

@@ -139,6 +139,36 @@ export default function Home() {
     return flattenData([data])
   }
 
+  const handleVehicleDel = async (id: string) => {
+    const { error } = await supabase
+      .from('car_fleet')
+      .delete()
+      .eq('id', id)
+      .single()
+    if (error) {
+      alert("delete error: " + error.message)
+    }
+  }
+
+  const handleVehicleSave = async (
+    table: string,
+    id: string,
+    updateData: Record<string, any>
+  ) => {
+    const { data, error } = await supabase
+      .from(table)
+      .update(updateData)
+      .eq("id", id)
+      .select();
+
+    if (error) {
+      console.error(`Update error in ${table}:`, error.message);
+      throw new Error(error.message);
+    }
+
+    return data;
+  }
+
   const tableTitle = [
     { key: "vin", label: "VIN" },
     { key: "plate_number", label: "Plate Number" },
@@ -150,7 +180,7 @@ export default function Home() {
     { key: "id", label: "Vehicle Id" },
     { key: "vin", label: "VIN" },
     { key: "plate_number", label: "Plate Number" },
-    { key: "plate_registration_date", label: "Plate Number" },
+    { key: "plate_registration_date", label: "Plate Registration Date" },
     { key: "model_name", label: "Model Name" },
     { key: "version_name", label: "Version Name" },
     { key: "interior_colour", label: "Interior Colour" },
@@ -181,8 +211,8 @@ export default function Home() {
           <VehiclePopModal
             fetchData={fetchVehicleDetail}
             popupWindowInfo={popupWindowInfo}
-            actionDelete={''}
-            actionEdit={''}
+            actionDelete={handleVehicleDel}
+            actionEdit={handleVehicleSave}
             selectInfo={vehicleInfo}
           ></VehiclePopModal>
         </TableGrid>

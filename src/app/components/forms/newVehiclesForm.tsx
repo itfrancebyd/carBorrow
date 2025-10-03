@@ -100,9 +100,12 @@ const NewVehiclesForm = () => {
             .insert(submitData)
             .select()
         if (error) {
-            console.error("Insert error:", error.message)
-            alert("error add new vehicle")
-            return
+            if (error.code === "23505") {  // duplicate key value violates unique constraint code
+                alert("The vehicle already exists, cannot add two vehicles with the same VIN, try add a new one!");
+                return;
+            }
+            console.error("Insert error:", error.message);
+            return;
         }
         formRef.current.reset()
         window.location.href = '/'

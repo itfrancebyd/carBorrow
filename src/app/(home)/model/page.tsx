@@ -89,7 +89,7 @@ const ModelPage = () => {
         return data;
     };
 
-    const deleteVehicle = async (id: string) => {
+    const deleteVehicleModel = async (id: string) => {
         const { error } = await supabase
             .from('vehicle_model')
             .delete()
@@ -152,7 +152,7 @@ const ModelPage = () => {
                         <PopModalForm
                             fetchData={fetchVehicleDetail}
                             popupWindowInfo={tableTitle}
-                            actionDelete={deleteVehicle}
+                            actionDelete={deleteVehicleModel}
                             actionEdit={editModel}
                             selectInfo={modelInfo}
                         ></PopModalForm>
