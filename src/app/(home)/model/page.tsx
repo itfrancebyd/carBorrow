@@ -130,15 +130,15 @@ const ModelPage = () => {
     ]
 
     return (
-        <div className="flex flex-col min-h-full">
+        <div className="flex flex-col h-screen">
             <SubTitle subTitleName="Vehicle Models"></SubTitle>
             <DataMeasure dataMeasure={dataMeasure}></DataMeasure>
             <Filter setFilterInfo={setFilterInfo} selectInfo={modelInfo} filterItems={tableTitle}></Filter>
-            <div>
+            <div className="flex-1">
                 {isLoading
                     ?
-                    <div className="flex items-center justify-center bg-[#7a856b] mx-8 mt-6 py-6 h-full text-white">
-                        Loading...
+                    <div className="flex items-center justify-center h-full text-white">
+                        <div className="bg-[#7a856b] mx-8 py-6 w-full">Loading...</div>
                     </div>
                     :
                     <TableGrid

@@ -27,7 +27,7 @@ const Filter: FC<FilterProps> = ({ setFilterInfo, selectInfo, filterItems }) => 
         setFilterInfo(newModel)
     }
     return (
-        <div className="mx-8 text-xs">
+        <div className="mx-6 text-xs">
             <form className="grid grid-cols-17 gap-3" ref={formRef}>
                 <div className="col-span-16 flex flex-row gap-2">
                     {filterItems.map((item: any) => (

@@ -195,7 +195,7 @@ export default function Home() {
   ]
 
   return (
-    <div className="flex flex-col min-h-full">
+    <div className="flex flex-col h-screen">
       <SubTitle subTitleName="Vehicles"></SubTitle>
       {/* <DataMeasure></DataMeasure> */}
       <Filter setFilterInfo={setVehicleInfo} selectInfo={modelInfo} filterItems={tableTitle}></Filter>

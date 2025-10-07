@@ -1,7 +1,6 @@
 'use client'
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { cloneElement, FC, ReactNode, useEffect, useState } from "react"
-import PopModalForm from "./popModal";
 import Link from "next/link";
 
 interface tableGridProp {
@@ -55,8 +54,8 @@ const TableGrid: FC<tableGridProp> = ({
     }, [])
 
     return (
-        <div className="h-full w-full px-8 text-[#494949] text-xs lg:text-sm">
-            <div className="bg-white h-full overflow-y-auto">
+        <div className="w-full h-full overflow-hidden flex px-6 text-[#494949] text-xs lg:text-sm">
+            <div className="bg-white w-full flex flex-col mb-4">
                 <div className="flex justify-between py-5">
                     <div className="font-semibold text-sm lg:text-base">{formTitle}</div>
                     <div className="flex gap-3">
@@ -65,40 +64,78 @@ const TableGrid: FC<tableGridProp> = ({
                         <Link href={`/${buttonLink}`} className="bg-[#26361C] hover:bg-[#7a856b] px-3 text-white cursor-pointer flex items-center">add new</Link>
                     </div>
                 </div>
-                <table className="w-full table-fixed">
-                    <thead>
-                        <tr className="h-10 bg-[#26361C] text-white">
-                            {tableTitle.map((item, index) =>
-                                <th key={index} className="text-start px-3 whitespace-nowrap">{item.label}</th>
-                            )}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {tableContent.map((item, index) => (
-                            <tr
-                                key={index}
-                                onClick={() => handleClick(item.id)}
-                                className="h-10 border-b-2 border-[#F3F5F7] whitespace-nowrap hover:bg-[#B6C6A1] hover:cursor-pointer"
-                            >
-                                {tableTitle.map((field) => (
-                                    field.key.toLowerCase() === "status"
-                                        ? (
-                                            <td key={field.key} className="px-3">
-                                                {item.status === "enable" ? (
-                                                    <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5933" width="16" height="16"><path d="M510.567403 63.852903c-246.304387 0-446.663336 200.358949-446.663336 446.663336 0 246.304387 200.358949 446.663336 446.663336 446.663336 246.304387 0 446.765664-200.358949 446.765664-446.663336C957.230738 264.211852 756.87179 63.852903 510.567403 63.852903L510.567403 63.852903zM787.979614 386.084941 454.593784 719.573099c-7.981613 7.981613-20.977316 7.981613-28.958929 0l-43.694214-43.694214c0 0 0 0 0 0L237.145998 531.084241c-7.981613-7.981613-7.981613-20.977316 0-28.958929l43.694214-43.694214c7.981613-7.981613 20.977316-7.981613 28.958929 0L440.063156 588.592785 715.326471 313.329469c7.981613-7.981613 20.977316-7.981613 29.061257 0L787.979614 357.126012C796.063556 365.107625 796.063556 378.103328 787.979614 386.084941L787.979614 386.084941z" p-id="5934" fill="#26361C"></path></svg>
+                <div className="w-full flex-1 text-[#494949] text-xs lg:text-sm">
+                    <div className="grid" style={{
+                        gridTemplateRows: "auto 1fr", // header fixed, content scrollable   
+                    }}>
+                        {/* Header */}
+                        <div
+                            className="grid bg-[#26361C] text-white font-semibold sticky top-0 z-10 shadow-2xl"
+                            style={{
+                                gridTemplateColumns: tableTitle
+                                    .map((item) =>
+                                        item.key.toLowerCase() === "status" ? "0.5fr" : "1fr"
+                                    )
+                                    .join(" "),
+                            }}
+                        >
+                            {tableTitle.map((item, index) => (
+                                <div key={index} className="px-3 py-2 whitespace-nowrap border-r border-[#394d2d]">
+                                    {item.label}
+                                </div>
+                            ))}
+                        </div>
+
+                        {/* Scrollable content */}
+                        <div>
+                            {tableContent.map((item, rowIndex) => (
+                                <div
+                                    key={rowIndex}
+                                    onClick={() => handleClick(item.id)}
+                                    className="grid border-b border-[#F3F5F7] hover:bg-[#B6C6A1] cursor-pointer items-center"
+                                    style={{
+                                        gridTemplateColumns: tableTitle
+                                            .map((field) =>
+                                                field.key.toLowerCase() === "status" ? "0.5fr" : "1fr"
+                                            )
+                                            .join(" "),
+                                    }}
+                                >
+                                    {tableTitle.map((field, colIndex) => (
+                                        <div
+                                            key={colIndex}
+                                            className="px-3 py-2 flex items-center truncate whitespace-nowrap overflow-hidden text-ellipsis"
+                                        >
+                                            {field.key.toLowerCase() === "status" ? (
+                                                item.status === "enable" ? (
+                                                    <svg
+                                                        viewBox="0 0 1024 1024"
+                                                        width="16"
+                                                        height="16"
+                                                        fill="#26361C"
+                                                    >
+                                                        <path d="M510.6 63.9c-246.3 0-446.7 200.4-446.7 446.7s200.4 446.7 446.7 446.7 446.8-200.4 446.8-446.7S756.9 63.9 510.6 63.9zM788 386.1 454.6 719.6c-8 8-21 8-29 0l-43.7-43.7-143.7-144c-8-8-8-21 0-29l43.7-43.7c8-8 21-8 29 0l164.2 164.2 275.3-275.3c8-8 21-8 29 0l43.6 43.8c8.1 8 8.1 21 0.1 29z"></path>
+                                                    </svg>
                                                 ) : (
-                                                    <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1490" width="16" height="16"><path d="M 506.56 25.92 C 239.68 25.92 23.36 242.24 23.36 509.12 s 216.32 483.2 483.2 483.2 s 483.2 -216.32 483.2 -483.2 C 989.44 242.24 773.12 25.92 506.56 25.92 Z m 239.04 663.68 l -81.28 81.28 l -157.76 -157.76 l -157.76 157.76 l -81.28 -81.28 l 157.76 -157.76 l -157.76 -157.76 l 81.28 -81.28 l 157.76 157.76 l 157.76 -157.76 l 81.28 81.28 l -157.76 157.76 l 157.76 157.76 Z" fill="#d81e06" p-id="1491"></path></svg>
-                                                )}
-                                            </td>
-                                        )
-                                        : (
-                                            <td key={field.key} className="px-3 whitespace-nowrap">{item[field.key as keyof typeof item]}</td>
-                                        )
-                                ))}
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
+                                                    <svg
+                                                        viewBox="0 0 1024 1024"
+                                                        width="16"
+                                                        height="16"
+                                                        fill="#d81e06"
+                                                    >
+                                                        <path d="M506.6 25.9C239.7 25.9 23.4 242.2 23.4 509.1s216.3 483.2 483.2 483.2 483.2-216.3 483.2-483.2S773.1 25.9 506.6 25.9z m239 663.7l-81.3 81.3-157.8-157.8-157.8 157.8-81.3-81.3 157.8-157.8-157.8-157.8 81.3-81.3 157.8 157.8 157.8-157.8 81.3 81.3-157.8 157.8 157.8 157.8z"></path>
+                                                    </svg>
+                                                )
+                                            ) : (
+                                                item[field.key as keyof typeof item]
+                                            )}
+                                        </div>
+                                    ))}
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                </div>
             </div>
             <div className={`${isOpen ? 'fixed inset-0 w-full h-screen overflow-hidden bg-gray-400/50 z-40 p-7' : 'hidden'} `}>
                 {children &&
