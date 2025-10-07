@@ -104,7 +104,7 @@ const TableGrid: FC<tableGridProp> = ({
                                     {tableTitle.map((field, colIndex) => (
                                         <div
                                             key={colIndex}
-                                            className="px-3 py-2 flex items-center truncate whitespace-nowrap overflow-hidden text-ellipsis"
+                                            className="px-3 py-2 flex items-center truncate whitespace-nowrap"
                                         >
                                             {field.key.toLowerCase() === "status" ? (
                                                 item.status === "enable" ? (
@@ -127,7 +127,7 @@ const TableGrid: FC<tableGridProp> = ({
                                                     </svg>
                                                 )
                                             ) : (
-                                                item[field.key as keyof typeof item]
+                                                <p className="truncate">{item[field.key as keyof typeof item]}</p>
                                             )}
                                         </div>
                                     ))}
