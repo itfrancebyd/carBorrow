@@ -139,7 +139,7 @@ const VehiclePopModal: FC<VehiclePopModalProp> = ({
                                             :
                                             <input
                                                 disabled={immutableKeys.includes(title.key) || !isEdit}
-                                                value={data[title.key]}
+                                                value={data[title.key] ?? undefined}
                                                 type={dateType.includes(title.key) ? "date" : "text"}
                                                 className={`border border-[#26361C] ${immutableKeys.includes(title.key) ? 'bg-[#bac7b2]' : ''} px-2 py-1 rounded-sm ${isEdit ? 'cursor-pointer' : 'cursor-not-allowed'}`}
                                                 onChange={(e) =>
