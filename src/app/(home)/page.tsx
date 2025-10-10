@@ -1,5 +1,4 @@
 'use client'
-
 import TableGrid from "../components/forms/tableGrid";
 import SubTitle from "../components/subTitle";
 import { useEffect, useState } from "react";
@@ -31,45 +30,34 @@ interface carFleet {
 
 export default function Home() {
   const [vehicleInfo, setVehicleInfo] = useState<carFleet[]>([])
-  // const [modelData, setModelData] = useState<Model[]>([])
+  const [allVehicleData, setAllVehicleData] = useState<carFleet[]>([])
   const [dataSum, setDataSum] = useState<carFleet[]>([])
   const [isLoading, setLoading] = useState(true)
-  const [isFilterInfo, setFilterInfo] = useState([])
+  const [error, setError] = useState<string | null>(null)
+  const [isFilterInfo, setFilterInfo] = useState<Record<string, string | null>>({})
   const supabase = createClient()
   const modelInfo = modelInfoJson as Record<string, string[]>
 
-
+  // flat model_information
   const flattenData = (data: any[]) =>
     data.map(({ model_information, ...rest }) => ({
       ...rest,
       model_name: model_information?.model_name ?? undefined,
       version_name: model_information?.version_name ?? undefined,
       interior_colour: model_information?.interior_colour ?? undefined,
-      exterior_colour: model_information?.exterior_colour ?? undefined
+      exterior_colour: model_information?.exterior_colour ?? undefined,
     }))
 
+  //first time load all the info in one go
   useEffect(() => {
-    const fetchData = async () => {
-      let { data: car_fleet, error } = await supabase
-        .from('car_fleet')
-        .select('*')
-      if (error) {
-        console.error("Error fetching car fleet: ", error)
-      } else if (car_fleet) {
-        setDataSum(car_fleet)
-      }
-    }
-    fetchData()
-  }, [])
-
-  useEffect(() => {
-    const fetchVehicleModels = async () => {
+    const fetchAllData = async () => {
       setLoading(true)
-      if (isFilterInfo.length === 0 || !isFilterInfo) {
-        let { data: car_fleet, error } = await supabase
-          .from('car_fleet')
-          .select(
-            `id,
+      setError(null)
+      try {
+        const { data, error } = await supabase
+          .from("car_fleet")
+          .select(`
+            id,
             vin,
             plate_number,
             model_information(model_name,version_name,interior_colour,exterior_colour),
@@ -81,37 +69,37 @@ export default function Home() {
             key_2,
             current_location,
             status
-            `)
-        if (error) {
-          console.error("Error fetching car fleet: ", error)
-        } else if (car_fleet) {
-          setVehicleInfo(flattenData(car_fleet))
-        }
+          `)
+
+        if (error) throw error
+
+        const flattened = flattenData(data ?? [])
+        setAllVehicleData(flattened)
+        setVehicleInfo(flattened)
+      } catch (err: any) {
+        console.error("Fetch error:", err.message)
+        setError(err.message)
+      } finally {
         setLoading(false)
-        return
       }
-      //filter the info
-      let query = supabase.from("vehicle_model").select("*")
-      // add eq condition: not null && not empty string
-      Object.entries(isFilterInfo).forEach(([key, value]) => {
-        if (value !== null && value !== "") {
-          query = query.eq(key, value as string)
-        }
-      })
-
-      const { data, error } = await query
-
-      if (error) {
-        console.error("Error while filtering:", error.message)
-        setVehicleInfo([])
-        return
-      } else {
-        setVehicleInfo(data ?? []);
-      }
-      setLoading(false);
     }
-    fetchVehicleModels()
-  }, [isFilterInfo])
+    fetchAllData()
+  }, [])
+
+  //filter
+  useEffect(() => {
+    if (!allVehicleData.length) return
+
+    const filtered = allVehicleData.filter((item) => {
+      return Object.entries(isFilterInfo).every(([key, value]) => {
+        if (!value) return true
+        const itemValue = String(item[key as keyof typeof item] ?? "").toLowerCase()
+        return itemValue.includes(String(value).toLowerCase())
+      })
+    })
+
+    setVehicleInfo(filtered)
+  }, [isFilterInfo, allVehicleData])
 
   // fetch detail with id
   const fetchVehicleDetail = async (id: string) => {
@@ -161,11 +149,11 @@ export default function Home() {
       .select();
 
     if (error) {
-      console.error(`Update error in ${table}:`, error.message);
-      throw new Error(error.message);
+      console.error(`Update error in ${table}:`, error.message)
+      throw new Error(error.message)
     }
 
-    return data;
+    return data
   }
 
   const tableTitle = [
@@ -212,7 +200,7 @@ export default function Home() {
     <div className="flex flex-col h-screen">
       <SubTitle subTitleName="Vehicles"></SubTitle>
       {/* <DataMeasure></DataMeasure> */}
-      <FilterVehicle setFilterInfo={setVehicleInfo} selectInfo={modelInfo} filterItems={filterTitle}></FilterVehicle>
+      <FilterVehicle setFilterInfo={setFilterInfo} selectInfo={modelInfo} filterItems={filterTitle}></FilterVehicle>
       <div className="flex-1">
         <TableGrid
           formTitle="Vehicle"

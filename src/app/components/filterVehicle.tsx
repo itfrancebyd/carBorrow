@@ -1,6 +1,6 @@
 'use client'
 
-import { FC, useRef } from "react"
+import { FC, useRef, useState } from "react"
 import { normalizeKey } from "./forms/newModelForm"
 
 interface FilterProps {
@@ -11,6 +11,15 @@ interface FilterProps {
 
 const FilterVehicle: FC<FilterProps> = ({ setFilterInfo, selectInfo, filterItems }) => {
     const formRef = useRef<HTMLFormElement>(null)
+    const [filters, setFilters] = useState<Record<string, string>>({})
+
+    const handleChange = (key: string, value: string) => {
+        setFilters((prev) => ({ ...prev, [key]: value }))
+    }
+
+    const handleClear = (key: string) => {
+        setFilters((prev) => ({ ...prev, [key]: "" }))
+    }
 
     const handleFilterSubmit = (event: React.MouseEvent) => {
         event.preventDefault()
@@ -34,20 +43,44 @@ const FilterVehicle: FC<FilterProps> = ({ setFilterInfo, selectInfo, filterItems
                         {filterItems.map((item: any) => (
                             <div key={item.key} className="flex flex-col flex-1">
                                 <label className="text-gray-600">{item.label}</label>
-                                <select
-                                    name={normalizeKey(item.label)}
-                                    defaultValue=""
-                                    className="border-1 border-gray-400 rounded-md py-1 px-2 w-full"
-                                >
-                                    <option value="" disabled>
-                                        -- please select --
-                                    </option>
-                                    {(selectInfo[item.label] ?? []).map((option: string) => (
-                                        <option key={option} value={option}>
-                                            {option}
-                                        </option>
-                                    ))}
-                                </select>
+                                {selectInfo[item.label]
+                                    ? (
+                                        <select
+                                            name={normalizeKey(item.label)}
+                                            defaultValue=""
+                                            className="border-1 border-gray-400 rounded-md py-1 px-2 w-full"
+                                        >
+                                            <option value="" disabled>
+                                                -- please select --
+                                            </option>
+                                            {selectInfo[item.label].map((option: string) => (
+                                                <option key={option} value={option}>
+                                                    {option}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    )
+                                    : (
+                                        <div className="relative">
+                                            <input
+                                                name={normalizeKey(item.label)}
+                                                value={filters[item.key] || ""}
+                                                onChange={(e) => handleChange(item.key, e.target.value)}
+                                                className="border border-gray-400 rounded-md py-1 px-2 w-full"
+                                                placeholder="type here"
+                                            />
+                                            {filters[item.key] && (
+                                                <button
+                                                    type="button"
+                                                    onClick={() => handleClear(item.key)}
+                                                    className="absolute right-2 top-1 text-gray-400 hover:cursor-pointer hover:text-black font-bold"
+                                                >
+                                                    x
+                                                </button>
+                                            )}
+                                        </div>
+                                    )
+                                }
                             </div>
                         ))}
                     </div>
