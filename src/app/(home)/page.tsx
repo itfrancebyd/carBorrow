@@ -76,6 +76,7 @@ export default function Home() {
         const flattened = flattenData(data ?? [])
         setAllVehicleData(flattened)
         setVehicleInfo(flattened)
+        setDataSum(flattened)
       } catch (err: any) {
         console.error("Fetch error:", err.message)
         setError(err.message)
@@ -196,10 +197,16 @@ export default function Home() {
     { key: "status", label: "Status" }
   ]
 
+  const dataMeasure = [
+    { title: "Total Vehicles", dataCount: dataSum.length, color: "bg-blue-600" },
+    { title: "Active Vehicles", dataCount: dataSum.filter((item) => item.status === "enable").length, color: "bg-green-400" },
+    { title: "Disabled Vehicles", dataCount: dataSum.filter((item) => item.status === "disable").length, color: "bg-red-600" }
+  ]
+
   return (
     <div className="flex flex-col h-screen">
       <SubTitle subTitleName="Vehicles"></SubTitle>
-      {/* <DataMeasure></DataMeasure> */}
+      <DataMeasure dataMeasure={dataMeasure}></DataMeasure>
       <FilterVehicle setFilterInfo={setFilterInfo} selectInfo={modelInfo} filterItems={filterTitle}></FilterVehicle>
       <div className="flex-1">
         <TableGrid
