@@ -1,5 +1,4 @@
 'use client'
-import TableGrid from "../components/forms/tableGrid";
 import SubTitle from "../components/subTitle";
 import { useEffect, useState } from "react";
 import modelInfoJson from "@/docs/modelInfo.json"
@@ -7,6 +6,7 @@ import DataMeasure from "@/app/components/dataMeasure"
 import { createClient } from "@/utils/supabase/client";
 import VehiclePopModal from "../components/forms/vehiclePopModal";
 import FilterVehicle from "../components/filterVehicle";
+import TableGridVehicle from "../components/forms/tableGridVehicle";
 
 interface carFleet {
   id: string;
@@ -158,6 +158,7 @@ export default function Home() {
   }
 
   const tableTitle = [
+    { key: "vehicle_schedule", label: "Schedule" },
     { key: "vin", label: "VIN" },
     { key: "plate_number", label: "Plate Number" },
     { key: "model_name", label: "Model Name" },
@@ -209,11 +210,11 @@ export default function Home() {
       <DataMeasure dataMeasure={dataMeasure}></DataMeasure>
       <FilterVehicle setFilterInfo={setFilterInfo} selectInfo={modelInfo} filterItems={filterTitle}></FilterVehicle>
       <div className="flex-1">
-        <TableGrid
+        <TableGridVehicle
           formTitle="Vehicle"
           tableTitle={tableTitle}
           tableContent={vehicleInfo}
-          pushQuery={"plate_number"}
+          pushQuery={"vehicleid"}
           dragDropLink="importvehicle"
           buttonLink="addvehicle"
         >
@@ -224,7 +225,7 @@ export default function Home() {
             actionEdit={handleVehicleSave}
             selectInfo={vehicleInfo}
           ></VehiclePopModal>
-        </TableGrid>
+        </TableGridVehicle>
       </div>
     </div>
   )
