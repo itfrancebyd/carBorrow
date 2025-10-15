@@ -13,7 +13,8 @@ interface tableGridTableGridVehicleProp {
     pushQuery: string;
     dragDropLink: string;
     buttonLink: string;
-    children?: ReactNode
+    children?: ReactNode;
+    fetchVehicleSchedule: (id: string) => Promise<any>
 }
 
 const TableCell = ({
@@ -21,7 +22,7 @@ const TableCell = ({
     field,
     item,
 }: {
-    handleScheduleOpen: (event: React.MouseEvent<HTMLElement>) => void;
+    handleScheduleOpen: (event: React.MouseEvent, id: string) => void;
     field: { key: string; label: string };
     item: Record<string, any>;
 }) => {
@@ -54,7 +55,7 @@ const TableCell = ({
             <Link
                 href={`/?${SCHEDULEQUERY}=${item.id}`}
                 className="text-[#26361C] hover:underline bg-[#26361C] hover:bg-[#425d31] px-1 py-1 rounded-md"
-                onClick={handleScheduleOpen} // prevent row click
+                onClick={(e) => handleScheduleOpen(e, item.id)} // prevent row click
             >
                 <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4748" width="16" height="16"><path d="M682.666667 128.170667h128c49.322667 0 86.954667 42.752 86.954666 93.696v665.770666c0 50.901333-37.674667 93.738667-86.954666 93.738667H215.893333c-49.322667 0-86.997333-42.794667-86.997333-93.738667V221.866667c0-50.944 37.546667-93.696 86.997333-93.696H341.333333V64a21.333333 21.333333 0 0 1 42.666667 0v170.666667a21.333333 21.333333 0 0 1-42.666667 0V170.837333H215.893333c-24.533333 0-44.330667 22.485333-44.330666 51.029334v665.770666c0 28.501333 19.84 51.072 44.330666 51.072H810.666667c24.448 0 44.288-22.613333 44.288-51.072V221.866667c0-28.501333-19.797333-51.029333-44.288-51.029334h-128V234.666667a21.333333 21.333333 0 1 1-42.666667 0v-170.666667a21.333333 21.333333 0 1 1 42.666667 0v64.170667z" p-id="4749" fill="#ffffff"></path><path d="M447.872 170.666667h127.786667a21.333333 21.333333 0 1 0 0-42.666667h-127.786667a21.333333 21.333333 0 1 0 0 42.666667zM341.632 384h341.333333a21.333333 21.333333 0 0 0 0-42.666667h-341.333333a21.333333 21.333333 0 0 0 0 42.666667zM341.632 554.666667h170.666667a21.333333 21.333333 0 1 0 0-42.666667h-170.666667a21.333333 21.333333 0 1 0 0 42.666667zM341.632 725.333333h341.077333a21.333333 21.333333 0 1 0 0-42.666666H341.632a21.333333 21.333333 0 1 0 0 42.666666z" p-id="4750" fill="#ffffff"></path></svg>
             </Link>
@@ -70,11 +71,13 @@ const TableGridVehicle: FC<tableGridTableGridVehicleProp> = ({
     pushQuery,
     dragDropLink,
     buttonLink,
-    children
+    children,
+    fetchVehicleSchedule
 }) => {
     const [isOpen, setIsOpen] = useState(false)
     const [isScheduleOpen, setScheduleOpen] = useState(false)
     const [currentNumber, setCurrentNumber] = useState('')
+    const [currentVehicleId, setCurrentVehicleId] = useState('')
     const searchParam = useSearchParams()
     const router = useRouter()
 
@@ -94,8 +97,9 @@ const TableGridVehicle: FC<tableGridTableGridVehicleProp> = ({
         setCurrentNumber('')
     }
 
-    const handleScheduleOpen = (event: React.MouseEvent) => {
+    const handleScheduleOpen = (event: React.MouseEvent, id: string) => {
         event.stopPropagation()
+        setCurrentVehicleId(id)
         setScheduleOpen(true)
     }
 
@@ -180,7 +184,7 @@ const TableGridVehicle: FC<tableGridTableGridVehicleProp> = ({
                     </div>
                 </div>
             </div>
-            {isScheduleOpen && <ScheduleForm handleScheduleClose={handleScheduleClose}></ScheduleForm>}
+            {isScheduleOpen && <ScheduleForm handleScheduleClose={handleScheduleClose} currentId={currentVehicleId} fetchVehicleSchedule={fetchVehicleSchedule}></ScheduleForm>}
             <div className={`${isOpen ? 'fixed inset-0 w-full h-screen overflow-hidden bg-gray-400/50 z-40 p-7' : 'hidden'} `}>
                 {children &&
                     cloneElement(children as React.ReactElement<any>, {

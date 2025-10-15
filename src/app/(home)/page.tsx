@@ -127,6 +127,25 @@ export default function Home() {
     return flattenData([data])
   }
 
+  // fetch detail with id
+  const fetchVehicleSchedule = async (id: string) => {
+    const { data, error } = await supabase
+      .from("car_fleet")
+      .select(
+        `id,
+            vin,
+            plate_number,
+            model_information(model_name,version_name,interior_colour,exterior_colour),
+            plate_registration_date,
+            status
+            `
+      )
+      .eq("id", id)
+      .single()
+    if (error) throw error
+    return flattenData([data])
+  }
+
   const handleVehicleDel = async (id: string) => {
     const { error } = await supabase
       .from('car_fleet')
@@ -217,13 +236,13 @@ export default function Home() {
           pushQuery={"vehicleid"}
           dragDropLink="importvehicle"
           buttonLink="addvehicle"
+          fetchVehicleSchedule={fetchVehicleSchedule}
         >
           <VehiclePopModal
             fetchData={fetchVehicleDetail}
             popupWindowInfo={popupWindowInfo}
             actionDelete={handleVehicleDel}
             actionEdit={handleVehicleSave}
-            selectInfo={vehicleInfo}
           ></VehiclePopModal>
         </TableGridVehicle>
       </div>

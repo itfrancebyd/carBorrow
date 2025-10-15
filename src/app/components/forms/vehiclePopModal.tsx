@@ -7,7 +7,6 @@ interface VehiclePopModalProp {
     popupWindowInfo: Array<{ key: string; label: string }>;
     actionDelete: any;
     actionEdit: any;
-    selectInfo: any
 }
 
 const VehiclePopModal: FC<VehiclePopModalProp> = ({
@@ -17,7 +16,6 @@ const VehiclePopModal: FC<VehiclePopModalProp> = ({
     popupWindowInfo,
     actionDelete,
     actionEdit,
-    selectInfo
 }) => {
     const [data, setData] = useState<Record<string, any> | null>(null)
     const [originalData, setOriginalData] = useState<Record<string, any> | null>(null);

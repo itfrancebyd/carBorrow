@@ -1,6 +1,61 @@
-const ScheduleForm = ({ handleScheduleClose }: { handleScheduleClose: () => void }) => {
+'use client'
+import { useEffect, useState } from "react";
+
+const ScheduleForm = (
+    { handleScheduleClose, currentId, fetchVehicleSchedule }: {
+        handleScheduleClose: () => void;
+        fetchVehicleSchedule: (id: string) => Promise<any>;
+        currentId: string
+    }) => {
+
+    const [isLoading, setLoading] = useState(false)
+    const [isScheduleData, setScheduleData] = useState<Record<string, any> | null>(null)
+    const [error, setError] = useState<string | null>(null)
+
+    useEffect(() => {
+        if (!currentId) return
+
+        setLoading(true)
+        setError(null)
+
+        fetchVehicleSchedule(currentId)
+            .then((res) => { setScheduleData(res[0]) })
+            .catch((err) => {
+                console.error("Failed to fetch data:", err);
+                setError(err instanceof Error ? err.message : "Something went wrong");
+            })
+            .finally(() => setLoading(false))
+    }, [currentId, fetchVehicleSchedule])
+
+    const vehicle = {
+        modelName: "BYD Dolphin",
+        versionName: "Surf Edition",
+        plateNumber: "HB-953-MS",
+        exteriorColour: "Blue",
+        interiorColour: "Beige",
+        status: "enable",
+    }
+
+    const schedules =
+        [
+            {
+                id: "1",
+                start_date: "2025-10-01",
+                end_date: "2025-10-05",
+                renter_name: "John Doe",
+                status: "completed",
+            },
+            {
+                id: "2",
+                start_date: "2025-10-10",
+                end_date: "2025-10-15",
+                renter_name: "Jane Smith",
+                status: "upcoming",
+            },
+        ]
+
     return (
-        <div className="bg-[#8C8C8C]/70 z-50 absolute top-0 bottom-0 left-0 right-0">
+        <div className="bg-[#8C8C8C]/70 z-50 fixed top-0 bottom-0 left-0 right-0">
             <div className="bg-white shadow-xl rounded-2xl z-50 absolute top-1/8 bottom-1/8 left-1/8 right-1/8 py-6 overflow-y-auto">
                 <div className="text-sm flex justify-between pb-3 px-6 border-b-1 border-[#dadada]">
                     <div className="flex flex-row gap-2 items-center">
@@ -9,8 +64,82 @@ const ScheduleForm = ({ handleScheduleClose }: { handleScheduleClose: () => void
                     </div>
                     <button onClick={handleScheduleClose} className="cursor-pointer">X</button>
                 </div>
-                <div className="px-6 pt-3">
+                <div className="px-6 pt-3 text-sm">
+                    {/* --- Vehicle Summary --- */}
+                    <div className="bg-[#f5f7f4] border border-[#d9dfd5] rounded-md p-4 mb-4 shadow-sm">
+                        {isScheduleData &&
+                            <>
+                                <div className="flex justify-between items-center mb-2">
+                                    <div className="font-semibold text-[#26361C] text-base">Vehicle Information</div>
+                                    <span
+                                        className={`px-3 py-1 rounded-full text-xs font-semibold ${vehicle.status === "enable"
+                                            ? "bg-green-100 text-green-800"
+                                            : "bg-red-100 text-red-700"
+                                            }`}
+                                    >
+                                        {isScheduleData.status === "enable" ? "Available" : "Unavailable"}
+                                    </span>
+                                </div>
+                                <div className="grid grid-cols-2 md:grid-cols-3 gap-y-1 gap-x-1 text-xs text-gray-700">
+                                    <p>
+                                        <span className="font-medium">Model:</span> {isScheduleData.model_name}
+                                    </p>
+                                    <p className="whitespace-nowrap truncate">
+                                        <span className="font-medium">Version:</span> {isScheduleData.version_name}
+                                    </p>
+                                    <p>
+                                        <span className="font-medium">Plate Number:</span> {isScheduleData.plate_number}
+                                    </p>
+                                    <p>
+                                        <span className="font-medium">Exterior:</span> {isScheduleData.exterior_colour}
+                                    </p>
+                                    <p>
+                                        <span className="font-medium">Interior:</span> {isScheduleData.interior_colour}
+                                    </p>
+                                </div>
+                            </>}
 
+                    </div>
+
+                    {/* --- Existing Schedules --- */}
+                    <div className="border border-[#dadada] rounded-md p-4 bg-white mb-4">
+                        <div className="font-semibold text-[#26361C] mb-2">Existing Schedules</div>
+                        {schedules.length > 0 ? (
+                            <div className="overflow-y-auto max-h-[40vh] divide-y divide-gray-200 text-xs">
+                                {schedules.map((sch) => (
+                                    <div
+                                        key={sch.id}
+                                        className="flex justify-between items-center py-2 hover:bg-gray-50"
+                                    >
+                                        <div className="w-2/5 truncate">
+                                            {sch.start_date} → {sch.end_date}
+                                        </div>
+                                        <div className="w-1/3 truncate text-gray-600">
+                                            {sch.renter_name || "—"}
+                                        </div>
+                                        <div
+                                            className={`text-right w-1/4 font-semibold ${sch.status === "active"
+                                                ? "text-green-600"
+                                                : sch.status === "upcoming"
+                                                    ? "text-blue-600"
+                                                    : "text-gray-500"
+                                                }`}
+                                        >
+                                            {sch.status.charAt(0).toUpperCase() + sch.status.slice(1)}
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        ) : (
+                            <div className="text-gray-400 italic text-xs py-2">
+                                No schedules yet.
+                            </div>
+                        )}
+                    </div>
+
+                    <div>
+                        <button type="button" className="bg-[#26361C] hover:bg-[#425d31] text-white px-2 py-1 hover:cursor-pointer">add schedule</button>
+                    </div>
                 </div>
             </div>
         </div>
