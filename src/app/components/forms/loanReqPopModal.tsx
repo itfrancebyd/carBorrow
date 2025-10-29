@@ -1,6 +1,10 @@
 import { FC, useEffect, useState } from "react"
+import { GetFormById } from "@/utils/jotform/server"
+import { answerContent } from "@/app/(home)/loan-requests/page"
+import Link from "next/link";
 
 interface LoanReqPopModalProp {
+    modelInfo?: Record<string, string[]>;
     currentID?: string;
     closeEvent?: () => void;
     fetchData?: (id: string) => Promise<any>;
@@ -9,7 +13,109 @@ interface LoanReqPopModalProp {
     actionEdit?: any;
 }
 
+type PopUpInputProps = {
+    title: { key: string };
+    data: Record<string, any>;
+    isEdit: boolean;
+    setData: React.Dispatch<React.SetStateAction<any>>;
+    selectKeys: string[];
+    immutableKeys: string[];
+    dateType: string[];
+    statusOptions: string[] | [];
+};
+
+const PopUpInput = ({
+    title,
+    data,
+    isEdit,
+    setData,
+    selectKeys,
+    immutableKeys,
+    dateType,
+    statusOptions,
+}: PopUpInputProps) => {
+    if (!title || !title.key) return null
+
+    const isDisabled = immutableKeys.includes(title.key) || !isEdit
+
+    const commonClass = `border border-[#26361C] ${immutableKeys.includes(title.key) ? "bg-[#bac7b2]" : ""
+        } px-2 py-1 rounded-sm ${isEdit ? "cursor-pointer" : "cursor-not-allowed"
+        }`
+
+    const handleChange = (
+        e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    ) => {
+        setData((prev: any) => ({
+            ...prev,
+            [title.key]: e.target.value,
+        }))
+    }
+
+    switch (true) {
+        case selectKeys.includes(title.key):
+            return (
+                <select
+                    disabled={isDisabled}
+                    value={data[title.key]}
+                    className={commonClass}
+                    onChange={handleChange}
+                >
+                    <option value="" disabled>
+                        -- select status --
+                    </option>
+                    {statusOptions.map((opt) => (
+                        <option key={opt} value={opt}>
+                            {opt}
+                        </option>
+                    ))}
+                </select>
+            )
+
+        case dateType.includes(title.key):
+            return (
+                <input
+                    type="date"
+                    disabled={isDisabled}
+                    value={data[title.key] ?? ""}
+                    className={commonClass}
+                    onChange={handleChange}
+                />
+            )
+
+        case title.key == "loan_reason":
+            return (
+                <textarea
+                    disabled={isDisabled}
+                    value={data[title.key] ?? ""}
+                    className={commonClass}
+                    rows={5}
+                ></textarea>
+            )
+        case title.key == "licence_photo":
+            return (
+                <Link
+                    href={data[title.key] ?? ""}
+                    className={commonClass}
+                    target="_blank"
+                >
+                    Licence Photo Link</Link>
+            )
+
+        default:
+            return (
+                <input
+                    type="text"
+                    disabled={isDisabled}
+                    value={data[title.key] ?? ""}
+                    className={commonClass}
+                    onChange={handleChange}
+                />
+            )
+    }
+}
+
 const LoanReqPopModal: FC<LoanReqPopModalProp> = ({
+    modelInfo,
     currentID,
     closeEvent,
     fetchData,
@@ -23,10 +129,55 @@ const LoanReqPopModal: FC<LoanReqPopModalProp> = ({
     const [loading, setLoading] = useState(false)
     const [isEdit, setEdit] = useState(false)
 
-    const immutableKeys = ["id", "model_name", "version_name", "interior_colour", "exterior_colour"]
-    const dateType = ["plate_registration_date", "usage_update_date"]
-    const selectKeys = ["status"]
-    const statusOptions = ["enable", "disable"]
+    const immutableKeys = [
+        "id",
+        "request_date",
+        "applicant",
+        "applicant_department",
+        "loan_intended",
+        "loan_reason",
+        "driver_name",
+        "license_no",
+        "licence_obtained_date",
+        "licence_issue_city",
+        "licence_expiration_date",
+        "licence_photo"
+    ]
+    const dateType = ["request_date", "licence_obtained_date", "licence_expiration_date"]
+    const selectKeys = ["prefered_model"]
+    const statusOptions = modelInfo ? modelInfo["Model Name"] : []
+
+    useEffect(() => {
+        if (!currentID) return
+        const fetchFormData = async () => {
+            const submissionData = await GetFormById(currentID)
+            if (submissionData) {
+                const answersContent = submissionData.content
+                Object.keys(answersContent).forEach(() => {
+                    const answers = answersContent.answers as any[]
+                    const formattedAnswers = {
+                        id: answersContent.id,
+                        request_date: answers[9]?.prettyFormat ?? "",
+                        applicant: `${answers[3]?.answer?.first ?? ""} ${answers[3]?.answer?.last ?? ""}`,
+                        applicant_department: answers[65]?.answer ?? "",
+                        loan_start_date: answers[61]?.prettyFormat ?? "",
+                        loan_end_date: answers[64]?.prettyFormat ?? "",
+                        loan_intended: answers[78]?.answer ?? "",
+                        loan_reason: answers[80]?.answer ?? "",
+                        driver_name: answers[16]?.answer ?? "",
+                        license_no: answers[19]?.answer ?? "",
+                        licence_obtained_date: answers[82]?.prettyFormat ?? "",
+                        licence_issue_city: answers[83]?.answer ?? "",
+                        licence_expiration_date: answers[84]?.prettyFormat ?? "",
+                        licence_photo: answers[86]?.answer?.[0] ?? "",
+                        prefered_model: answers[88]?.answer ?? "",
+                    }
+                    setData(formattedAnswers)
+                })
+            }
+        }
+        fetchFormData()
+    }, [currentID])
 
     useEffect(() => {
         if (!currentID || !fetchData) return
@@ -111,44 +262,16 @@ const LoanReqPopModal: FC<LoanReqPopModalProp> = ({
                                 {popupWindowInfo.map((title, index) => (
                                     <div key={index} className="flex flex-col gap-1">
                                         <label className="text-[#26361C] font-semibold">{title.label}</label>
-                                        {selectKeys.includes(title.key)
-                                            ?
-                                            (<select
-                                                disabled={immutableKeys.includes(title.key) || !isEdit}
-                                                value={data[title.key]}
-                                                className={`border border-[#26361C] ${immutableKeys.includes(title.key) ? "bg-[#bac7b2]" : ""
-                                                    } px-2 py-1 rounded-sm ${isEdit ? "cursor-pointer" : "cursor-not-allowed"}`}
-                                                onChange={(e) =>
-                                                    setData((prev: any) => ({
-                                                        ...prev,
-                                                        [title.key]: e.target.value,
-                                                    }))
-                                                }
-                                            >
-                                                <option value="" disabled>
-                                                    -- select status --
-                                                </option>
-                                                {statusOptions.map((opt) => (
-                                                    <option key={opt} value={opt}>
-                                                        {opt}
-                                                    </option>
-                                                ))}
-                                            </select>)
-                                            :
-                                            <input
-                                                disabled={immutableKeys.includes(title.key) || !isEdit}
-                                                value={data[title.key] ?? undefined}
-                                                type={dateType.includes(title.key) ? "date" : "text"}
-                                                className={`border border-[#26361C] ${immutableKeys.includes(title.key) ? 'bg-[#bac7b2]' : ''} px-2 py-1 rounded-sm ${isEdit ? 'cursor-pointer' : 'cursor-not-allowed'}`}
-                                                onChange={(e) =>
-                                                    setData((prev: any) => ({
-                                                        ...prev,
-                                                        [title.key]: e.target.value,
-                                                    }))
-                                                }
-                                            >
-                                            </input>
-                                        }
+                                        <PopUpInput
+                                            title={title}
+                                            isEdit={isEdit}
+                                            setData={setData}
+                                            data={data}
+                                            selectKeys={selectKeys}
+                                            immutableKeys={immutableKeys}
+                                            dateType={dateType}
+                                            statusOptions={statusOptions}
+                                        />
                                     </div>
                                 ))}
                                 {isEdit ?

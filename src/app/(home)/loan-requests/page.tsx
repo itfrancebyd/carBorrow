@@ -1,11 +1,12 @@
 'use client'
 import SubTitle from "@/app/components/subTitle"
 import { useEffect, useState } from "react"
-import JotformServer from "@/utils/jotform/server"
+import { GetForms } from "@/utils/jotform/server"
 import TableGridLoanReq from "@/app/components/forms/tableGridLoanReq"
 import LoanReqPopModal from "@/app/components/forms/loanReqPopModal"
+import modelInfoJson from "@/docs/modelInfo.json"
 
-interface answerContent {
+export interface answerContent {
     request_date: Date;
     applicant: string;
     applicant_department: string;
@@ -24,6 +25,8 @@ interface answerContent {
 
 const LoanReq = () => {
     const [isAnswerArr, setAnswerArr] = useState<answerContent[]>([])
+    const modelInfo = modelInfoJson as Record<string, string[]>
+
     const tableTitle = [
         { key: "request_date", label: "Request date" },
         { key: "applicant", label: "Applicant" },
@@ -32,10 +35,11 @@ const LoanReq = () => {
         { key: "loan_end_date", label: "Return date" },
         { key: "loan_intended", label: "Intend" },
         { key: "loan_reason", label: "Comment" },
-        { key: "prefered_model", label: "model" },
+        { key: "prefered_model", label: "Model" },
     ]
 
     const popupWindowInfo = [
+        { key: "id", label: "Submission id" },
         { key: "request_date", label: "Request date" },
         { key: "applicant", label: "Applicant" },
         { key: "applicant_department", label: "Department" },
@@ -48,12 +52,12 @@ const LoanReq = () => {
         { key: "licence_obtained_date", label: "licence obtain date" },
         { key: "licence_issue_city", label: "Issue city" },
         { key: "licence_expiration_date", label: "Expiration date" },
-        { key: "licence_photo", label: "license" },
-        { key: "prefered_model", label: "model" },
+        { key: "licence_photo", label: "License" },
+        { key: "prefered_model", label: "Model" },
     ]
     useEffect(() => {
         const getAnswers = async () => {
-            const resObj = await JotformServer()
+            const resObj = await GetForms()
             if (resObj) {
                 const answersContent = resObj.content
                 const formattedAnswers: answerContent[] = answersContent.map((item: any) => {
@@ -65,7 +69,7 @@ const LoanReq = () => {
                         applicant_department: answers[65]?.answer ?? "",
                         loan_start_date: answers[61]?.prettyFormat ?? "",
                         loan_end_date: answers[64]?.prettyFormat ?? "",
-                        loan_intended: answers[9]?.prettyFormat ?? "",
+                        loan_intended: answers[78]?.answer ?? "",
                         loan_reason: answers[80]?.answer ?? "",
                         driver_name: answers[16]?.answer ?? "",
                         license_no: answers[19]?.answer ?? "",
@@ -96,6 +100,7 @@ const LoanReq = () => {
                     buttonLink="addloanrequest"
                 >
                     <LoanReqPopModal
+                        modelInfo={modelInfo}
                         popupWindowInfo={popupWindowInfo}
                     ></LoanReqPopModal>
                 </TableGridLoanReq>
