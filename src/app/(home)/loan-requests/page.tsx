@@ -21,6 +21,8 @@ export interface answerContent {
     licence_expiration_date: Date;
     licence_photo: string;
     prefered_model: string;
+    applicant_declaration: string;
+    manager_approval: string
 }
 
 const LoanReq = () => {
@@ -54,12 +56,15 @@ const LoanReq = () => {
         { key: "licence_issue_city", label: "Issue city" },
         { key: "licence_expiration_date", label: "Expiration date" },
         { key: "licence_photo", label: "License" },
+        { key: "applicant_declaration", label: "Applicant declaration" },
+        { key: "manager_approval", label: "Manager Approval" },
     ]
     useEffect(() => {
         const getAnswers = async () => {
             const resObj = await GetForms()
             if (resObj) {
                 const answersContent = resObj.content
+                console.log("🚀 ~ getAnswers ~ answersContent:", resObj)
                 const formattedAnswers: answerContent[] = answersContent.map((item: any) => {
                     const answers = item.answers
                     return {
@@ -78,6 +83,7 @@ const LoanReq = () => {
                         licence_expiration_date: answers[84]?.prettyFormat ?? "",
                         licence_photo: answers[86]?.answer?.[0] ?? "",
                         prefered_model: answers[88]?.answer ?? "",
+                        applicant_declaration: answers[95]?.answer?.[0] ?? ""
                     }
                 })
 
