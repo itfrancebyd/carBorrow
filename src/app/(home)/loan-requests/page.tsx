@@ -47,13 +47,13 @@ const LoanReq = () => {
         { key: "loan_end_date", label: "Return date" },
         { key: "loan_intended", label: "Intend" },
         { key: "loan_reason", label: "Comment" },
+        { key: "prefered_model", label: "Preferred Model" },
         { key: "driver_name", label: "Driver name" },
         { key: "license_no", label: "License number" },
         { key: "licence_obtained_date", label: "licence obtain date" },
         { key: "licence_issue_city", label: "Issue city" },
         { key: "licence_expiration_date", label: "Expiration date" },
         { key: "licence_photo", label: "License" },
-        { key: "prefered_model", label: "Model" },
     ]
     useEffect(() => {
         const getAnswers = async () => {
