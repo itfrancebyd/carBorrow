@@ -30,14 +30,14 @@ const LoanReq = () => {
     const modelInfo = modelInfoJson as Record<string, string[]>
 
     const tableTitle = [
+        { key: "status", label: "Status" },
+        { key: "allocate", label: "Allocate" },
         { key: "request_date", label: "Request date" },
         { key: "applicant", label: "Applicant" },
         { key: "applicant_department", label: "Department" },
         { key: "loan_start_date", label: "Borrow date" },
         { key: "loan_end_date", label: "Return date" },
-        { key: "loan_intended", label: "Intend" },
-        { key: "loan_reason", label: "Comment" },
-        { key: "prefered_model", label: "Model" },
+        { key: "prefered_model", label: "Preferred Model" },
     ]
 
     const popupWindowInfo = [
@@ -64,7 +64,6 @@ const LoanReq = () => {
             const resObj = await GetForms()
             if (resObj) {
                 const answersContent = resObj.content
-                console.log("🚀 ~ getAnswers ~ answersContent:", resObj)
                 const formattedAnswers: answerContent[] = answersContent.map((item: any) => {
                     const answers = item.answers
                     return {
