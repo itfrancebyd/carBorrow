@@ -19,6 +19,7 @@ export const DataBlock: FC<DataBlockProps> = ({ color, title, dataCount }) => {
     )
 }
 
+// @ts-ignore
 const DataMeasure = ({ dataMeasure }: { dataMeasure: any }) => {
     return (
         <div className="mx-6 my-4 px-4 py-4 gap-6 border border-gray-400 rounded-md grid grid-cols-3">

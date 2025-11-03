@@ -17,7 +17,7 @@ const LoginForm = () => {
         const formData = new FormData(formRef.current)
         const email = formData.get("email")?.toString() || ""
         const passWord = formData.get("password")?.toString() || ""
-        let { data, error } = await supabase.auth.signInWithPassword({
+        const { error } = await supabase.auth.signInWithPassword({
             email: email,
             password: passWord
         })

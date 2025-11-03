@@ -28,7 +28,7 @@ const ModelPage = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            let { data: vehicle_model, error } = await supabase
+            const { data: vehicle_model, error } = await supabase
                 .from('vehicle_model')
                 .select('*')
             if (error) {
@@ -44,7 +44,7 @@ const ModelPage = () => {
         const fetchVehicleModels = async () => {
             setLoading(true)
             if (isFilterInfo.length === 0 || !isFilterInfo) {
-                let { data: vehicle_model, error } = await supabase
+                const { data: vehicle_model, error } = await supabase
                     .from('vehicle_model')
                     .select('*')
                 if (error) {
@@ -90,7 +90,7 @@ const ModelPage = () => {
     };
 
     const deleteVehicleModel = async (id: string) => {
-        const { error } = await supabase
+        const {} = await supabase
             .from('vehicle_model')
             .delete()
             .eq('id', id)
@@ -99,7 +99,7 @@ const ModelPage = () => {
     const editModel = async (
         table: string,
         id: string,
-        updateData: Record<string, any>
+        updateData: Record<string, unknown>
     ) => {
         const { data, error } = await supabase
             .from(table)

@@ -63,7 +63,7 @@ const LoanReq = () => {
         const getAnswers = async () => {
             const resArr = await fetchJotformSubmissions()
             if (resArr) {
-                const formattedAnswers: answerContent[] = resArr.map((item: any) => {
+                const formattedAnswers: answerContent[] = resArr.map((item: Record<string, any>) => {
                     const answers = item.answers
                     return {
                         id: item.id,

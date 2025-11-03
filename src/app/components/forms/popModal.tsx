@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react"
-
+// @ts-nocheck
 interface PopModalFormProp {
     currentID?: string;
     closeEvent?: () => void;

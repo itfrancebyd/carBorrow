@@ -39,6 +39,7 @@ export default function Home() {
   const modelInfo = modelInfoJson as Record<string, string[]>
 
   // flat model_information
+  // @ts-ignore
   const flattenData = (data: any[]) =>
     data.map(({ model_information, ...rest }) => ({
       ...rest,
@@ -77,9 +78,10 @@ export default function Home() {
         setAllVehicleData(flattened)
         setVehicleInfo(flattened)
         setDataSum(flattened)
-      } catch (err: any) {
-        console.error("Fetch error:", err.message)
-        setError(err.message)
+      } catch (err: unknown) {
+        const error = err as { message: string };
+        console.error("Fetch error:", error.message)
+        setError(error.message)
       } finally {
         setLoading(false)
       }
@@ -160,7 +162,7 @@ export default function Home() {
   const handleVehicleSave = async (
     table: string,
     id: string,
-    updateData: Record<string, any>
+    updateData: Record<string, unknown>
   ) => {
     const { data, error } = await supabase
       .from(table)

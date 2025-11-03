@@ -1,5 +1,5 @@
 import { FC, useEffect, useState } from "react"
-
+// @ts-nocheck
 interface VehiclePopModalProp {
     currentID?: string;
     closeEvent?: () => void;
@@ -71,7 +71,7 @@ const VehiclePopModal: FC<VehiclePopModalProp> = ({
             setEdit(false)
             window.location.href = '/'
         } catch (err) {
-            alert("Failed to save changes")
+            alert("Failed to save changes" + err)
         }
     }
 

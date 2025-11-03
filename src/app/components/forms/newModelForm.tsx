@@ -58,7 +58,7 @@ const NewModelForm = () => {
             }
         ];
 
-        const { data, error } = await supabase.from('vehicle_model').insert(newModel).select()
+        const { error } = await supabase.from('vehicle_model').insert(newModel).select()
         if (error) {
             if (error.code === "23505") {  // duplicate key value violates unique constraint code
                 alert("The vehicle model already exists, try add a new one!");

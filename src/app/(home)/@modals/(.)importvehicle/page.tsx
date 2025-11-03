@@ -4,7 +4,6 @@ import { useRef, useState } from "react"
 
 const ImportVehicleModal = () => {
     const [fileEnter, setFileEnter] = useState(false)
-    const [isFile, setFile] = useState<File>()
     const fileInputRef = useRef<HTMLInputElement | null>(null)
     const [fileName, setFileName] = useState('')
 

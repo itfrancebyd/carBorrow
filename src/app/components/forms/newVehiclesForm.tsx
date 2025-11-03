@@ -95,7 +95,7 @@ const NewVehiclesForm = () => {
             }
         ]
 
-        const { data, error } = await supabase
+        const { error } = await supabase
             .from('car_fleet')
             .insert(submitData)
             .select()
@@ -117,7 +117,7 @@ const NewVehiclesForm = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            let { data: vehicle_model, error } = await supabase
+            const { data: vehicle_model, error } = await supabase
                 .from('vehicle_model')
                 .select('*')
                 .neq('status', 'disable')

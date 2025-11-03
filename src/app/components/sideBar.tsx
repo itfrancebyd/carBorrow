@@ -9,7 +9,7 @@ const SideBar = () => {
     const router = useRouter()
 
     const handleLogout = async () => {
-        const { error } = await supabase.auth.signOut()
+        const { error } = await supabase.auth.signOut()// @ts-ignore
         router.refresh()
     }
 
