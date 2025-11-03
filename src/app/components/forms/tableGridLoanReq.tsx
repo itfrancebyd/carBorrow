@@ -56,16 +56,14 @@ const TableGridLoanReq: FC<tableGridTableLoanReqProp> = ({
 }) => {
     const [isOpen, setIsOpen] = useState(false)
     const [currentNumber, setCurrentNumber] = useState('')
-    const [currentVehicleId, setCurrentVehicleId] = useState('')
-    const searchParam = useSearchParams()
     const router = useRouter()
-
+    
     const handleClick = (getPushQuery: string) => {
         router.push(`?${pushQuery}=${getPushQuery}`)
         setCurrentNumber(getPushQuery)
         setIsOpen(true)
     }
-
+    
     const handleClose = () => {
         const params = new URLSearchParams(window.location.search)
         params.delete(pushQuery)
@@ -75,8 +73,9 @@ const TableGridLoanReq: FC<tableGridTableLoanReqProp> = ({
         setIsOpen(false)
         setCurrentNumber('')
     }
-
+    
     useEffect(() => {
+        const searchParam = useSearchParams()
         if (searchParam.has(pushQuery)) {
             const requestQuery = searchParam.get(pushQuery)
             if (requestQuery) {
