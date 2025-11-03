@@ -1,5 +1,4 @@
 import { FC, useEffect, useState } from "react"
-// @ts-nocheck
 interface VehiclePopModalProp {
     currentID?: string;
     closeEvent?: () => void;

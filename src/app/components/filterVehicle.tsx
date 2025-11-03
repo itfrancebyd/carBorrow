@@ -1,5 +1,4 @@
 'use client'
-// @ts-nocheck
 import { FC, useRef, useState } from "react"
 import { normalizeKey } from "./forms/newModelForm"
 

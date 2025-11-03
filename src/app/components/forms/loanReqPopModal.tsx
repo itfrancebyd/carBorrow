@@ -1,4 +1,3 @@
-// @ts-nocheck
 import { FC, useEffect, useState } from "react"
 import { GetFormById } from "@/utils/jotform/server"
 import { answerContent } from "@/app/(home)/loan-requests/page"

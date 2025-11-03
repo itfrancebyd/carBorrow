@@ -1,5 +1,4 @@
 'use client'
-// @ts-nocheck
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { cloneElement, FC, ReactNode, useEffect, useState } from "react"
 import Link from "next/link";

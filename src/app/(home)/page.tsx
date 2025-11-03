@@ -39,7 +39,6 @@ export default function Home() {
   const modelInfo = modelInfoJson as Record<string, string[]>
 
   // flat model_information
-  // @ts-ignore
   const flattenData = (data: any[]) =>
     data.map(({ model_information, ...rest }) => ({
       ...rest,
