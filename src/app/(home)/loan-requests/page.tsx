@@ -1,7 +1,7 @@
 'use client'
 import SubTitle from "@/app/components/subTitle"
 import { useEffect, useState } from "react"
-import { GetForms } from "@/utils/jotform/server"
+import { fetchJotformSubmissions } from "@/utils/jotform/server"
 import TableGridLoanReq from "@/app/components/forms/tableGridLoanReq"
 import LoanReqPopModal from "@/app/components/forms/loanReqPopModal"
 import modelInfoJson from "@/docs/modelInfo.json"
@@ -61,10 +61,9 @@ const LoanReq = () => {
     ]
     useEffect(() => {
         const getAnswers = async () => {
-            const resObj = await GetForms()
-            if (resObj) {
-                const answersContent = resObj.content
-                const formattedAnswers: answerContent[] = answersContent.map((item: any) => {
+            const resArr = await fetchJotformSubmissions()
+            if (resArr) {
+                const formattedAnswers: answerContent[] = resArr.map((item: any) => {
                     const answers = item.answers
                     return {
                         id: item.id,
