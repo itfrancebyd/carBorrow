@@ -3,7 +3,7 @@ import Filter from "@/app/components/filter"
 import TableGrid from "@/app/components/forms/tableGrid"
 import SubTitle from "@/app/components/subTitle"
 import { createClient } from "@/utils/supabase/client"
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import modelInfoJson from "@/docs/modelInfo.json"
 import DataMeasure from "@/app/components/dataMeasure"
 import PopModalForm from "@/app/components/forms/popModal"
@@ -90,7 +90,7 @@ const ModelPage = () => {
     };
 
     const deleteVehicleModel = async (id: string) => {
-        const {} = await supabase
+        const { } = await supabase
             .from('vehicle_model')
             .delete()
             .eq('id', id)
@@ -141,22 +141,24 @@ const ModelPage = () => {
                         <div className="bg-[#7a856b] mx-8 py-6 w-full">Loading...</div>
                     </div>
                     :
-                    <TableGrid
-                        formTitle="Vehicle Models"
-                        tableTitle={tableTitle}
-                        tableContent={modelData}
-                        pushQuery={"model"}
-                        dragDropLink="importModel"
-                        buttonLink="addmodel"
-                    >
-                        <PopModalForm
-                            fetchData={fetchVehicleDetail}
-                            popupWindowInfo={tableTitle}
-                            actionDelete={deleteVehicleModel}
-                            actionEdit={editModel}
-                            selectInfo={modelInfo}
-                        ></PopModalForm>
-                    </TableGrid>
+                    <Suspense fallback={<div>Loading table...</div>}>
+                        <TableGrid
+                            formTitle="Vehicle Models"
+                            tableTitle={tableTitle}
+                            tableContent={modelData}
+                            pushQuery={"model"}
+                            dragDropLink="importModel"
+                            buttonLink="addmodel"
+                        >
+                            <PopModalForm
+                                fetchData={fetchVehicleDetail}
+                                popupWindowInfo={tableTitle}
+                                actionDelete={deleteVehicleModel}
+                                actionEdit={editModel}
+                                selectInfo={modelInfo}
+                            ></PopModalForm>
+                        </TableGrid>
+                    </Suspense>
                 }
             </div>
         </div>

@@ -1,6 +1,6 @@
 'use client'
 import SubTitle from "@/app/components/subTitle"
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 import { fetchJotformSubmissions } from "@/utils/jotform/server"
 import TableGridLoanReq from "@/app/components/forms/tableGridLoanReq"
 import LoanReqPopModal from "@/app/components/forms/loanReqPopModal"
@@ -95,19 +95,21 @@ const LoanReq = () => {
         <div className="flex flex-col h-screen">
             <SubTitle subTitleName="Loan Requests"></SubTitle>
             <div className="flex-1">
-                <TableGridLoanReq
-                    formTitle="Loan Requests"
-                    tableTitle={tableTitle}
-                    tableContent={isAnswerArr}
-                    pushQuery={"loan_id"}
-                    dragDropLink="importvehicle"
-                    buttonLink="addloanrequest"
-                >
-                    <LoanReqPopModal
-                        modelInfo={modelInfo}
-                        popupWindowInfo={popupWindowInfo}
-                    ></LoanReqPopModal>
-                </TableGridLoanReq>
+                <Suspense fallback={<div>Loading table...</div>}>
+                    <TableGridLoanReq
+                        formTitle="Loan Requests"
+                        tableTitle={tableTitle}
+                        tableContent={isAnswerArr}
+                        pushQuery={"loan_id"}
+                        dragDropLink="importvehicle"
+                        buttonLink="addloanrequest"
+                    >
+                        <LoanReqPopModal
+                            modelInfo={modelInfo}
+                            popupWindowInfo={popupWindowInfo}
+                        ></LoanReqPopModal>
+                    </TableGridLoanReq>
+                </Suspense>
             </div>
         </div>
     )

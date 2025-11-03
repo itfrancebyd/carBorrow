@@ -1,6 +1,6 @@
 'use client'
 import SubTitle from "../components/subTitle";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import modelInfoJson from "@/docs/modelInfo.json"
 import DataMeasure from "@/app/components/dataMeasure"
 import { createClient } from "@/utils/supabase/client";
@@ -230,22 +230,24 @@ export default function Home() {
       <DataMeasure dataMeasure={dataMeasure}></DataMeasure>
       <FilterVehicle setFilterInfo={setFilterInfo} selectInfo={modelInfo} filterItems={filterTitle}></FilterVehicle>
       <div className="flex-1">
-        <TableGridVehicle
-          formTitle="Vehicle"
-          tableTitle={tableTitle}
-          tableContent={vehicleInfo}
-          pushQuery={"vehicleid"}
-          dragDropLink="importvehicle"
-          buttonLink="addvehicle"
-          fetchVehicleSchedule={fetchVehicleSchedule}
-        >
-          <VehiclePopModal
-            fetchData={fetchVehicleDetail}
-            popupWindowInfo={popupWindowInfo}
-            actionDelete={handleVehicleDel}
-            actionEdit={handleVehicleSave}
-          ></VehiclePopModal>
-        </TableGridVehicle>
+        <Suspense fallback={<div>Loading table...</div>}>
+          <TableGridVehicle
+            formTitle="Vehicle"
+            tableTitle={tableTitle}
+            tableContent={vehicleInfo}
+            pushQuery={"vehicleid"}
+            dragDropLink="importvehicle"
+            buttonLink="addvehicle"
+            fetchVehicleSchedule={fetchVehicleSchedule}
+          >
+            <VehiclePopModal
+              fetchData={fetchVehicleDetail}
+              popupWindowInfo={popupWindowInfo}
+              actionDelete={handleVehicleDel}
+              actionEdit={handleVehicleSave}
+            ></VehiclePopModal>
+          </TableGridVehicle>
+        </Suspense>
       </div>
     </div>
   )

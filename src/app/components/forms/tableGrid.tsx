@@ -25,6 +25,7 @@ const TableGrid: FC<tableGridProp> = ({
     const [isOpen, setIsOpen] = useState(false)
     const [currentNumber, setCurrentNumber] = useState('')
     const router = useRouter()
+    const searchParam = useSearchParams()
 
     const handleClick = (getPushQuery: string) => {
         router.push(`?${pushQuery}=${getPushQuery}`)
@@ -43,7 +44,6 @@ const TableGrid: FC<tableGridProp> = ({
     }
 
     useEffect(() => {
-        const searchParam = useSearchParams()
         if (searchParam.has(pushQuery)) {
             const requestQuery = searchParam.get(pushQuery)
             if (requestQuery) {

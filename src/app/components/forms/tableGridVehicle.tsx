@@ -78,6 +78,7 @@ const TableGridVehicle: FC<tableGridTableGridVehicleProp> = ({
     const [isScheduleOpen, setScheduleOpen] = useState(false)
     const [currentNumber, setCurrentNumber] = useState('')
     const [currentVehicleId, setCurrentVehicleId] = useState('')
+    const searchParam = useSearchParams()
     const router = useRouter()
 
     const handleClick = (getPushQuery: string) => {
@@ -112,7 +113,6 @@ const TableGridVehicle: FC<tableGridTableGridVehicleProp> = ({
     }
 
     useEffect(() => {
-        const searchParam = useSearchParams()
         if (searchParam.has(pushQuery)) {
             const requestQuery = searchParam.get(pushQuery)
             if (requestQuery) {
