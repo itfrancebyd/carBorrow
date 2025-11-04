@@ -1,6 +1,4 @@
 import { FC, useEffect, useState } from "react"
-import { GetFormById } from "@/utils/jotform/server"
-import { answerContent } from "@/app/(home)/loan-requests/page"
 import Link from "next/link";
 
 interface LoanReqPopModalProp {
@@ -166,47 +164,13 @@ const LoanReqPopModal: FC<LoanReqPopModalProp> = ({
     const linkType = ["applicant_declaration", "licence_photo", "manager_approval"]
 
     useEffect(() => {
-        if (!currentID) return
-        const fetchFormData = async () => {
-            const submissionData = await GetFormById(currentID)
-            if (submissionData) {
-                const answersContent = submissionData.content
-                Object.keys(answersContent).forEach(() => {
-                    const answers = answersContent.answers as Record<number, any>
-                    const formattedAnswers = {
-                        id: answersContent.id,
-                        request_date: answers[9]?.prettyFormat ?? "",
-                        applicant: `${answers[3]?.answer?.first ?? ""} ${answers[3]?.answer?.last ?? ""}`,
-                        applicant_department: answers[65]?.answer ?? "",
-                        loan_start_date: answers[61]?.prettyFormat ?? "",
-                        loan_end_date: answers[64]?.prettyFormat ?? "",
-                        loan_intended: answers[78]?.answer ?? "",
-                        loan_reason: answers[80]?.answer ?? "",
-                        driver_name: answers[16]?.answer ?? "",
-                        license_no: answers[19]?.answer ?? "",
-                        licence_obtained_date: answers[82]?.prettyFormat ?? "",
-                        licence_issue_city: answers[83]?.answer ?? "",
-                        licence_expiration_date: answers[84]?.prettyFormat ?? "",
-                        licence_photo: answers[86]?.answer?.[0] ?? "",
-                        prefered_model: answers[88]?.answer ?? "",
-                        applicant_declaration: answers[95]?.answer?.[0] ?? "",
-                        manager_approval: answers[89]?.answer?.[0] ?? ""
-                    } as answerContent
-                    setData(formattedAnswers)
-                })
-            }
-        }
-        fetchFormData()
-    }, [currentID])
-
-    useEffect(() => {
         if (!currentID || !fetchData) return
 
         setLoading(true)
         setError(null)
 
         fetchData(currentID)
-            .then((res) => { setData(res[0]); setOriginalData(res[0]) })
+            .then((res) => { setData(res); setOriginalData(res) })
             .catch((err) => {
                 console.error("Failed to fetch data:", err);
                 setError(err instanceof Error ? err.message : "Something went wrong");

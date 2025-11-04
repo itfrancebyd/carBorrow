@@ -5,6 +5,7 @@ import { fetchJotformSubmissions } from "@/utils/jotform/server"
 import TableGridLoanReq from "@/app/components/forms/tableGridLoanReq"
 import LoanReqPopModal from "@/app/components/forms/loanReqPopModal"
 import modelInfoJson from "@/docs/modelInfo.json"
+import { createClient } from "@/utils/supabase/client"
 
 export interface answerContent {
     request_date: Date;
@@ -27,7 +28,10 @@ export interface answerContent {
 
 const LoanReq = () => {
     const [isAnswerArr, setAnswerArr] = useState<answerContent[]>([])
+    const [isLoanData, setLoanData] = useState<answerContent[]>([])
     const modelInfo = modelInfoJson as Record<string, string[]>
+    const supabase = createClient()
+    // const [dataSum, setDataSum] = useState<ModelProps[]>([])
 
     const tableTitle = [
         { key: "status", label: "Status" },
@@ -88,8 +92,30 @@ const LoanReq = () => {
                 setAnswerArr(formattedAnswers)
             }
         }
+        const fetchData = async () => {
+            const { data: loan_requests, error } = await supabase
+                .from('loan_requests')
+                .select('*')
+            if (error) {
+                console.error("Error fetching loan requests: ", error)
+            } else if (loan_requests) {
+                setLoanData(loan_requests)
+            }
+        }
+        fetchData()
         getAnswers()
     }, [])
+
+    // fetch detail with id
+    const fetchVehicleDetail = async (id: string) => {
+        const { data, error } = await supabase
+            .from("loan_requests")
+            .select("*")
+            .eq("id", id)
+            .single()
+        if (error) throw error
+        return data;
+    }
 
     return (
         <div className="flex flex-col h-screen">
@@ -99,12 +125,13 @@ const LoanReq = () => {
                     <TableGridLoanReq
                         formTitle="Loan Requests"
                         tableTitle={tableTitle}
-                        tableContent={isAnswerArr}
+                        tableContent={isLoanData}
                         pushQuery={"loan_id"}
                         dragDropLink="importvehicle"
                         buttonLink="addloanrequest"
                     >
                         <LoanReqPopModal
+                            fetchData={fetchVehicleDetail}
                             modelInfo={modelInfo}
                             popupWindowInfo={popupWindowInfo}
                         ></LoanReqPopModal>

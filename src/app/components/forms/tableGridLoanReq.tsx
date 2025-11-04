@@ -22,7 +22,7 @@ const TableCell = ({
 }) => {
     const key = field.key.toLowerCase()
     if (key === "status") {
-        return item.status === "enable" ? (
+        return item.status === "new" ? (
             <svg
                 viewBox="0 0 1024 1024"
                 width="16"
