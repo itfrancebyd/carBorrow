@@ -32,6 +32,12 @@ export async function middleware(request: NextRequest) {
         },
     );
 
+    // ✅ 跳过 Webhook 或其他公开 API 路径
+    if (request.nextUrl.pathname.startsWith("/api/jotform-webhook")) {
+        // 直接放行，不做任何鉴权逻辑
+        return supabaseResponse
+    }
+
     const { data: { user } } = await supabase.auth.getUser()
 
     // allow /login no need authentication

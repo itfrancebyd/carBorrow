@@ -9,6 +9,7 @@ const supabase = createClient(
 export async function POST(req: Request) {
   try {
     const body = await req.json()
+    console.log("🚀 ~ POST ~ body:", body)
 
     // Jotform webhook
     const answers = body.answers
@@ -26,7 +27,6 @@ export async function POST(req: Request) {
       licence_obtained_date: answers['82']?.prettyFormat,
       licence_issue_city: answers['83']?.answer,
       licence_expiration_date: answers['84']?.prettyFormat,
-      licence_photo: answers['86']?.answer?.[0],
       prefered_model: answers['88']?.answer,
     }
 
