@@ -9,25 +9,23 @@ const supabase = createClient(
 export async function POST(req: Request) {
   try {
     const body = await req.json()
-    console.log("🚀 ~ POST ~ body:", body)
 
     // Jotform webhook
-    const answers = body.answers
 
     const formatted = {
-      request_date: answers['9']?.prettyFormat,
-      applicant: `${answers['3']?.answer?.first ?? ''} ${answers['3']?.answer?.last ?? ''}`,
-      applicant_department: answers['65']?.answer,
-      loan_start_date: answers['61']?.prettyFormat,
-      loan_end_date: answers['64']?.prettyFormat,
-      loan_intended: answers['78']?.answer,
-      loan_reason: answers['80']?.answer,
-      driver_name: answers['16']?.answer,
-      license_no: answers['19']?.answer,
-      licence_obtained_date: answers['82']?.prettyFormat,
-      licence_issue_city: answers['83']?.answer,
-      licence_expiration_date: answers['84']?.prettyFormat,
-      prefered_model: answers['88']?.answer,
+      request_date: body.dateDemande,
+      applicant: body.demandeur,
+      applicant_department: body.departementDemandeur,
+      loan_start_date: body.dureeDu,
+      loan_end_date: body.dureeDe,
+      loan_intended: body.objPret,
+      loan_reason: body.preciserPret,
+      driver_name: body.nomConducteur,
+      license_no: body.numPermis,
+      licence_obtained_date: body.dateDobtention,
+      licence_issue_city: body.typeA83,
+      licence_expiration_date: body.date,
+      prefered_model: body.modele
     }
 
     // write to Supabase
