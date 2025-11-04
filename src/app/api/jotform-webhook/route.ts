@@ -14,7 +14,6 @@ export async function POST(request: Request) {
 
     if (contentType.includes("application/json")) {
       data = await request.json();
-      console.log("🚀 ~ POST ~ data:", data)
     } else if (contentType.includes("application/x-www-form-urlencoded")) {
       const formData = await request.formData();
       data = Object.fromEntries(formData) as Record<string, string>;
@@ -24,6 +23,7 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+    console.log("🚀 ~ POST ~ data:", data)
 
     // ✅ Clean up keys: remove `{}` from Jotform field names
     const cleaned = Object.fromEntries(
