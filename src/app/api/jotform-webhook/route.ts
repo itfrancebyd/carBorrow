@@ -6,6 +6,11 @@ const supabase = createClient(
   process.env.SUPABASE_SERVICE_ROLE_KEY! // Service key 才能写入数据库
 )
 
+function extractHref(html: string): string | null {
+  const match = html.match(/href="([^"]+)"/);
+  return match ? match[1] : null;
+}
+
 // Next.js App Router receive POST request from webhook
 export async function POST(request: Request) {
   try {
@@ -29,7 +34,6 @@ export async function POST(request: Request) {
     const cleaned = Object.fromEntries(
       Object.entries(data).map(([key, value]) => [key.replace(/[{}]/g, ""), value])
     );
-    console.log("🚀 ~ POST ~ cleaned:", cleaned)
 
     // Jotform webhook
     const formatted = {
@@ -46,11 +50,10 @@ export async function POST(request: Request) {
       licence_issue_city: cleaned.typeA83,
       licence_expiration_date: cleaned.date,
       prefered_model: cleaned.modele,
-      licence_photo: cleaned.fileUpload,
-      applicant_declaration: cleaned.televerserLe,
-      manager_approval: cleaned.accordDu
+      licence_photo: extractHref(cleaned.fileUpload),
+      applicant_declaration: extractHref(cleaned.televerserLe),
+      manager_approval: extractHref(cleaned.accordDu)
     }
-    console.log("🚀 ~ POST ~ formatted:", formatted)
 
     // write to Supabase
     const { error } = await supabase
