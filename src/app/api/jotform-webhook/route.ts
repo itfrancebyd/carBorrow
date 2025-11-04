@@ -1,4 +1,5 @@
 import { createClient } from '@supabase/supabase-js'
+import { NextResponse } from 'next/server';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -6,27 +7,45 @@ const supabase = createClient(
 )
 
 // Next.js App Router receive POST request from webhook
-export async function POST(req: Request) {
+export async function POST(request: Request) {
   try {
-    const body = await req.json()
-    console.log("🚀 ~ POST ~ body:", body)
+    const contentType = request.headers.get("content-type") || "";
+    let data: Record<string, string> = {};
 
+    if (contentType.includes("application/json")) {
+      data = await request.json();
+    } else if (contentType.includes("application/x-www-form-urlencoded")) {
+      const formData = await request.formData();
+      data = Object.fromEntries(formData) as Record<string, string>;
+    } else {
+      return NextResponse.json(
+        { error: "Unsupported content type" },
+        { status: 400 }
+      );
+    }
+
+    // ✅ Clean up keys: remove `{}` from Jotform field names
+    const cleaned = Object.fromEntries(
+      Object.entries(data).map(([key, value]) => [key.replace(/[{}]/g, ""), value])
+    );
+
+    console.log("🧩 Cleaned data:", cleaned);
     // Jotform webhook
 
     const formatted = {
-      request_date: body.dateDemande,
-      applicant: body.demandeur,
-      applicant_department: body.departementDemandeur,
-      loan_start_date: body.dureeDu,
-      loan_end_date: body.dureeDe,
-      loan_intended: body.objPret,
-      loan_reason: body.preciserPret,
-      driver_name: body.nomConducteur,
-      license_no: body.numPermis,
-      licence_obtained_date: body.dateDobtention,
-      licence_issue_city: body.typeA83,
-      licence_expiration_date: body.date,
-      prefered_model: body.modele
+      request_date: cleaned.dateDemande,
+      applicant: cleaned.demandeur,
+      applicant_department: cleaned.departementDemandeur,
+      loan_start_date: cleaned.dureeDu,
+      loan_end_date: cleaned.dureeDe,
+      loan_intended: cleaned.objPret,
+      loan_reason: cleaned.preciserPret,
+      driver_name: cleaned.nomConducteur,
+      license_no: cleaned.numPermis,
+      licence_obtained_date: cleaned.dateDobtention,
+      licence_issue_city: cleaned.typeA83,
+      licence_expiration_date: cleaned.date,
+      prefered_model: cleaned.modele
     }
     console.log("🚀 ~ POST ~ formatted:", formatted)
 
