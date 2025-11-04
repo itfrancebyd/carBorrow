@@ -43,7 +43,10 @@ export async function POST(request: Request) {
       licence_obtained_date: cleaned.dateDobtention,
       licence_issue_city: cleaned.typeA83,
       licence_expiration_date: cleaned.date,
-      prefered_model: cleaned.modele
+      prefered_model: cleaned.modele,
+      licence_photo: cleaned.fileUpload,
+      applicant_declaration: cleaned.televerserLe,
+      manager_approval: cleaned.accordDu
     }
 
     // write to Supabase
