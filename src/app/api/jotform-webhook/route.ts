@@ -29,9 +29,7 @@ export async function POST(request: Request) {
       Object.entries(data).map(([key, value]) => [key.replace(/[{}]/g, ""), value])
     );
 
-    console.log("🧩 Cleaned data:", cleaned);
     // Jotform webhook
-
     const formatted = {
       request_date: cleaned.dateDemande,
       applicant: cleaned.demandeur,
@@ -47,7 +45,6 @@ export async function POST(request: Request) {
       licence_expiration_date: cleaned.date,
       prefered_model: cleaned.modele
     }
-    console.log("🚀 ~ POST ~ formatted:", formatted)
 
     // write to Supabase
     const { error } = await supabase
