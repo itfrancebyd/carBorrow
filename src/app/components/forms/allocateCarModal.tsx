@@ -1,5 +1,5 @@
 "use client"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
 import modelInfoJson from "@/docs/modelInfo.json"
 import { createClient } from "@/utils/supabase/client"
 import dayjs from "dayjs"
@@ -13,6 +13,7 @@ interface AllocateCarModalProps {
         loan_start_date: string
         loan_end_date: string
         prefered_model: string
+        allocated_vehicle_id: string | null
     }
 }
 
@@ -34,7 +35,18 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
     const modelInfo = modelInfoJson as Record<string, string[]>
     const [selectedModelName, setSelectedModelName] = useState("")
     const [availableVehicles, setAvailableVehicles] = useState<any[]>([])
+    const [isAllocatedInfo, setAllocatedInfo] = useState<any>()
+    const [reassignMode, setReassignMode] = useState(false)
     const supabase = createClient()
+
+    const flattenData = (data: any[]) =>
+        data.map(({ model_information, ...rest }) => ({
+            ...rest,
+            model_name: model_information?.model_name ?? undefined,
+            version_name: model_information?.version_name ?? undefined,
+            interior_colour: model_information?.interior_colour ?? undefined,
+            exterior_colour: model_information?.exterior_colour ?? undefined,
+        }))
 
     const handleModelChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
         const modelName = e.target.value
@@ -114,7 +126,35 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
         setSelectedVehicle(vehicle);
     }
 
-    // 确认分配
+    useEffect(() => {
+        const fetchVehicleDetail = async (id: string) => {
+            const { data, error } = await supabase
+                .from("car_fleet")
+                .select(
+                    `id,
+            vin,
+            plate_number,
+            model_information(model_name,version_name,interior_colour,exterior_colour),
+            plate_registration_date,
+            km,
+            battery,
+            usage_update_date,
+            key_1,
+            key_2,
+            current_location,
+            status
+            `
+                )
+                .eq("id", id)
+                .single()
+            if (error) throw error
+            setAllocatedInfo(flattenData([data])[0] ?? null)
+        }
+        if (currentRequest.allocated_vehicle_id) {
+            fetchVehicleDetail(currentRequest.allocated_vehicle_id)
+        }
+    }, [])
+
     const handleAssign = async () => {
         if (!selectedVehicle) return alert("Please select a vehicle");
 
@@ -131,6 +171,7 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
         else {
             alert("✅ Vehicle allocated successfully!")
             window.location.href = '/loan-requests'
+            setReassignMode(false)
         }
     }
 
@@ -159,78 +200,135 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
                     <p><strong>Preferred Model:</strong> {currentRequest.prefered_model}</p>
                 </div>
 
-                {/* Model Selection */}
-                <div className="flex flex-col gap-2 mb-4">
-                    <label className="text-sm font-medium text-[#26361C]">
-                        Select Vehicle Model
-                    </label>
-                    <select
-                        value={selectedModelName}
-                        onChange={handleModelChange}
-                        className="border border-gray-400 rounded-md py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#26361C]"
-                    >
-                        <option value="">-- Select a Model --</option>
-                        {modelInfo["Model Name"].map((model) => (
-                            <option key={model} value={model}>
-                                {model}
-                            </option>
-                        ))}
-                    </select>
-                </div>
+                {currentRequest.allocated_vehicle_id && isAllocatedInfo && !reassignMode
+                    ? (
+                        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mt-4">
+                            <h3 className="text-sm font-semibold text-[#26361C] mb-3">
+                                Assigned Vehicle
+                            </h3>
 
-                {/* Available Vehicles List */}
-                {selectedModelName && (
-                    <div className="mt-3">
-                        <h3 className="text-sm font-medium text-[#26361C] mb-2">Available Vehicles</h3>
-                        {availableVehicles.length > 0 ? (
-                            <div className="max-h-40 overflow-y-auto border border-gray-200 rounded-md divide-y divide-gray-100">
-                                {availableVehicles.map((v) => (
-                                    <div
-                                        key={v.id}
-                                        onClick={() => handleVehicleSelect(v)}
-                                        className={`flex justify-between items-center px-3 py-2 cursor-pointer text-sm transition-colors
-                      ${selectedVehicle?.id === v.id
-                                                ? "bg-[#C7D3B4] text-[#26361C]"
-                                                : "hover:bg-gray-100"
-                                            }`}
-                                    >
-                                        <div className="flex flex-col">
-                                            <span className="font-medium">{v.plate_number}</span>
-                                            <span className="text-gray-500 text-xs">{v.interior_colour}, {v.exterior_colour}</span>
-                                        </div>
-                                        <span className="text-xs bg-[#E8EDE1] text-[#26361C] px-2 py-0.5 rounded-md">
-                                            {v.version_name ?? "N/A"}
-                                        </span>
-                                    </div>
-                                ))}
+                            <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm text-gray-700">
+                                <div>
+                                    <span className="font-medium text-[#26361C]">Model:</span>{" "}
+                                    {isAllocatedInfo.model_name}
+                                </div>
+                                <div>
+                                    <span className="font-medium text-[#26361C]">Version:</span>{" "}
+                                    {isAllocatedInfo.version_name}
+                                </div>
+                                <div>
+                                    <span className="font-medium text-[#26361C]">Plate No.:</span>{" "}
+                                    {isAllocatedInfo.plate_number}
+                                </div>
+                                <div>
+                                    <span className="font-medium text-[#26361C]">VIN:</span>{" "}
+                                    {isAllocatedInfo.vin}
+                                </div>
+                                <div>
+                                    <span className="font-medium text-[#26361C]">Interior:</span>{" "}
+                                    {isAllocatedInfo.interior_colour}
+                                </div>
+                                <div>
+                                    <span className="font-medium text-[#26361C]">Exterior:</span>{" "}
+                                    {isAllocatedInfo.exterior_colour}
+                                </div>
+                                <div>
+                                    <span className="font-medium text-[#26361C]">Location:</span>{" "}
+                                    {isAllocatedInfo.current_location ?? "N/A"}
+                                </div>
+                                <div>
+                                    <span className="font-medium text-[#26361C]">Key:</span>{" "}
+                                    {isAllocatedInfo.key_1 ?? "N/A"}
+                                </div>
                             </div>
-                        ) : (
-                            <p className="text-xs text-gray-500 italic">
-                                No available vehicles for this model.
-                            </p>
-                        )}
-                    </div>
-                )}
 
-                {/* Action Buttons */}
-                <div className="flex justify-end gap-3 mt-6">
-                    <button
-                        onClick={onClose}
-                        className="px-4 py-2 border border-gray-400 rounded-md text-gray-600 hover:bg-gray-100 hover:cursor-pointer"
-                    >
-                        Cancel
-                    </button>
-                    <button
-                        disabled={!selectedVehicle}
-                        onClick={handleAssign}
-                        className={`px-4 py-2 rounded-md text-white transition-colors ${selectedVehicle
-                            ? "bg-[#26361C] hover:bg-[#4a5b38]"
-                            : "bg-gray-400 cursor-not-allowed"
-                            }`}
-                    >
-                        Confirm Allocation
-                    </button>
-                </div>
+                            {/* Action */}
+                            <div className="flex justify-end mt-5">
+                                <button
+                                    onClick={() => setReassignMode(true)}
+                                    className="px-4 py-2 border border-[#26361C] text-[#26361C] rounded-md text-sm hover:bg-[#26361C] hover:text-white transition-colors cursor-pointer"
+                                >
+                                    Reassign Vehicle
+                                </button>
+                            </div>
+                        </div>
+                    )
+                    :
+                    <>
+                        {/* Model Selection */}
+                        <div className="flex flex-col gap-2 mb-4">
+                            <label className="text-sm font-medium text-[#26361C]">
+                                Select Vehicle Model
+                            </label>
+                            <select
+                                value={selectedModelName}
+                                onChange={handleModelChange}
+                                className="border border-gray-400 rounded-md py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#26361C]"
+                            >
+                                <option value="">-- Select a Model --</option>
+                                {modelInfo["Model Name"].map((model) => (
+                                    <option key={model} value={model}>
+                                        {model}
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+
+                        {/* Available Vehicles List */}
+                        {selectedModelName && (
+                            <div className="mt-3">
+                                <h3 className="text-sm font-medium text-[#26361C] mb-2">Available Vehicles</h3>
+                                {availableVehicles.length > 0 ? (
+                                    <div className="max-h-40 overflow-y-auto border border-gray-200 rounded-md divide-y divide-gray-100">
+                                        {availableVehicles.map((v) => (
+                                            <div
+                                                key={v.id}
+                                                onClick={() => handleVehicleSelect(v)}
+                                                className={`flex justify-between items-center px-3 py-2 cursor-pointer text-sm transition-colors
+                      ${selectedVehicle?.id === v.id
+                                                        ? "bg-[#C7D3B4] text-[#26361C]"
+                                                        : "hover:bg-gray-100"
+                                                    }`}
+                                            >
+                                                <div className="flex flex-col">
+                                                    <span className="font-medium">{v.plate_number}</span>
+                                                    <span className="text-gray-500 text-xs">{v.interior_colour}, {v.exterior_colour}</span>
+                                                </div>
+                                                <span className="text-xs bg-[#E8EDE1] text-[#26361C] px-2 py-0.5 rounded-md">
+                                                    {v.version_name ?? "N/A"}
+                                                </span>
+                                            </div>
+                                        ))}
+                                    </div>
+                                ) : (
+                                    <p className="text-xs text-gray-500 italic">
+                                        No available vehicles for this model.
+                                    </p>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Action Buttons */}
+                        <div className="flex justify-end gap-3 mt-6">
+                            <button
+                                onClick={onClose}
+                                className="px-4 py-2 border border-gray-400 rounded-md text-gray-600 hover:bg-gray-100 hover:cursor-pointer"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                disabled={!selectedVehicle}
+                                onClick={handleAssign}
+                                className={`px-4 py-2 rounded-md text-white transition-colors ${selectedVehicle
+                                    ? "bg-[#26361C] hover:bg-[#4a5b38]"
+                                    : "bg-gray-400 cursor-not-allowed"
+                                    }`}
+                            >
+                                Confirm Allocation
+                            </button>
+                        </div>
+                    </>
+                }
             </div>
         </div>
     )

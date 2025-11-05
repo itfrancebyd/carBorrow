@@ -28,7 +28,6 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
-    console.log("🚀 ~ POST ~ data:", data)
 
     // ✅ Clean up keys: remove `{}` from Jotform field names
     const cleaned = Object.fromEntries(
