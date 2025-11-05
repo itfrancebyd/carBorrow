@@ -248,7 +248,7 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
                                     onClick={() => setReassignMode(true)}
                                     className="px-4 py-2 border border-[#26361C] text-[#26361C] rounded-md text-sm hover:bg-[#26361C] hover:text-white transition-colors cursor-pointer"
                                 >
-                                    Reassign Vehicle
+                                    Reallocate Vehicle
                                 </button>
                             </div>
                         </div>
