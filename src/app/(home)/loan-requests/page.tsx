@@ -114,7 +114,7 @@ const LoanReq = () => {
             .eq("id", id)
             .single()
         if (error) throw error
-        return data;
+        return data
     }
 
     return (
