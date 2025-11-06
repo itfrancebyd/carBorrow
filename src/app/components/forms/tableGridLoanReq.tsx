@@ -144,7 +144,7 @@ const TableGridLoanReq: FC<tableGridTableLoanReqProp> = ({
                             style={{
                                 gridTemplateColumns: tableTitle
                                     .map((item) =>
-                                        item.key.toLowerCase() === "status" || item.key.toLowerCase() === "vehicle_schedule" || item.key.toLowerCase() === "plate_number" ? "0.5fr" : "1fr"
+                                        item.key.toLowerCase() === "status" || item.key.toLowerCase() === "allocate" ? "0.5fr" : "1fr"
                                     )
                                     .join(" "),
                             }}
@@ -166,7 +166,7 @@ const TableGridLoanReq: FC<tableGridTableLoanReqProp> = ({
                                     style={{
                                         gridTemplateColumns: tableTitle
                                             .map((field) =>
-                                                (field.key.toLowerCase() === "status" || field.key.toLowerCase() === "vehicle_schedule" || field.key.toLowerCase() === "plate_number") ? "0.5fr" : "1fr"
+                                                (field.key.toLowerCase() === "status" || field.key.toLowerCase() === "allocate") ? "0.5fr" : "1fr"
                                             )
                                             .join(" "),
                                     }}

@@ -145,7 +145,7 @@ const TableGridVehicle: FC<tableGridTableGridVehicleProp> = ({
                             style={{
                                 gridTemplateColumns: tableTitle
                                     .map((item) =>
-                                        item.key.toLowerCase() === "status" || item.key.toLowerCase() === "vehicle_schedule" || item.key.toLowerCase() === "plate_number" ? "0.5fr" : "1fr"
+                                        item.key.toLowerCase() === "status" || item.key.toLowerCase() === "vehicle_schedule" || item.key.toLowerCase() === "model_name" || item.key.toLowerCase() === "plate_number" ? "0.5fr" : "1fr"
                                     )
                                     .join(" "),
                             }}
@@ -167,7 +167,7 @@ const TableGridVehicle: FC<tableGridTableGridVehicleProp> = ({
                                     style={{
                                         gridTemplateColumns: tableTitle
                                             .map((field) =>
-                                                (field.key.toLowerCase() === "status" || field.key.toLowerCase() === "vehicle_schedule" || field.key.toLowerCase() === "plate_number") ? "0.5fr" : "1fr"
+                                                (field.key.toLowerCase() === "status" || field.key.toLowerCase() === "vehicle_schedule" || field.key.toLowerCase() === "model_name" || field.key.toLowerCase() === "plate_number") ? "0.5fr" : "1fr"
                                             )
                                             .join(" "),
                                     }}
