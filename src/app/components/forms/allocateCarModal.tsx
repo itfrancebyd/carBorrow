@@ -155,6 +155,23 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
         }
     }, [])
 
+    const handleCancelAllocation = async () => {
+        const { error } = await supabase
+            .from("loan_requests")
+            .update({
+                allocated_vehicle_id: null,
+                status: "new",
+            })
+            .eq("id", currentRequest.id)
+            .select()
+
+        if (error) console.error(error)
+        else {
+            alert("✅The allocated vehicle has been canceled!")
+            window.location.href = '/loan-requests'
+        }
+    }
+
     const handleAssign = async () => {
         if (!selectedVehicle) return alert("Please select a vehicle");
 
@@ -243,7 +260,13 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
                             </div>
 
                             {/* Action */}
-                            <div className="flex justify-end mt-5">
+                            <div className="flex justify-end mt-5 gap-1">
+                                <button
+                                    onClick={handleCancelAllocation}
+                                    className="px-4 py-2 border bg-[#26361C] border-[#26361C] text-white rounded-md text-sm hover:text-[#26361C] hover:bg-white transition-colors cursor-pointer"
+                                >
+                                    Cancel allocate
+                                </button>
                                 <button
                                     onClick={() => setReassignMode(true)}
                                     className="px-4 py-2 border border-[#26361C] text-[#26361C] rounded-md text-sm hover:bg-[#26361C] hover:text-white transition-colors cursor-pointer"

@@ -1,7 +1,6 @@
 'use client'
 import SubTitle from "@/app/components/subTitle"
 import { Suspense, useEffect, useState } from "react"
-import { fetchJotformSubmissions } from "@/utils/jotform/server"
 import TableGridLoanReq from "@/app/components/forms/tableGridLoanReq"
 import LoanReqPopModal from "@/app/components/forms/loanReqPopModal"
 import modelInfoJson from "@/docs/modelInfo.json"
@@ -27,7 +26,6 @@ export interface answerContent {
 }
 
 const LoanReq = () => {
-    const [isAnswerArr, setAnswerArr] = useState<answerContent[]>([])
     const [isLoanData, setLoanData] = useState<answerContent[]>([])
     const modelInfo = modelInfoJson as Record<string, string[]>
     const supabase = createClient()
@@ -64,46 +62,26 @@ const LoanReq = () => {
         { key: "manager_approval", label: "Manager Approval" },
     ]
     useEffect(() => {
-        const getAnswers = async () => {
-            const resArr = await fetchJotformSubmissions()
-            if (resArr) {
-                const formattedAnswers: answerContent[] = resArr.map((item: Record<string, any>) => {
-                    const answers = item.answers
-                    return {
-                        id: item.id,
-                        request_date: answers[9]?.prettyFormat ?? "",
-                        applicant: `${answers[3]?.answer?.first ?? ""} ${answers[3]?.answer?.last ?? ""}`,
-                        applicant_department: answers[65]?.answer ?? "",
-                        loan_start_date: answers[61]?.prettyFormat ?? "",
-                        loan_end_date: answers[64]?.prettyFormat ?? "",
-                        loan_intended: answers[78]?.answer ?? "",
-                        loan_reason: answers[80]?.answer ?? "",
-                        driver_name: answers[16]?.answer ?? "",
-                        license_no: answers[19]?.answer ?? "",
-                        licence_obtained_date: answers[82]?.prettyFormat ?? "",
-                        licence_issue_city: answers[83]?.answer ?? "",
-                        licence_expiration_date: answers[84]?.prettyFormat ?? "",
-                        licence_photo: answers[86]?.answer?.[0] ?? "",
-                        prefered_model: answers[88]?.answer ?? "",
-                        applicant_declaration: answers[95]?.answer?.[0] ?? ""
-                    }
-                })
-
-                setAnswerArr(formattedAnswers)
-            }
-        }
         const fetchData = async () => {
             const { data: loan_requests, error } = await supabase
                 .from('loan_requests')
                 .select('*')
             if (error) {
                 console.error("Error fetching loan requests: ", error)
-            } else if (loan_requests) {
-                setLoanData(loan_requests)
             }
+            if (loan_requests) {
+                const sorted = loan_requests.sort((a, b) => {
+                    if (a.status === "new" && b.status !== "new") return -1
+                    if (a.status !== "new" && b.status === "new") return 1
+
+                    return new Date(b.request_date).getTime() - new Date(a.request_date).getTime()
+                })
+
+                setLoanData(sorted)
+            }
+
         }
         fetchData()
-        getAnswers()
     }, [])
 
     // fetch detail with id
