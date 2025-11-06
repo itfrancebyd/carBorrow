@@ -14,7 +14,8 @@ interface tableGridTableGridVehicleProp {
     dragDropLink: string;
     buttonLink: string;
     children?: ReactNode;
-    fetchVehicleSchedule: (id: string) => Promise<any>
+    fetchVehicleSchedule: (id: string) => Promise<any>;
+    fetchExistingSchedule: (id: string) => Promise<any>
 }
 
 const TableCell = ({
@@ -72,7 +73,8 @@ const TableGridVehicle: FC<tableGridTableGridVehicleProp> = ({
     dragDropLink,
     buttonLink,
     children,
-    fetchVehicleSchedule
+    fetchVehicleSchedule,
+    fetchExistingSchedule
 }) => {
     const [isOpen, setIsOpen] = useState(false)
     const [isScheduleOpen, setScheduleOpen] = useState(false)
@@ -184,7 +186,14 @@ const TableGridVehicle: FC<tableGridTableGridVehicleProp> = ({
                     </div>
                 </div>
             </div>
-            {isScheduleOpen && <ScheduleForm handleScheduleClose={handleScheduleClose} currentId={currentVehicleId} fetchVehicleSchedule={fetchVehicleSchedule}></ScheduleForm>}
+            {isScheduleOpen
+                &&
+                <ScheduleForm
+                    handleScheduleClose={handleScheduleClose}
+                    currentId={currentVehicleId}
+                    fetchVehicleSchedule={fetchVehicleSchedule}
+                    fetchExistingSchedule={fetchExistingSchedule}
+                ></ScheduleForm>}
             <div className={`${isOpen ? 'fixed inset-0 w-full h-screen overflow-hidden bg-gray-400/50 z-40 p-7' : 'hidden'} `}>
                 {children &&
                     cloneElement(children as React.ReactElement<any>, {

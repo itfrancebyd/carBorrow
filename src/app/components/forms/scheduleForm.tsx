@@ -1,16 +1,34 @@
 'use client'
+import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 
+type ScheduleStatus = "upcoming" | "ongoing" | "completed";
+
 const ScheduleForm = (
-    { handleScheduleClose, currentId, fetchVehicleSchedule }: {
+    { handleScheduleClose, currentId, fetchVehicleSchedule, fetchExistingSchedule }: {
         handleScheduleClose: () => void;
         fetchVehicleSchedule: (id: string) => Promise<any>;
+        fetchExistingSchedule: (id: string) => Promise<any>;
         currentId: string
     }) => {
 
     const [isLoading, setLoading] = useState(false)
     const [isScheduleData, setScheduleData] = useState<Record<string, any> | null>(null)
+    const [isExistSchedule, setExistSchedule] = useState<any[]>([])
     const [error, setError] = useState<string | null>(null)
+
+    const getScheduleStatus = (
+        startDate: string | Date,
+        endDate: string | Date
+    ): ScheduleStatus => {
+        const today = dayjs()
+        const start = dayjs(startDate)
+        const end = dayjs(endDate)
+
+        if (today.isBefore(start)) return "upcoming"
+        if (today.isAfter(end)) return "completed"
+        return "ongoing"
+    }
 
     useEffect(() => {
         if (!currentId) return
@@ -25,34 +43,15 @@ const ScheduleForm = (
                 setError(err instanceof Error ? err.message : "Something went wrong");
             })
             .finally(() => setLoading(false))
+
+        fetchExistingSchedule(currentId)
+            .then((res) => { setExistSchedule(res) })
+            .catch((err) => {
+                console.error("Failed to fetch data:", err);
+                setError(err instanceof Error ? err.message : "Something went wrong");
+            })
+            .finally(() => setLoading(false))
     }, [currentId, fetchVehicleSchedule])
-
-    const vehicle = {
-        modelName: "BYD Dolphin",
-        versionName: "Surf Edition",
-        plateNumber: "HB-953-MS",
-        exteriorColour: "Blue",
-        interiorColour: "Beige",
-        status: "enable",
-    }
-
-    const schedules =
-        [
-            {
-                id: "1",
-                start_date: "2025-10-01",
-                end_date: "2025-10-05",
-                renter_name: "John Doe",
-                status: "completed",
-            },
-            {
-                id: "2",
-                start_date: "2025-10-10",
-                end_date: "2025-10-15",
-                renter_name: "Jane Smith",
-                status: "upcoming",
-            },
-        ]
 
     return (
         <div className="bg-[#8C8C8C]/70 z-50 fixed top-0 bottom-0 left-0 right-0">
@@ -72,7 +71,7 @@ const ScheduleForm = (
                                 <div className="flex justify-between items-center mb-2">
                                     <div className="font-semibold text-[#26361C] text-base">Vehicle Information</div>
                                     <span
-                                        className={`px-3 py-1 rounded-full text-xs font-semibold ${vehicle.status === "enable"
+                                        className={`px-3 py-1 rounded-full text-xs font-semibold ${isScheduleData.status === "enable"
                                             ? "bg-green-100 text-green-800"
                                             : "bg-red-100 text-red-700"
                                             }`}
@@ -104,31 +103,37 @@ const ScheduleForm = (
                     {/* --- Existing Schedules --- */}
                     <div className="border border-[#dadada] rounded-md p-4 bg-white mb-4">
                         <div className="font-semibold text-[#26361C] mb-2">Existing Schedules</div>
-                        {schedules.length > 0 ? (
+                        {isExistSchedule.length > 0 ? (
                             <div className="overflow-y-auto max-h-[40vh] divide-y divide-gray-200 text-xs">
-                                {schedules.map((sch) => (
-                                    <div
-                                        key={sch.id}
-                                        className="flex justify-between items-center py-2 hover:bg-gray-50"
-                                    >
-                                        <div className="w-2/5 truncate">
-                                            {sch.start_date} → {sch.end_date}
-                                        </div>
-                                        <div className="w-1/3 truncate text-gray-600">
-                                            {sch.renter_name || "—"}
-                                        </div>
+                                {isExistSchedule.map((sch) => {
+                                    const status = getScheduleStatus(sch.loan_start_date, sch.loan_end_date);
+                                    return (
                                         <div
-                                            className={`text-right w-1/4 font-semibold ${sch.status === "active"
-                                                ? "text-green-600"
-                                                : sch.status === "upcoming"
-                                                    ? "text-blue-600"
-                                                    : "text-gray-500"
-                                                }`}
+                                            key={sch.id}
+                                            className="flex justify-between items-center py-2 hover:bg-gray-50"
                                         >
-                                            {sch.status.charAt(0).toUpperCase() + sch.status.slice(1)}
+                                            <div className="w-2/5 truncate">
+                                                {sch.loan_start_date} → {sch.loan_end_date}
+                                            </div>
+                                            <div className="w-1/3 truncate text-gray-600">
+                                                {sch.applicant || "—"}
+                                            </div>
+                                            <div
+                                                className={`text-right w-1/4 font-semibold ${status === "ongoing"
+                                                    ? "text-green-600"
+                                                    : status === "upcoming"
+                                                        ? "text-blue-600"
+                                                        : "text-gray-500"
+                                                    }`}
+                                            >
+                                                {status.charAt(0).toUpperCase() + status.slice(1)}
+                                            </div>
+                                            {/* <ScheduleStatus start_date={sch.loan_start_date} end_date={sch.loan_end_date} status={sch.status} /> */}
                                         </div>
-                                    </div>
-                                ))}
+                                    )
+                                }
+                                )
+                                }
                             </div>
                         ) : (
                             <div className="text-gray-400 italic text-xs py-2">

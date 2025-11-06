@@ -129,22 +129,13 @@ export default function Home() {
   }
 
   // fetch detail with id
-  const fetchVehicleSchedule = async (id: string) => {
+  const fetchExistingSchedule = async (id: string) => {
     const { data, error } = await supabase
-      .from("car_fleet")
-      .select(
-        `id,
-            vin,
-            plate_number,
-            model_information(model_name,version_name,interior_colour,exterior_colour),
-            plate_registration_date,
-            status
-            `
-      )
-      .eq("id", id)
-      .single()
+      .from("loan_requests")
+      .select('*')
+      .eq("allocated_vehicle_id", id)
     if (error) throw error
-    return flattenData([data])
+    return data
   }
 
   const handleVehicleDel = async (id: string) => {
@@ -238,7 +229,8 @@ export default function Home() {
             pushQuery={"vehicleid"}
             dragDropLink="importvehicle"
             buttonLink="addvehicle"
-            fetchVehicleSchedule={fetchVehicleSchedule}
+            fetchVehicleSchedule={fetchVehicleDetail}
+            fetchExistingSchedule={fetchExistingSchedule}
           >
             <VehiclePopModal
               fetchData={fetchVehicleDetail}
