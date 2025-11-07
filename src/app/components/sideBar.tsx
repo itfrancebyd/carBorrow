@@ -2,11 +2,30 @@
 import { createClient } from "@/utils/supabase/client"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
+import { useEffect, useState } from "react"
 
 const SideBar = () => {
+    const [isCurrentUser, setCurrentUser] = useState<string | null>(null)
+    const [isUserLoading, setUserLoading] = useState(false)
     const pathname = usePathname()
     const supabase = createClient()
     const router = useRouter()
+
+    useEffect(() => {
+        const getCurrentUser = async () => {
+            setUserLoading(true)
+            const { data, error } = await supabase.auth.getUser()
+            if (error) {
+                console.error("use not find: " + error)
+            } else {
+                if (data.user?.email) {
+                    setCurrentUser(data.user.email)
+                    setUserLoading(false)
+                }
+            }
+        }
+        getCurrentUser()
+    }, [])
 
     const handleLogout = async () => {
         const { error } = await supabase.auth.signOut()
@@ -33,12 +52,47 @@ const SideBar = () => {
                     <div className="hidden lg:inline">Manage Models</div>
                 </Link>
             </div>
-            <div className="row-span-1 justify-self-center lg:justify-self-start self-end text-sm">
-                <button onClick={handleLogout} className="cursor-pointer flex flex-row items-center gap-1">
-                    <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="4705" width="16" height="16"><path d="M960.512 539.712l-144.768 144.832-48.256-48.256 60.224-60.288H512V512h325.76l-70.272-70.272 48.256-48.256 144.768 144.768-0.704 0.768 0.704 0.704zM704 192a64 64 0 0 0-64-64H192a64 64 0 0 0-64 64v640a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64v-64h64v64a128 128 0 0 1-128 128H192a128 128 0 0 1-128-128V192a128 128 0 0 1 128-128h448a128 128 0 0 1 128 128v128h-64V192z" p-id="4706" fill="#26361C"></path></svg>
-                    <p className="hidden lg:inline">Log out</p>
-                </button>
+            <div className="row-span-1 justify-self-stretch self-end w-full">
+                <div className="flex flex-col gap-2 items-center lg:items-start border-t border-gray-200 pt-3">
+                    {/* Current user info */}
+                    <div className="flex items-center gap-2 text-gray-600 text-xs lg:text-sm w-full justify-center lg:justify-start">
+                        {isUserLoading ? (
+                            <>
+                                <div className="w-7 h-7 rounded-full bg-gray-200 animate-pulse" />
+                                <span className="hidden lg:inline-block w-[100px] h-3 rounded-md bg-gray-200 animate-pulse" />
+                            </>
+                        ) : (
+                            <>
+                                <div className="flex w-7 h-7 items-center justify-center rounded-full bg-[#B6C6A1] text-[#26361C] font-semibold shadow-sm">
+                                    {isCurrentUser?.charAt(0)?.toUpperCase()}
+                                </div>
+                                <span className="hidden lg:inline truncate max-w-[120px] font-medium text-[#26361C] text-xs">
+                                    {isCurrentUser}
+                                </span>
+                            </>
+                        )}
+                    </div>
+                    <button
+                        onClick={handleLogout}
+                        className="w-full flex items-center justify-center lg:justify-start gap-2 py-2 px-2 mt-1 text-[#26361C] border border-[#26361C]/30 rounded-md hover:bg-[#e1e6d9] hover:text-[#1c2814] transition-colors duration-150 cursor-pointer"
+                    >
+                        <svg
+                            viewBox="0 0 1024 1024"
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="16"
+                            height="16"
+                            className="flex-shrink-0"
+                        >
+                            <path
+                                d="M960.512 539.712l-144.768 144.832-48.256-48.256 60.224-60.288H512V512h325.76l-70.272-70.272 48.256-48.256 144.768 144.768-0.704 0.768 0.704 0.704zM704 192a64 64 0 0 0-64-64H192a64 64 0 0 0-64 64v640a64 64 0 0 0 64 64h448a64 64 0 0 0 64-64v-64h64v64a128 128 0 0 1-128 128H192a128 128 0 0 1-128-128V192a128 128 0 0 1 128-128h448a128 128 0 0 1 128 128v128h-64V192z"
+                                fill="#26361C"
+                            />
+                        </svg>
+                        <span className="hidden lg:inline font-semibold text-sm">Log out</span>
+                    </button>
+                </div>
             </div>
+
         </div>
     )
 }
