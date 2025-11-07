@@ -228,7 +228,7 @@ const LoanReqPopModal: FC<LoanReqPopModalProp> = ({
                     )}
                     {!error && !loading && data && (
                         <div className="p-2 text-xs">
-                            <div className="my-1 flex gap-2">
+                            {/* <div className="my-1 flex gap-2">
                                 <button
                                     className="bg-[#26361C] hover:bg-[#375a23] py-1 px-1 rounded-sm cursor-pointer"
                                     onClick={handleDelete}
@@ -241,7 +241,7 @@ const LoanReqPopModal: FC<LoanReqPopModalProp> = ({
                                 >
                                     <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5267" width="16" height="16"><path d="M526.41 117.029v58.514a7.314 7.314 0 0 1-7.315 7.314H219.429a36.571 36.571 0 0 0-35.987 29.989l-0.585 6.583V804.57a36.571 36.571 0 0 0 29.989 35.987l6.583 0.585H804.57a36.571 36.571 0 0 0 35.987-29.989l0.585-6.583v-317.44a7.314 7.314 0 0 1 7.314-7.314h58.514a7.314 7.314 0 0 1 7.315 7.314v317.44a109.714 109.714 0 0 1-99.182 109.203l-10.533 0.512H219.43a109.714 109.714 0 0 1-109.203-99.182l-0.512-10.533V219.43a109.714 109.714 0 0 1 99.182-109.203l10.533-0.512h299.666a7.314 7.314 0 0 1 7.314 7.315z m307.345 31.817l41.4 41.399a7.314 7.314 0 0 1 0 10.313L419.985 655.726a7.314 7.314 0 0 1-10.313 0l-41.399-41.4a7.314 7.314 0 0 1 0-10.312l455.168-455.168a7.314 7.314 0 0 1 10.313 0z" p-id="5268" fill="#ffffff"></path></svg>
                                 </button>
-                            </div>
+                            </div> */}
                             <form className="flex flex-col gap-2">
                                 {popupWindowInfo.map((title, index) => (
                                     <div key={index} className="flex flex-col gap-1">
