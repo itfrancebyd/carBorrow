@@ -7,7 +7,7 @@ const Modal = ({ title, children }: {
 }) => {
     const router = useRouter()
     return (
-        <div className="bg-[#8C8C8C]/70 z-50 absolute top-0 bottom-0 left-0 right-0">
+        <div className="bg-[#8C8C8C]/70 z-50 fixed top-0 bottom-0 left-0 right-0">
             <div className="bg-white shadow-xl rounded-2xl z-50 absolute top-1/8 bottom-1/8 left-1/8 right-1/8 py-6 overflow-y-auto">
                 <div className="text-sm flex justify-between pb-3 px-6 border-b-1 border-[#dadada]">
                     <div className="flex flex-row gap-2 items-center">
