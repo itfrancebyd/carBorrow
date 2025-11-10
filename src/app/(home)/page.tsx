@@ -208,7 +208,6 @@ export default function Home() {
     { key: "current_location", label: "Current Location" },
     { key: "status", label: "Status" }
   ]
-
   const dataMeasure = [
     { title: "Total Vehicles", dataCount: dataSum.length, color: "bg-blue-600" },
     { title: "Active Vehicles", dataCount: dataSum.filter((item) => item.status === "enable").length, color: "bg-green-400" },

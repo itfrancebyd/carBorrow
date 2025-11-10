@@ -5,6 +5,7 @@ import TableGridLoanReq from "@/app/components/forms/tableGridLoanReq"
 import LoanReqPopModal from "@/app/components/forms/loanReqPopModal"
 import modelInfoJson from "@/docs/modelInfo.json"
 import { createClient } from "@/utils/supabase/client"
+import FilterLoan from "@/app/components/filterLoan"
 
 export interface answerContent {
     request_date: Date;
@@ -27,7 +28,9 @@ export interface answerContent {
 
 const LoanReq = () => {
     const [isLoanData, setLoanData] = useState<answerContent[]>([])
+    const [isAllLoanData, setAllLoanData] = useState<answerContent[]>([])
     const modelInfo = modelInfoJson as Record<string, string[]>
+    const [isFilterInfo, setFilterInfo] = useState<Record<string, string | null>>({})
     const supabase = createClient()
     // const [dataSum, setDataSum] = useState<ModelProps[]>([])
 
@@ -39,6 +42,14 @@ const LoanReq = () => {
         { key: "applicant_department", label: "Department" },
         { key: "loan_start_date", label: "Borrow date" },
         { key: "loan_end_date", label: "Return date" },
+        { key: "prefered_model", label: "Preferred Model" },
+    ]
+
+    const filterTitle = [
+        { key: "status", label: "Status" },
+        { key: "request_date", label: "Request date" },
+        { key: "applicant", label: "Applicant" },
+        { key: "applicant_department", label: "Department" },
         { key: "prefered_model", label: "Preferred Model" },
     ]
 
@@ -61,6 +72,7 @@ const LoanReq = () => {
         { key: "applicant_declaration", label: "Applicant declaration" },
         { key: "manager_approval", label: "Manager Approval" },
     ]
+
     useEffect(() => {
         const fetchData = async () => {
             const { data: loan_requests, error } = await supabase
@@ -78,11 +90,27 @@ const LoanReq = () => {
                 })
 
                 setLoanData(sorted)
+                setAllLoanData(sorted)
             }
 
         }
         fetchData()
     }, [])
+
+    //filter
+    useEffect(() => {
+        if (!isAllLoanData.length) return
+
+        const filtered = isAllLoanData.filter((item) => {
+            return Object.entries(isFilterInfo).every(([key, value]) => {
+                if (!value) return true
+                const itemValue = String(item[key as keyof typeof item] ?? "").toLowerCase()
+                return itemValue.includes(String(value).toLowerCase())
+            })
+        })
+
+        setLoanData(filtered)
+    }, [isFilterInfo, isAllLoanData])
 
     // fetch detail with id
     const fetchVehicleDetail = async (id: string) => {
@@ -105,6 +133,7 @@ const LoanReq = () => {
             throw error
         }
     }
+
     const handleEdit = async (id: string, updatedData: answerContent) => {
         const { data, error } = await supabase
             .from("loan_requests")
@@ -119,6 +148,7 @@ const LoanReq = () => {
     return (
         <div className="flex flex-col h-screen">
             <SubTitle subTitleName="Loan Requests"></SubTitle>
+            <FilterLoan setFilterInfo={setFilterInfo} selectInfo={modelInfo} filterItems={filterTitle}></FilterLoan>
             <div className="flex-1">
                 <Suspense fallback={<div>Loading table...</div>}>
                     <TableGridLoanReq
