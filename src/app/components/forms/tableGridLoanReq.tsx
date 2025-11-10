@@ -1,7 +1,6 @@
 'use client'
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { cloneElement, FC, ReactNode, useEffect, useState } from "react"
-import Link from "next/link";
 import AllocateCarModal from "./allocateCarModal";
 
 interface tableGridTableLoanReqProp {
@@ -52,6 +51,16 @@ const TableCell = ({
         }
     }
     if (key === "allocate") {
+        if (item.status === "canceled") {
+            return (
+                <button
+                    className="bg-[#737572] text-white px-1 py-0.5 rounded-sm hover:cursor-not-allowed"
+                    onClick={(event) => event.stopPropagation()}
+                >
+                    <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="12341" width="16" height="16"><path d="M872.8 63.1H151.4c-48.7 0-88.3 39.6-88.3 88.3v718.4c0 48.7 39.6 88.3 88.3 88.3h721.4c48.7 0 88.3-39.6 88.3-88.3V151.4c0-48.7-39.6-88.3-88.3-88.3z m-721.4 64h721.4c13.4 0 24.3 10.9 24.3 24.3v104.2h-770V151.4c0-13.4 10.9-24.3 24.3-24.3z m721.4 767H151.4c-13.4 0-24.3-10.9-24.3-24.3V319.6h770v550.2c0 13.4-10.9 24.3-24.3 24.3z" fill="#ffffff" p-id="12342"></path><path d="M224.6 479.6m-32 0a32 32 0 1 0 64 0 32 32 0 1 0-64 0Z" fill="#ffffff" p-id="12343"></path><path d="M418.1 479.6m-32 0a32 32 0 1 0 64 0 32 32 0 1 0-64 0Z" fill="#ffffff" p-id="12344"></path><path d="M610.1 479.6m-32 0a32 32 0 1 0 64 0 32 32 0 1 0-64 0Z" fill="#ffffff" p-id="12345"></path><path d="M800.6 479.6m-32 0a32 32 0 1 0 64 0 32 32 0 1 0-64 0Z" fill="#ffffff" p-id="12346"></path></svg>
+                </button>
+            )
+        }
         return (
             <button
                 className="bg-[#26361C] text-white px-1 py-0.5 rounded-sm hover:bg-[#425d31] hover:cursor-pointer"

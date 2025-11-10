@@ -82,11 +82,23 @@ const LoanReq = () => {
                 console.error("Error fetching loan requests: ", error)
             }
             if (loan_requests) {
-                const sorted = loan_requests.sort((a, b) => {
-                    if (a.status === "new" && b.status !== "new") return -1
-                    if (a.status !== "new" && b.status === "new") return 1
+                const statusOrder: Record<string, number> = {
+                    new: 1,
+                    allocated: 2,
+                    canceled: 3,
+                }
 
-                    return new Date(b.request_date).getTime() - new Date(a.request_date).getTime()
+                const sorted = loan_requests.sort((a, b) => {
+                    const statusA = statusOrder[a.status] ?? 999
+                    const statusB = statusOrder[b.status] ?? 999
+
+                    if (statusA !== statusB) {
+                        return statusA - statusB
+                    }
+
+                    return (
+                        new Date(b.request_date).getTime() - new Date(a.request_date).getTime()
+                    )
                 })
 
                 setLoanData(sorted)
