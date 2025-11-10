@@ -204,7 +204,9 @@ const TableGridLoanReq: FC<tableGridTableLoanReqProp> = ({
                     onClose={() => setAllocateOpen(false)}
                     currentRequest={isCurrentRequest}
                 />}
-            <div className={`${isOpen ? 'fixed inset-0 w-full h-screen overflow-hidden bg-gray-400/50 z-40 p-7' : 'hidden'} `}>
+            <div
+                className={`${isOpen ? 'fixed inset-0 w-full h-screen overflow-hidden bg-gray-400/50 z-40 p-7' : 'hidden'} `}
+                onClick={handleClose}>
                 {children &&
                     cloneElement(children as React.ReactElement<any>, {
                         closeEvent: handleClose,

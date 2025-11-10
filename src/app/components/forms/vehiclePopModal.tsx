@@ -75,7 +75,7 @@ const VehiclePopModal: FC<VehiclePopModalProp> = ({
     }
 
     return (
-        <div className="bg-white w-1/3 h-screen absolute right-0 top-0 bottom-0 shadow-2xl overflow-y-auto">
+        <div className="bg-white w-1/3 h-screen absolute right-0 top-0 bottom-0 shadow-2xl overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="my-3 mx-6">
                 <button onClick={closeEvent} className="text-3xl hover:cursor-pointer absolute right-6">
                     <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="6469" width="32" height="32"><path d="M551.424 512l195.072-195.072c9.728-9.728 9.728-25.6 0-36.864l-1.536-1.536c-9.728-9.728-25.6-9.728-35.328 0L514.56 475.136 319.488 280.064c-9.728-9.728-25.6-9.728-35.328 0l-1.536 1.536c-9.728 9.728-9.728 25.6 0 36.864L477.696 512 282.624 707.072c-9.728 9.728-9.728 25.6 0 36.864l1.536 1.536c9.728 9.728 25.6 9.728 35.328 0L514.56 548.864l195.072 195.072c9.728 9.728 25.6 9.728 35.328 0l1.536-1.536c9.728-9.728 9.728-25.6 0-36.864L551.424 512z" fill="#26361C" p-id="6470"></path></svg>

@@ -193,8 +193,8 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
     }
 
     return (
-        <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center">
-            <div className="bg-white rounded-xl shadow-xl w-[90%] max-w-lg p-6 relative animate-fadeIn">
+        <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center" onClick={onClose}>
+            <div className="bg-white rounded-xl shadow-xl w-[90%] max-w-lg p-6 relative animate-fadeIn" onClick={(e) => e.stopPropagation()}>
                 {/* Header */}
                 <div className="flex justify-between items-center border-b pb-3 mb-4">
                     <h2 className="text-lg font-semibold text-[#26361C]">Allocate Vehicle</h2>
