@@ -45,6 +45,11 @@ const TableCell = ({
                 <div className="bg-[#B0CE88] text-white text-[6px] font-semibold px-1 py-0.5 rounded-sm">ALLOCATED</div>
             )
         }
+        if (item.status === "canceled") {
+            return (
+                <div className="bg-[#99A1AF] text-white text-[6px] font-semibold px-1 py-0.5 rounded-sm">CANCELED</div>
+            )
+        }
     }
     if (key === "allocate") {
         return (

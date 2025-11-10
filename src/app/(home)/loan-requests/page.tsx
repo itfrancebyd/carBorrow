@@ -95,6 +95,17 @@ const LoanReq = () => {
         return data
     }
 
+    const handleDetele = async (id: string) => {
+        const { data, error } = await supabase
+            .from("loan_requests")
+            .update({ status: "canceled" })
+            .eq("id", id)
+            .select()
+        if (error) {
+            throw error
+        }
+    }
+
     return (
         <div className="flex flex-col h-screen">
             <SubTitle subTitleName="Loan Requests"></SubTitle>
@@ -112,6 +123,7 @@ const LoanReq = () => {
                             fetchData={fetchVehicleDetail}
                             modelInfo={modelInfo}
                             popupWindowInfo={popupWindowInfo}
+                            actionDelete={handleDetele}
                         ></LoanReqPopModal>
                     </TableGridLoanReq>
                 </Suspense>
