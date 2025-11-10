@@ -105,6 +105,16 @@ const LoanReq = () => {
             throw error
         }
     }
+    const handleEdit = async (id: string, updatedData: answerContent) => {
+        const { data, error } = await supabase
+            .from("loan_requests")
+            .update(updatedData)
+            .eq("id", id)
+            .select()
+        if (error) {
+            throw error
+        }
+    }
 
     return (
         <div className="flex flex-col h-screen">
@@ -124,6 +134,7 @@ const LoanReq = () => {
                             modelInfo={modelInfo}
                             popupWindowInfo={popupWindowInfo}
                             actionDelete={handleDetele}
+                            actionEdit={handleEdit}
                         ></LoanReqPopModal>
                     </TableGridLoanReq>
                 </Suspense>
