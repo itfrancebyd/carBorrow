@@ -107,7 +107,7 @@ const PopModalForm: FC<PopModalFormProp> = ({
                                         <select
                                             disabled={!isEdit}
                                             value={data[title.key]}
-                                            className={`border border-[#26361C] px-2 py-1 rounded-sm ${isEdit ? 'cursor-pointer' : 'cursor-not-allowed'}`}
+                                            className={`border border-[#26361C] px-2 py-1 rounded-sm ${isEdit ? 'cursor-pointer' : 'cursor-text'}`}
                                             onChange={(e) =>
                                                 setData((prev: any) => ({
                                                     ...prev,
