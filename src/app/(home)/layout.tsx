@@ -30,10 +30,10 @@ export default function HomeLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased min-h-screen flex`}
       >
-        <div className="w-14 lg:w-52 fixed top-0 left-0 h-screen bg-gray-100">
+        <div className="w-14 lg:w-52 fixed top-0 left-0 z-20 h-screen bg-gray-100">
           <SideBar></SideBar>
         </div>
-        <div className="flex-1 ml-14 lg:ml-52">
+        <div className="flex-1 ml-14 lg:ml-52 min-w-[820px]">
           {children}
         </div>
         {modals}

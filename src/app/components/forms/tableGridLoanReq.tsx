@@ -154,7 +154,7 @@ const TableGridLoanReq: FC<tableGridTableLoanReqProp> = ({
                     }}>
                         {/* Header */}
                         <div
-                            className="grid bg-[#26361C] text-white font-semibold sticky top-0 z-10 shadow-2xl"
+                            className="grid bg-[#26361C] text-white font-semibold shadow-2xl"
                             style={{
                                 gridTemplateColumns: tableTitle
                                     .map((item) =>
