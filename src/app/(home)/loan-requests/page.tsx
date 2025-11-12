@@ -6,6 +6,7 @@ import LoanReqPopModal from "@/app/components/forms/loanReqPopModal"
 import modelInfoJson from "@/docs/modelInfo.json"
 import { createClient } from "@/utils/supabase/client"
 import FilterLoan from "@/app/components/filterLoan"
+import DataMeasure from "@/app/components/dataMeasure"
 
 export interface answerContent {
     request_date: Date;
@@ -23,7 +24,8 @@ export interface answerContent {
     licence_photo: string;
     prefered_model: string;
     applicant_declaration: string;
-    manager_approval: string
+    manager_approval: string;
+    status: string
 }
 
 const LoanReq = () => {
@@ -157,9 +159,16 @@ const LoanReq = () => {
         }
     }
 
+    const dataMeasure = [
+        { title: "New", dataCount: isAllLoanData.filter((item) => item.status === "new").length, color: "bg-blue-600" },
+        { title: "Allocated", dataCount: isAllLoanData.filter((item) => item.status === "allocated").length, color: "bg-green-400" },
+        { title: "Canceled", dataCount: isAllLoanData.filter((item) => item.status === "canceled").length, color: "bg-red-600" }
+    ]
+
     return (
         <div className="flex flex-col h-screen">
             <SubTitle subTitleName="Loan Requests"></SubTitle>
+            <DataMeasure dataMeasure={dataMeasure}></DataMeasure>
             <FilterLoan setFilterInfo={setFilterInfo} selectInfo={modelInfo} filterItems={filterTitle}></FilterLoan>
             <div className="flex-1">
                 <Suspense fallback={<div>Loading table...</div>}>
