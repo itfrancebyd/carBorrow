@@ -27,6 +27,17 @@ const TableGrid: FC<tableGridProp> = ({
     const router = useRouter()
     const searchParam = useSearchParams()
 
+    useEffect(() => {
+        if (isOpen) {
+            document.body.style.overflow = "hidden"
+        } else {
+            document.body.style.overflow = ""
+        }
+        return () => {
+            document.body.style.overflow = ""
+        }
+    }, [isOpen])
+
     const handleClick = (getPushQuery: string) => {
         router.push(`?${pushQuery}=${getPushQuery}`)
         setCurrentNumber(getPushQuery)
@@ -139,7 +150,8 @@ const TableGrid: FC<tableGridProp> = ({
             </div>
             <div
                 className={`${isOpen ? 'fixed inset-0 w-full h-screen overflow-hidden bg-gray-400/50 z-40 p-7' : 'hidden'} `}
-                onClick={handleClose}>
+                onClick={handleClose}
+            >
                 {children &&
                     cloneElement(children as React.ReactElement<any>, {
                         closeEvent: handleClose,
