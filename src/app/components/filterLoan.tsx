@@ -16,40 +16,77 @@ const FilterCell = ({ item, selectInfo, filters, handleChange, handleClear }:
         handleChange: any;
         handleClear: any
     }) => {
+    const [selectedValue, setSelectedValue] = useState<Record<string, string>>({});
+
+    const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>, key: string) => {
+        const value = e.target.value
+        setSelectedValue((prev) => ({ ...prev, [key]: value }))
+        handleChange(key, value)
+    }
+    const handleClearClick = (key: string) => {
+        setSelectedValue((prev => ({ ...prev, [key]: "" })))
+        handleClear(key)
+    }
+
     if (item.key === "prefered_model") {
         return (
-            <select
-                name={normalizeKey(item.label)}
-                defaultValue=""
-                className="border-1 border-gray-400 rounded-md py-1 px-2 w-full"
-            >
-                <option value="" disabled>
-                    -- please select --
-                </option>
-                {selectInfo["Model Name"].map((option: string) => (
-                    <option key={option} value={option}>
-                        {option}
+            <div>
+                <select
+                    name={normalizeKey(item.label)}
+                    value={selectedValue.prefered_model}
+                    className="border-1 border-gray-400 rounded-md py-1 px-2 w-full"
+                    onChange={(e) => handleSelectChange(e, item.key)}
+                >
+                    <option value="" disabled>
+                        -- please select --
                     </option>
-                ))}
-            </select>
+                    {selectInfo["Model Name"].map((option: string) => (
+                        <option key={option} value={option}>
+                            {option}
+                        </option>
+                    ))}
+                </select>
+                {filters[item.key] && (
+                    <button
+                        type="button"
+                        onClick={() => handleClearClick(item.key)}
+                        className="absolute right-1 top-1 px-0.5 bg-white text-gray-400 hover:cursor-pointer hover:text-black font-bold"
+                    >
+                        x
+                    </button>
+                )}
+            </div>
+
         )
     }
     if (item.key === "status") {
         return (
-            <select
-                name={normalizeKey(item.label)}
-                defaultValue=""
-                className="border-1 border-gray-400 rounded-md py-1 px-2 w-full"
-            >
-                <option value="" disabled>
-                    -- please select --
-                </option>
-                {["NEW", "ALLOCATE", "CANCELED"].map((option: string) => (
-                    <option key={option} value={option}>
-                        {option}
+            <div className="relative">
+                <select
+                    name={normalizeKey(item.label)}
+                    value={selectedValue.status}
+                    className="border-1 border-gray-400 rounded-md py-1 px-2 w-full"
+                    onChange={(e) => handleSelectChange(e, item.key)}
+                >
+                    <option value="" disabled>
+                        -- please select --
                     </option>
-                ))}
-            </select>
+                    {["NEW", "ALLOCATE", "CANCELED"].map((option: string) => (
+                        <option key={option} value={option}>
+                            {option}
+                        </option>
+                    ))}
+                </select>
+                {filters[item.key] && (
+                    <button
+                        type="button"
+                        onClick={() => handleClearClick(item.key)}
+                        className="absolute right-1 top-1 px-0.5 bg-white text-gray-400 hover:cursor-pointer hover:text-black font-bold"
+                    >
+                        x
+                    </button>
+                )}
+            </div>
         )
     }
     else {
