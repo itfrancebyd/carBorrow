@@ -55,18 +55,19 @@ export async function POST(request: Request) {
     }
 
     // write to Supabase
-    const { data: any, error } = await supabase
+    const { data: inserted, error } = await supabase
       .from('loan_requests')
       .insert([formatted])
       .select("id")
+      .single()
 
     if (error) {
       console.error('Supabase insert error:', error.message)
       return Response.json({ error: error.message }, { status: 500 })
     }
-    
-    console.log("🚀 ~ POST ~ data:", data)
-    const loan_id = data.id
+
+    console.log("🚀 ~ POST ~ inserted:", inserted)
+    const loan_id = inserted.id
     console.log("🚀 ~ POST ~ loan_id:", loan_id)
 
     console.log('✅ New Jotform entry saved to Supabase')
