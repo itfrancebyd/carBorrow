@@ -64,7 +64,8 @@ export async function POST(request: Request) {
       console.error('Supabase insert error:', error.message)
       return Response.json({ error: error.message }, { status: 500 })
     }
-
+    
+    console.log("🚀 ~ POST ~ data:", data)
     const loan_id = data.id
     console.log("🚀 ~ POST ~ loan_id:", loan_id)
 
