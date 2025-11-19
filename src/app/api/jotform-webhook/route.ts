@@ -53,7 +53,7 @@ export async function POST(request: Request) {
       licence_photo: extractHref(cleaned.fileUpload),
       applicant_declaration: extractHref(cleaned.televerserLe),
       manager_approval: extractHref(cleaned.accordDu),
-      submissionId: cleaned.submissionId,
+      submission_id: cleaned.submissionId,
     }
 
     // write to Supabase
