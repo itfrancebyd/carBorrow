@@ -14,20 +14,16 @@ function extractHref(html: string): string | null {
 // Next.js App Router receive POST request from webhook
 export async function POST(request: Request) {
   try {
+    console.log("🚀 ~ POST ~ request:", request.body)
     const contentType = request.headers.get("content-type") || ""
     let data: Record<string, string> = {}
 
     if (contentType.includes("application/json")) {
       data = await request.json()
-      console.log("🚀 ~ POST ~ data:", data)
     } else if (contentType.includes("application/x-www-form-urlencoded")) {
       const formData = await request.formData()
       data = Object.fromEntries(formData) as Record<string, string>
-      console.log("🚀 ~ POST ~ data:", data)
     } else {
-      console.log("❓ Unknown content-type:", contentType)
-      const raw = await request.text()
-      console.log("RAW BODY STRING:", raw)
       return NextResponse.json(
         { error: "Unsupported content type" },
         { status: 400 }
