@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import { NextResponse } from 'next/server'
+import { PostJotformSubmissions } from '@/utils/jotform/server'
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -23,7 +24,6 @@ function extractSubmissionIdFromUploadUrl(url: string | null): string | null {
   }
 }
 
-
 // Next.js App Router receive POST request from webhook
 export async function POST(request: Request) {
   try {
@@ -42,7 +42,7 @@ export async function POST(request: Request) {
       )
     }
 
-    // ✅ Clean up keys: remove `{}` from Jotform field names
+    // remove `{}` from Jotform field names
     const cleaned = Object.fromEntries(
       Object.entries(data).map(([key, value]) => [key.replace(/[{}]/g, ""), value])
     )
@@ -81,9 +81,16 @@ export async function POST(request: Request) {
     }
 
     const loan_id = inserted.id
+    if (formatted.submission_id) {
+      try {
+        await PostJotformSubmissions(formatted.submission_id, { loanId: loan_id })
+      } catch (error) {
+        console.error("Error to update loan id")
+      }
+    }
 
     console.log('✅ New Jotform entry saved to Supabase')
-    return Response.json({ success: true })
+    return Response.json({ success: true, loan_id })
   } catch (err) {
     console.error('Webhook error:', err)
     return Response.json({ error: 'Invalid request' }, { status: 400 })

@@ -31,4 +31,27 @@ export const fetchJotformSubmissions = async () => {
     return data.content || []
 }
 
+export interface JotformSubmissionUpdate {
+    [key: string]: unknown
+}
+
+export const PostJotformSubmissions = async (
+    submissionId: string,
+    postBody: JotformSubmissionUpdate
+): Promise<void> => {
+    const url = `https://eu-api.jotform.com/submission/${submissionId}?apiKey=${JOTFORM_API_KEY}`
+
+    try {
+        const res: Response = await fetch(url, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(postBody)
+        })
+    } catch (error: any) {
+        console.error(error.message)
+        return error
+    }
+}
 
