@@ -11,12 +11,22 @@ function extractHref(html: string): string | null {
   return match ? match[1] : null
 }
 
+function extractSubmissionIdFromUploadUrl(url: string | null): string | null {
+  if (!url) return null
+
+  try {
+    const parts = url.split("/")
+    // submissionID always is the second-to-last part before filename
+    return parts[parts.length - 2] || null
+  } catch {
+    return null
+  }
+}
+
+
 // Next.js App Router receive POST request from webhook
 export async function POST(request: Request) {
   try {
-    const raw = await request.clone().text()
-    console.log("🚀RAW BODY STRING:", raw)
-    
     const contentType = request.headers.get("content-type") || ""
     let data: Record<string, string> = {}
 
@@ -55,7 +65,7 @@ export async function POST(request: Request) {
       licence_photo: extractHref(cleaned.fileUpload),
       applicant_declaration: extractHref(cleaned.televerserLe),
       manager_approval: extractHref(cleaned.accordDu),
-      submission_id: cleaned.id103,
+      submission_id: extractSubmissionIdFromUploadUrl(extractHref(cleaned.fileUpload)),
     }
 
     // write to Supabase
@@ -71,7 +81,6 @@ export async function POST(request: Request) {
     }
 
     const loan_id = inserted.id
-    console.log("🚀 ~ POST ~ loan_id:", loan_id)
 
     console.log('✅ New Jotform entry saved to Supabase')
     return Response.json({ success: true })
