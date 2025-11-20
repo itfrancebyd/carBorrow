@@ -14,7 +14,9 @@ function extractHref(html: string): string | null {
 // Next.js App Router receive POST request from webhook
 export async function POST(request: Request) {
   try {
-    console.log("🚀 ~ POST ~ request:", request.text())
+    const raw = await request.text()
+    console.log("🚀RAW BODY STRING:", raw)
+    
     const contentType = request.headers.get("content-type") || ""
     let data: Record<string, string> = {}
 
