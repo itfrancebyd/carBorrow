@@ -84,7 +84,7 @@ export async function POST(request: Request) {
     console.log("🚀 ~ POST ~ loan_id:", loan_id)
     if (formatted.submission_id) {
 
-      await PostJotformSubmissions(formatted.submission_id, { "submission": { "loanId": loan_id } })
+      await PostJotformSubmissions(formatted.submission_id, { "loanId": loan_id })
       console.log("📨 loan_id sent back to Jotform")
     } else {
       console.warn("⚠️ submissionId missing — cannot update Jotform")
