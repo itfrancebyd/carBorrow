@@ -1,5 +1,6 @@
 // curl -X GET "https://eu-api.jotform.com/form/{formID}/questions?apiKey={apiKey}"
 import Jotform from "jotform"
+import { Json } from "jotform/dist/types/common"
 
 const JOTFORM_API_KEY = process.env.NEXT_PUBLIC_JOTFORM_KEY! //!:Non-null assertion operator非空断言
 const JOTFORM_FORM_ID = process.env.NEXT_PUBLIC_FORM_ID!
@@ -37,21 +38,11 @@ export interface JotformSubmissionUpdate {
 
 export const PostJotformSubmissions = async (
     submissionId: string,
-    postBody: JotformSubmissionUpdate
-): Promise<void> => {
-    const url = `https://eu-api.jotform.com/submission/${submissionId}?apiKey=${JOTFORM_API_KEY}`
-
-    try {
-        const res: Response = await fetch(url, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(postBody)
-        })
-    } catch (error: any) {
-        console.error(error.message)
-        return error
-    }
+    postBody: Json
+) => {
+    if (!JOTFORM_API_KEY || !JOTFORM_FORM_ID) return
+    const client = new Jotform(JOTFORM_API_KEY, { baseURL: "https://eu-api.jotform.com" })
+    const postData = await client.submission.edit(submissionId, postBody)
+    return postData
 }
 
