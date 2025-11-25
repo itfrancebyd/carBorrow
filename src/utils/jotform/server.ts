@@ -40,9 +40,17 @@ export const PostJotformSubmissions = async (
     submissionId: string,
     postBody: Json
 ) => {
-    const url = `https://eu-api.jotform.com/form/submissions/${submissionId}?apiKey=${JOTFORM_API_KEY}`
-    const res = await fetch(url, { method: "POST", body: JSON.stringify(postBody) })
-    if (!res.ok) throw new Error("Failed to change Jotform loan id")
-    return res
+    const url = `https://eu-api.jotform.com/submission/${submissionId}?apiKey=${JOTFORM_API_KEY}`
+    const res = await fetch(url,
+        {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(postBody)
+        })
+    if (!res.ok) {
+        const text = await res.text()
+        throw new Error("Failed to change Jotform submission: " + text)
+    }
+    return res.json()
 }
 
