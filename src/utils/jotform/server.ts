@@ -40,9 +40,9 @@ export const PostJotformSubmissions = async (
     submissionId: string,
     postBody: Json
 ) => {
-    if (!JOTFORM_API_KEY || !JOTFORM_FORM_ID) return
-    const client = new Jotform(JOTFORM_API_KEY, { baseURL: "https://eu-api.jotform.com" })
-    const postData = await client.submission.edit(submissionId, postBody)
-    return postData
+    const url = `https://eu-api.jotform.com/form/submissions/${submissionId}?apiKey=${JOTFORM_API_KEY}`
+    const res = await fetch(url, { method: "POST", body: JSON.stringify(postBody) })
+    if (!res.ok) throw new Error("Failed to change Jotform loan id")
+    return res
 }
 

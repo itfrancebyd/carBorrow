@@ -82,7 +82,8 @@ export async function POST(request: Request) {
 
     const loan_id = inserted.id
     if (formatted.submission_id) {
-      await PostJotformSubmissions(formatted.submission_id, { "105": { "answer": loan_id } })
+      const res = await PostJotformSubmissions(formatted.submission_id, { "105": { "answer": loan_id } })
+      console.log("🚀 ~ POST ~ res:", res)
       console.log("📨 loan_id sent back to Jotform")
     } else {
       console.warn("⚠️ submissionId missing — cannot update Jotform")
