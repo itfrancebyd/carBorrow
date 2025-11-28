@@ -15,6 +15,12 @@ interface AllocateCarModalProps {
         prefered_model: string
         allocated_vehicle_id: string | null
         status: string
+        checkin_location: string
+        checkin_km: number
+        checkin_energy: number
+        checkout_location: string
+        checkout_km: number
+        checkout_energy: number
     }
 }
 
@@ -312,6 +318,65 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
                                 )}
 
                             </div>
+
+                            {/* Check-in / Check-out Information */}
+                            <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mt-4">
+                                <h3 className="text-sm font-semibold text-[#26361C] mb-3">
+                                    Check-in / Check-out Information
+                                </h3>
+
+                                {!currentRequest.checkin_location && !currentRequest.checkin_km && !currentRequest.checkin_energy && !currentRequest.checkout_location && !currentRequest.checkout_km && !currentRequest.checkout_energy ? (
+                                    // ===== Placeholder when NO check info =====
+                                    <div className="text-xs text-gray-500 italic">
+                                        No check-in or check-out information has been provided yet.
+                                        The user will submit this information via Jotform.
+                                    </div>
+                                ) : (
+                                    // ===== Show detailed check info =====
+                                    <div className="space-y-4 text-sm text-gray-700">
+
+                                        {/* Check-in */}
+                                        <div>
+                                            <div className="text-[#26361C] font-medium mb-1">Check-in</div>
+                                            <div className="grid grid-cols-2 gap-x-6 gap-y-1">
+                                                <div>
+                                                    <span className="font-medium text-[#26361C]">Pickup Location:</span>{" "}
+                                                    {currentRequest.checkin_location || "N/A"}
+                                                </div>
+                                                <div>
+                                                    <span className="font-medium text-[#26361C]">Kilometer:</span>{" "}
+                                                    {currentRequest.checkin_km || "N/A"}
+                                                </div>
+                                                <div>
+                                                    <span className="font-medium text-[#26361C]">Battery:</span>{" "}
+                                                    {currentRequest.checkin_energy || "N/A"}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        {/* Check-out */}
+                                        <div>
+                                            <div className="text-[#26361C] font-medium mb-1">Check-out</div>
+                                            <div className="grid grid-cols-2 gap-x-6 gap-y-1">
+                                                <div>
+                                                    <span className="font-medium text-[#26361C]">Return Location:</span>{" "}
+                                                    {currentRequest.checkout_location || "N/A"}
+                                                </div>
+                                                <div>
+                                                    <span className="font-medium text-[#26361C]">Kilometer:</span>{" "}
+                                                    {currentRequest.checkout_km || "N/A"}
+                                                </div>
+                                                <div>
+                                                    <span className="font-medium text-[#26361C]">Battery:</span>{" "}
+                                                    {currentRequest.checkout_energy || "N/A"}
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                )}
+                            </div>
+
 
                         </div>
                     )

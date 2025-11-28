@@ -21,6 +21,12 @@ interface allocateProp {
     prefered_model: string
     allocated_vehicle_id: string | null
     status: string
+    checkin_location: string
+    checkin_km: number
+    checkin_energy: number
+    checkout_location: string
+    checkout_km: number
+    checkout_energy: number
 }
 
 const TableCell = ({
@@ -99,7 +105,13 @@ const TableGridLoanReq: FC<tableGridTableLoanReqProp> = ({
         loan_end_date: "loading",
         prefered_model: "loading",
         allocated_vehicle_id: "loading",
-        status: "loading"
+        status: "loading",
+        checkin_location: "loading",
+        checkin_km: 0,
+        checkin_energy: 0,
+        checkout_location: "loading",
+        checkout_km: 0,
+        checkout_energy: 0
     })
     const searchParam = useSearchParams()
     const router = useRouter()
@@ -152,7 +164,13 @@ const TableGridLoanReq: FC<tableGridTableLoanReqProp> = ({
             loan_end_date: item.loan_end_date,
             prefered_model: item.prefered_model,
             allocated_vehicle_id: item.allocated_vehicle_id,
-            status: item.status
+            status: item.status,
+            checkin_location: item.checkin_location,
+            checkin_km: item.checkin_km,
+            checkin_energy: item.checkin_energy,
+            checkout_location: item.checkout_location,
+            checkout_km: item.checkout_km,
+            checkout_energy: item.checkout_energy
         })
     }
 
