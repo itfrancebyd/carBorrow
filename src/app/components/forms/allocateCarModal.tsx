@@ -14,6 +14,7 @@ interface AllocateCarModalProps {
         loan_end_date: string
         prefered_model: string
         allocated_vehicle_id: string | null
+        status: string
     }
 }
 
@@ -192,12 +193,29 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
         }
     }
 
+    const handleKeyGiven = async () => {
+        console.log('give key')
+        const { error } = await supabase
+            .from("loan_requests")
+            .update({
+                status: "issued",
+            })
+            .eq("id", currentRequest.id)
+            .select()
+
+        if (error) console.error(error)
+        else {
+            alert("🔑The key has been passed to the user!")
+            window.location.href = '/loan-requests'
+        }
+    }
+
     return (
         <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center" onClick={onClose}>
             <div className="bg-white rounded-xl shadow-xl w-[90%] max-w-lg p-6 relative animate-fadeIn" onClick={(e) => e.stopPropagation()}>
                 {/* Header */}
                 <div className="flex justify-between items-center border-b pb-3 mb-4">
-                    <h2 className="text-lg font-semibold text-[#26361C]">Allocate Vehicle</h2>
+                    <h2 className="text-lg font-semibold text-[#26361C] flex gap-1">Allocate Vehicle <div className="">{currentRequest.status}</div></h2>
                     <button
                         onClick={onClose}
                         className="text-gray-500 hover:text-gray-700 text-xl cursor-pointer"
@@ -260,20 +278,41 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
                             </div>
 
                             {/* Action */}
-                            <div className="flex justify-end mt-5 gap-1">
-                                <button
-                                    onClick={handleCancelAllocation}
-                                    className="px-4 py-2 border bg-[#26361C] border-[#26361C] text-white rounded-md text-sm hover:text-[#26361C] hover:bg-white transition-colors cursor-pointer"
-                                >
-                                    Cancel allocate
-                                </button>
-                                <button
-                                    onClick={() => setReassignMode(true)}
-                                    className="px-4 py-2 border border-[#26361C] text-[#26361C] rounded-md text-sm hover:bg-[#26361C] hover:text-white transition-colors cursor-pointer"
-                                >
-                                    Reallocate Vehicle
-                                </button>
+                            <div className="flex justify-end mt-5 gap-2">
+
+                                {/* If NOT key_given -> show 3 buttons */}
+                                {currentRequest.status !== "issued" ? (
+                                    <>
+                                        <button
+                                            onClick={handleKeyGiven}
+                                            className="px-4 py-2 bg-[#4A7B2C] text-white rounded-md text-sm hover:bg-[#365b20] transition-colors cursor-pointer"
+                                        >
+                                            Key Given
+                                        </button>
+
+                                        <button
+                                            onClick={handleCancelAllocation}
+                                            className="px-4 py-2 border bg-[#26361C] border-[#26361C] text-white rounded-md text-sm hover:text-[#26361C] hover:bg-white transition-colors cursor-pointer"
+                                        >
+                                            Cancel allocate
+                                        </button>
+
+                                        <button
+                                            onClick={() => setReassignMode(true)}
+                                            className="px-4 py-2 border border-[#26361C] text-[#26361C] rounded-md text-sm hover:bg-[#26361C] hover:text-white transition-colors cursor-pointer"
+                                        >
+                                            Reallocate Vehicle
+                                        </button>
+                                    </>
+                                ) : (
+                                    /* If key_given -> show simple green badge */
+                                    <div className="text-sm text-[#4A7B2C] font-medium bg-[#E3F2D7] px-3 py-1 rounded-md">
+                                        ✓ Key has been given to the user
+                                    </div>
+                                )}
+
                             </div>
+
                         </div>
                     )
                     :

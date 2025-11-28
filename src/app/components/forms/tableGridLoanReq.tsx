@@ -20,6 +20,7 @@ interface allocateProp {
     loan_end_date: string
     prefered_model: string
     allocated_vehicle_id: string | null
+    status: string
 }
 
 const TableCell = ({
@@ -47,6 +48,11 @@ const TableCell = ({
         if (item.status === "canceled") {
             return (
                 <div className="bg-[#99A1AF] text-white text-[6px] font-semibold px-1 py-0.5 rounded-sm">CANCELED</div>
+            )
+        }
+        if (item.status === "issued") {
+            return (
+                <div className="bg-[#F9DC5C] text-white text-[8px] font-semibold px-1 py-0.5 rounded-sm">ISSUED</div>
             )
         }
     }
@@ -92,7 +98,8 @@ const TableGridLoanReq: FC<tableGridTableLoanReqProp> = ({
         loan_start_date: "loading",
         loan_end_date: "loading",
         prefered_model: "loading",
-        allocated_vehicle_id: "loading"
+        allocated_vehicle_id: "loading",
+        status: "loading"
     })
     const searchParam = useSearchParams()
     const router = useRouter()
@@ -144,7 +151,8 @@ const TableGridLoanReq: FC<tableGridTableLoanReqProp> = ({
             loan_start_date: item.loan_start_date,
             loan_end_date: item.loan_end_date,
             prefered_model: item.prefered_model,
-            allocated_vehicle_id: item.allocated_vehicle_id
+            allocated_vehicle_id: item.allocated_vehicle_id,
+            status: item.status
         })
     }
 
