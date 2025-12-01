@@ -28,8 +28,18 @@ export async function POST(request: Request) {
         }
         // remove `{}` from Jotform field names
         const cleaned = Object.fromEntries(
-            Object.entries(data).map(([key, value]) => [key.replace(/[{}]/g, ""), value])
+            Object.entries(data).map(([rawKey, value]) => {
+                // remove {}
+                const keyWithoutBrackets = rawKey.replace(/^\{|\}$/g, "");
+
+                // find part after _
+                const parts = keyWithoutBrackets.split("_");
+                const finalKey = parts[1] ?? parts[0];
+
+                return [finalKey, value];
+            })
         )
+        console.log("🚀 ~ POST ~ cleaned:", cleaned)
 
         const loan_id = cleaned.loanRequest
 
