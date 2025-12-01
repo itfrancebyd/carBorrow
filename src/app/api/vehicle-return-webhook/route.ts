@@ -37,6 +37,7 @@ export async function POST(request: Request) {
             checkout_km: cleaned.kilometrage60,
             checkout_energy: cleaned.niveauDe61
         }
+        console.log("🚀 ~ POST ~ formatted:", formatted)
 
         // write to Supabase
         const { error } = await supabase
