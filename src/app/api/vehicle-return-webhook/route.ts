@@ -13,9 +13,11 @@ export async function POST(request: Request) {
 
         if (contentType.includes("application/json")) {
             data = await request.json()
+            console.log("🚀 ~ POST ~ data:", data)
         } else if (contentType.includes("application/x-www-form-urlencoded")) {
             const formData = await request.formData()
             data = Object.fromEntries(formData) as Record<string, string>
+            console.log("🚀 ~ POST ~ data:", data)
         } else {
             return NextResponse.json(
                 { error: "unsupported content type" },
