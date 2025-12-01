@@ -44,12 +44,12 @@ export async function POST(request: Request) {
         const loan_id = cleaned.loanRequest
 
         const formatted = {
-            checkin_location: cleaned.formId_lieuDe,
-            checkin_km: cleaned.formId_kilometrage,
-            checkin_energy: cleaned.formId_niveauDe,
-            checkout_location: cleaned.formId_lieuDe64,
-            checkout_km: cleaned.formId_kilometrage60,
-            checkout_energy: cleaned.formId_niveauDe61
+            checkin_location: cleaned.lieuDe,
+            checkin_km: cleaned.kilometrage,
+            checkin_energy: cleaned.niveauDe,
+            checkout_location: cleaned.lieuDe64,
+            checkout_km: cleaned.kilometrage60,
+            checkout_energy: cleaned.niveauDe61
         }
         console.log("🚀 ~ POST ~ formatted:", formatted)
 
