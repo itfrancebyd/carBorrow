@@ -163,6 +163,7 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
         if (currentRequest.allocated_vehicle_id) {
             fetchVehicleDetail(currentRequest.allocated_vehicle_id)
         }
+        setLoading(false)
     }, [])
 
     const handleCancelAllocation = async () => {
@@ -247,7 +248,7 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
                         ?
                         <div className="bg-[#F7F8F5] text-5xl text-gray-700 h-[300px] p-4">...</div>
                         :
-                        currentRequest.allocated_vehicle_id && isAllocatedInfo && !reassignMode
+                        (currentRequest.allocated_vehicle_id && isAllocatedInfo && !reassignMode
                             ? (
                                 <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mt-4">
                                     <h3 className="text-sm font-semibold text-[#26361C] mb-3">
@@ -465,7 +466,7 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
                                     </button>
                                 </div>
                             </>
-
+                        )
                     }
                 </div>
             </div>
