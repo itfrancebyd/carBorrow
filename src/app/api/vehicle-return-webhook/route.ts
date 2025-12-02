@@ -15,11 +15,9 @@ export async function POST(request: Request) {
 
         if (contentType.includes("application/json")) {
             data = await request.json()
-            console.log("🚀 ~ POST ~ data:", data)
         } else if (contentType.includes("application/x-www-form-urlencoded")) {
             const formData = await request.formData()
             data = Object.fromEntries(formData) as Record<string, string>
-            console.log("🚀 ~ POST ~ data:", data)
         } else {
             return NextResponse.json(
                 { error: "unsupported content type" },
@@ -39,7 +37,6 @@ export async function POST(request: Request) {
                 return [finalKey, value];
             })
         )
-        console.log("🚀 ~ POST ~ cleaned:", cleaned)
 
         const loan_id = cleaned.loanRequest
 
@@ -64,6 +61,8 @@ export async function POST(request: Request) {
             console.error('Supabase insert error:', error.message)
             return Response.json({ error: error.message }, { status: 500 })
         }
+
+        return Response.json({ success: true }, { status: 200 })
     } catch (err) {
         console.error('Webhook error:', err)
         return Response.json({ error: 'Invalid request' }, { status: 400 })
