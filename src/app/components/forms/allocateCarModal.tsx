@@ -229,233 +229,238 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
                         ×
                     </button>
                 </div>
+                <div className="max-h-[400px] overflow-y-auto">
+                    {/* Loan Request Info */}
+                    <div className="space-y-2 text-sm mb-5 bg-[#F7F8F5] rounded-md p-3">
+                        <p><strong>Applicant:</strong> {currentRequest.applicant}</p>
+                        <p><strong>Department:</strong> {currentRequest.department}</p>
+                        <p>
+                            <strong>Loan Period:</strong>{" "}
+                            {currentRequest.loan_start_date} → {currentRequest.loan_end_date}
+                        </p>
+                        <p><strong>Preferred Model:</strong> {currentRequest.prefered_model}</p>
+                    </div>
 
-                {/* Loan Request Info */}
-                <div className="space-y-2 text-sm mb-5 bg-[#F7F8F5] rounded-md p-3">
-                    <p><strong>Applicant:</strong> {currentRequest.applicant}</p>
-                    <p><strong>Department:</strong> {currentRequest.department}</p>
-                    <p>
-                        <strong>Loan Period:</strong>{" "}
-                        {currentRequest.loan_start_date} → {currentRequest.loan_end_date}
-                    </p>
-                    <p><strong>Preferred Model:</strong> {currentRequest.prefered_model}</p>
-                </div>
-
-                {currentRequest.allocated_vehicle_id && isAllocatedInfo && !reassignMode
-                    ? (
-                        <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mt-4">
-                            <h3 className="text-sm font-semibold text-[#26361C] mb-3">
-                                Assigned Vehicle
-                            </h3>
-
-                            <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm text-gray-700">
-                                <div>
-                                    <span className="font-medium text-[#26361C]">Model:</span>{" "}
-                                    {isAllocatedInfo.model_name}
-                                </div>
-                                <div>
-                                    <span className="font-medium text-[#26361C]">Version:</span>{" "}
-                                    {isAllocatedInfo.version_name}
-                                </div>
-                                <div>
-                                    <span className="font-medium text-[#26361C]">Plate No.:</span>{" "}
-                                    {isAllocatedInfo.plate_number}
-                                </div>
-                                <div>
-                                    <span className="font-medium text-[#26361C]">VIN:</span>{" "}
-                                    {isAllocatedInfo.vin}
-                                </div>
-                                <div>
-                                    <span className="font-medium text-[#26361C]">Interior:</span>{" "}
-                                    {isAllocatedInfo.interior_colour}
-                                </div>
-                                <div>
-                                    <span className="font-medium text-[#26361C]">Exterior:</span>{" "}
-                                    {isAllocatedInfo.exterior_colour}
-                                </div>
-                                <div>
-                                    <span className="font-medium text-[#26361C]">Location:</span>{" "}
-                                    {isAllocatedInfo.current_location ?? "N/A"}
-                                </div>
-                                <div>
-                                    <span className="font-medium text-[#26361C]">Key:</span>{" "}
-                                    {isAllocatedInfo.key_1 ?? "N/A"}
-                                </div>
-                            </div>
-
-                            {/* Action */}
-                            <div className="flex justify-end mt-5 gap-2">
-
-                                {/* If NOT key_given -> show 3 buttons */}
-                                {currentRequest.status !== "issued" ? (
-                                    <>
-                                        <button
-                                            onClick={handleKeyGiven}
-                                            className="px-4 py-2 bg-[#4A7B2C] text-white rounded-md text-sm hover:bg-[#365b20] transition-colors cursor-pointer"
-                                        >
-                                            Key Given
-                                        </button>
-
-                                        <button
-                                            onClick={handleCancelAllocation}
-                                            className="px-4 py-2 border bg-[#26361C] border-[#26361C] text-white rounded-md text-sm hover:text-[#26361C] hover:bg-white transition-colors cursor-pointer"
-                                        >
-                                            Cancel allocate
-                                        </button>
-
-                                        <button
-                                            onClick={() => setReassignMode(true)}
-                                            className="px-4 py-2 border border-[#26361C] text-[#26361C] rounded-md text-sm hover:bg-[#26361C] hover:text-white transition-colors cursor-pointer"
-                                        >
-                                            Reallocate Vehicle
-                                        </button>
-                                    </>
-                                ) : (
-                                    /* If key_given -> show simple green badge */
-                                    <div className="text-sm text-[#4A7B2C] font-medium bg-[#E3F2D7] px-3 py-1 rounded-md">
-                                        ✓ Key has been given to the user
-                                    </div>
-                                )}
-
-                            </div>
-
-                            {/* Check-in / Check-out Information */}
+                    {currentRequest.allocated_vehicle_id && isAllocatedInfo && !reassignMode
+                        ? (
                             <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mt-4">
                                 <h3 className="text-sm font-semibold text-[#26361C] mb-3">
-                                    Check-in / Check-out Information
+                                    Assigned Vehicle
                                 </h3>
 
-                                {!currentRequest.checkin_location && !currentRequest.checkin_km && !currentRequest.checkin_energy && !currentRequest.checkout_location && !currentRequest.checkout_km && !currentRequest.checkout_energy ? (
-                                    // ===== Placeholder when NO check info =====
-                                    <div className="text-xs text-gray-500 italic">
-                                        No check-in or check-out information has been provided yet.
-                                        The user will submit this information via Jotform.
+                                <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm text-gray-700">
+                                    <div>
+                                        <span className="font-medium text-[#26361C]">Model:</span>{" "}
+                                        {isAllocatedInfo.model_name}
                                     </div>
-                                ) : (
-                                    // ===== Show detailed check info =====
-                                    <div className="space-y-4 text-sm text-gray-700">
-
-                                        {/* Check-in */}
-                                        <div>
-                                            <div className="text-[#26361C] font-medium mb-1">Check-in</div>
-                                            <div className="grid grid-cols-2 gap-x-6 gap-y-1">
-                                                <div>
-                                                    <span className="font-medium text-[#26361C]">Pickup Location:</span>{" "}
-                                                    {currentRequest.checkin_location || "N/A"}
-                                                </div>
-                                                <div>
-                                                    <span className="font-medium text-[#26361C]">Kilometer:</span>{" "}
-                                                    {currentRequest.checkin_km || "N/A"}
-                                                </div>
-                                                <div>
-                                                    <span className="font-medium text-[#26361C]">Battery:</span>{" "}
-                                                    {currentRequest.checkin_energy || "N/A"}
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        {/* Check-out */}
-                                        <div>
-                                            <div className="text-[#26361C] font-medium mb-1">Check-out</div>
-                                            <div className="grid grid-cols-2 gap-x-6 gap-y-1">
-                                                <div>
-                                                    <span className="font-medium text-[#26361C]">Return Location:</span>{" "}
-                                                    {currentRequest.checkout_location || "N/A"}
-                                                </div>
-                                                <div>
-                                                    <span className="font-medium text-[#26361C]">Kilometer:</span>{" "}
-                                                    {currentRequest.checkout_km || "N/A"}
-                                                </div>
-                                                <div>
-                                                    <span className="font-medium text-[#26361C]">Battery:</span>{" "}
-                                                    {currentRequest.checkout_energy || "N/A"}
-                                                </div>
-                                            </div>
-                                        </div>
-
+                                    <div>
+                                        <span className="font-medium text-[#26361C]">Version:</span>{" "}
+                                        {isAllocatedInfo.version_name}
                                     </div>
-                                )}
-                            </div>
+                                    <div>
+                                        <span className="font-medium text-[#26361C]">Plate No.:</span>{" "}
+                                        {isAllocatedInfo.plate_number}
+                                    </div>
+                                    <div>
+                                        <span className="font-medium text-[#26361C]">VIN:</span>{" "}
+                                        {isAllocatedInfo.vin}
+                                    </div>
+                                    <div>
+                                        <span className="font-medium text-[#26361C]">Interior:</span>{" "}
+                                        {isAllocatedInfo.interior_colour}
+                                    </div>
+                                    <div>
+                                        <span className="font-medium text-[#26361C]">Exterior:</span>{" "}
+                                        {isAllocatedInfo.exterior_colour}
+                                    </div>
+                                    <div>
+                                        <span className="font-medium text-[#26361C]">Location:</span>{" "}
+                                        {isAllocatedInfo.current_location ?? "N/A"}
+                                    </div>
+                                    <div>
+                                        <span className="font-medium text-[#26361C]">Key:</span>{" "}
+                                        {isAllocatedInfo.key_1 ?? "N/A"}
+                                    </div>
+                                </div>
 
+                                {/* Action */}
+                                <div className="flex justify-end mt-5 gap-2">
 
-                        </div>
-                    )
-                    :
-                    <>
-                        {/* Model Selection */}
-                        <div className="flex flex-col gap-2 mb-4">
-                            <label className="text-sm font-medium text-[#26361C]">
-                                Select Vehicle Model
-                            </label>
-                            <select
-                                value={selectedModelName}
-                                onChange={handleModelChange}
-                                className="border border-gray-400 rounded-md py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#26361C]"
-                            >
-                                <option value="">-- Select a Model --</option>
-                                {modelInfo["Model Name"].map((model) => (
-                                    <option key={model} value={model}>
-                                        {model}
-                                    </option>
-                                ))}
-                            </select>
-                        </div>
-
-                        {/* Available Vehicles List */}
-                        {selectedModelName && (
-                            <div className="mt-3">
-                                <h3 className="text-sm font-medium text-[#26361C] mb-2">Available Vehicles</h3>
-                                {availableVehicles.length > 0 ? (
-                                    <div className="max-h-40 overflow-y-auto border border-gray-200 rounded-md divide-y divide-gray-100">
-                                        {availableVehicles.map((v) => (
-                                            <div
-                                                key={v.id}
-                                                onClick={() => handleVehicleSelect(v)}
-                                                className={`flex justify-between items-center px-3 py-2 cursor-pointer text-sm transition-colors
-                      ${selectedVehicle?.id === v.id
-                                                        ? "bg-[#C7D3B4] text-[#26361C]"
-                                                        : "hover:bg-gray-100"
-                                                    }`}
+                                    {/* If NOT key_given -> show 3 buttons */}
+                                    {currentRequest.status !== "issued" ? (
+                                        <>
+                                            <button
+                                                onClick={handleKeyGiven}
+                                                className="px-4 py-2 bg-[#4A7B2C] text-white rounded-md text-sm hover:bg-[#365b20] transition-colors cursor-pointer"
                                             >
-                                                <div className="flex flex-col">
-                                                    <span className="font-medium">{v.plate_number}</span>
-                                                    <span className="text-gray-500 text-xs">{v.interior_colour}, {v.exterior_colour}</span>
-                                                </div>
-                                                <span className="text-xs bg-[#E8EDE1] text-[#26361C] px-2 py-0.5 rounded-md">
-                                                    {v.version_name ?? "N/A"}
-                                                </span>
-                                            </div>
-                                        ))}
-                                    </div>
-                                ) : (
-                                    <p className="text-xs text-gray-500 italic">
-                                        No available vehicles for this model.
-                                    </p>
-                                )}
-                            </div>
-                        )}
+                                                Key Given
+                                            </button>
 
-                        {/* Action Buttons */}
-                        <div className="flex justify-end gap-3 mt-6">
-                            <button
-                                onClick={onClose}
-                                className="px-4 py-2 border border-gray-400 rounded-md text-gray-600 hover:bg-gray-100 hover:cursor-pointer"
-                            >
-                                Cancel
-                            </button>
-                            <button
-                                disabled={!selectedVehicle}
-                                onClick={handleAssign}
-                                className={`px-4 py-2 rounded-md text-white transition-colors ${selectedVehicle
-                                    ? "bg-[#26361C] hover:bg-[#4a5b38]"
-                                    : "bg-gray-400 cursor-not-allowed"
-                                    }`}
-                            >
-                                Confirm Allocation
-                            </button>
-                        </div>
-                    </>
-                }
+                                            <button
+                                                onClick={handleCancelAllocation}
+                                                className="px-4 py-2 border bg-[#26361C] border-[#26361C] text-white rounded-md text-sm hover:text-[#26361C] hover:bg-white transition-colors cursor-pointer"
+                                            >
+                                                Cancel allocate
+                                            </button>
+
+                                            <button
+                                                onClick={() => setReassignMode(true)}
+                                                className="px-4 py-2 border border-[#26361C] text-[#26361C] rounded-md text-sm hover:bg-[#26361C] hover:text-white transition-colors cursor-pointer"
+                                            >
+                                                Reallocate Vehicle
+                                            </button>
+                                        </>
+                                    ) : (
+                                        /* If key_given -> show simple green badge */
+                                        <div className="text-sm text-[#4A7B2C] font-medium bg-[#E3F2D7] px-3 py-1 rounded-md">
+                                            ✓ Key has been given to the user
+                                        </div>
+                                    )}
+
+                                </div>
+
+                                {/* Check-in / Check-out Information */}
+                                <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mt-4">
+                                    <h3 className="text-sm font-semibold text-[#26361C] mb-3">
+                                        Check-in / Check-out Information
+                                    </h3>
+
+                                    {!currentRequest.checkin_location && !currentRequest.checkin_km && !currentRequest.checkin_energy && !currentRequest.checkout_location && !currentRequest.checkout_km && !currentRequest.checkout_energy ? (
+                                        // ===== Placeholder when NO check info =====
+                                        <div className="text-xs text-gray-500 italic">
+                                            No check-in or check-out information has been provided yet.
+                                            The user will submit this information via Jotform.
+                                        </div>
+                                    ) : (
+                                        // ===== Show detailed check info =====
+                                        <div className="space-y-4 text-sm text-gray-700">
+
+                                            {/* Check-in */}
+                                            <div>
+                                                <div className="text-[#26361C] font-medium mb-1">Check-in</div>
+                                                <div className="grid grid-cols-1 gap-x-6 gap-y-1">
+                                                    <div>
+                                                        <span className="font-medium text-[#26361C]">Pickup Location:</span>{" "}
+                                                        {currentRequest.checkin_location || "N/A"}
+                                                    </div>
+                                                    <div className="grid grid-cols-2">
+                                                        <div>
+                                                            <span className="font-medium text-[#26361C]">Kilometer:</span>{" "}
+                                                            {currentRequest.checkin_km || "N/A"}
+                                                        </div>
+                                                        <div>
+                                                            <span className="font-medium text-[#26361C]">Battery:</span>{" "}
+                                                            {currentRequest.checkin_energy || "N/A"}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            {/* Check-out */}
+                                            <div>
+                                                <div className="text-[#26361C] font-medium mb-1">Check-out</div>
+                                                <div className="grid grid-cols-1 gap-x-6 gap-y-1">
+                                                    <div>
+                                                        <span className="font-medium text-[#26361C]">Return Location:</span>{" "}
+                                                        {currentRequest.checkout_location || "N/A"}
+                                                    </div>
+                                                    <div className="grid grid-cols-2">
+                                                        <div>
+                                                            <span className="font-medium text-[#26361C]">Kilometer:</span>{" "}
+                                                            {currentRequest.checkout_km || "N/A"}
+                                                        </div>
+                                                        <div>
+                                                            <span className="font-medium text-[#26361C]">Battery:</span>{" "}
+                                                            {currentRequest.checkout_energy || "N/A"}
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    )}
+                                </div>
+
+
+                            </div>
+                        )
+                        :
+                        <>
+                            {/* Model Selection */}
+                            <div className="flex flex-col gap-2 mb-4">
+                                <label className="text-sm font-medium text-[#26361C]">
+                                    Select Vehicle Model
+                                </label>
+                                <select
+                                    value={selectedModelName}
+                                    onChange={handleModelChange}
+                                    className="border border-gray-400 rounded-md py-2 px-3 text-sm focus:outline-none focus:ring-2 focus:ring-[#26361C]"
+                                >
+                                    <option value="">-- Select a Model --</option>
+                                    {modelInfo["Model Name"].map((model) => (
+                                        <option key={model} value={model}>
+                                            {model}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+
+                            {/* Available Vehicles List */}
+                            {selectedModelName && (
+                                <div className="mt-3">
+                                    <h3 className="text-sm font-medium text-[#26361C] mb-2">Available Vehicles</h3>
+                                    {availableVehicles.length > 0 ? (
+                                        <div className="max-h-40 overflow-y-auto border border-gray-200 rounded-md divide-y divide-gray-100">
+                                            {availableVehicles.map((v) => (
+                                                <div
+                                                    key={v.id}
+                                                    onClick={() => handleVehicleSelect(v)}
+                                                    className={`flex justify-between items-center px-3 py-2 cursor-pointer text-sm transition-colors
+                      ${selectedVehicle?.id === v.id
+                                                            ? "bg-[#C7D3B4] text-[#26361C]"
+                                                            : "hover:bg-gray-100"
+                                                        }`}
+                                                >
+                                                    <div className="flex flex-col">
+                                                        <span className="font-medium">{v.plate_number}</span>
+                                                        <span className="text-gray-500 text-xs">{v.interior_colour}, {v.exterior_colour}</span>
+                                                    </div>
+                                                    <span className="text-xs bg-[#E8EDE1] text-[#26361C] px-2 py-0.5 rounded-md">
+                                                        {v.version_name ?? "N/A"}
+                                                    </span>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    ) : (
+                                        <p className="text-xs text-gray-500 italic">
+                                            No available vehicles for this model.
+                                        </p>
+                                    )}
+                                </div>
+                            )}
+
+                            {/* Action Buttons */}
+                            <div className="flex justify-end gap-3 mt-6">
+                                <button
+                                    onClick={onClose}
+                                    className="px-4 py-2 border border-gray-400 rounded-md text-gray-600 hover:bg-gray-100 hover:cursor-pointer"
+                                >
+                                    Cancel
+                                </button>
+                                <button
+                                    disabled={!selectedVehicle}
+                                    onClick={handleAssign}
+                                    className={`px-4 py-2 rounded-md text-white transition-colors ${selectedVehicle
+                                        ? "bg-[#26361C] hover:bg-[#4a5b38]"
+                                        : "bg-gray-400 cursor-not-allowed"
+                                        }`}
+                                >
+                                    Confirm Allocation
+                                </button>
+                            </div>
+                        </>
+                    }
+                </div>
             </div>
         </div>
     )
