@@ -87,7 +87,8 @@ const LoanReq = () => {
                 const statusOrder: Record<string, number> = {
                     new: 1,
                     allocated: 2,
-                    canceled: 3,
+                    issued: 3,
+                    canceled: 4,
                 }
 
                 const sorted = loan_requests.sort((a, b) => {

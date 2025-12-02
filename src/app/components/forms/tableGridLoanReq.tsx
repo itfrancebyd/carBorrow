@@ -48,17 +48,17 @@ const TableCell = ({
         }
         if (item.status === "allocated") {
             return (
-                <div className="bg-[#B0CE88] text-white text-[6px] font-semibold px-1 py-0.5 rounded-sm">ALLOCATED</div>
+                <div className="bg-[#82b640] text-white text-[6px] font-semibold px-1 py-0.5 rounded-sm">ALLOCATED</div>
             )
         }
         if (item.status === "canceled") {
             return (
-                <div className="bg-[#99A1AF] text-white text-[6px] font-semibold px-1 py-0.5 rounded-sm">CANCELED</div>
+                <div className="bg-[#99A1AF] text-white text-[7px] font-semibold px-1 py-0.5 rounded-sm">CANCELED</div>
             )
         }
         if (item.status === "issued") {
             return (
-                <div className="bg-[#F9DC5C] text-white text-[8px] font-semibold px-1 py-0.5 rounded-sm">ISSUED</div>
+                <div className="bg-[#f4d138] text-white text-[7px] font-semibold px-1 py-0.5 rounded-sm">ISSUED</div>
             )
         }
     }
