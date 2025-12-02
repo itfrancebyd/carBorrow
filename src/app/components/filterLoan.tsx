@@ -30,10 +30,10 @@ const FilterCell = ({ item, selectInfo, filters, handleChange, handleClear }:
 
     if (item.key === "prefered_model") {
         return (
-            <div>
+            <div className="relative">
                 <select
                     name={normalizeKey(item.label)}
-                    value={selectedValue.prefered_model}
+                    value={Object.keys(selectedValue).length == 0 ? "" : selectedValue.prefered_model}
                     className="border-1 border-gray-400 rounded-md py-1 px-2 w-full"
                     onChange={(e) => handleSelectChange(e, item.key)}
                 >
@@ -64,7 +64,7 @@ const FilterCell = ({ item, selectInfo, filters, handleChange, handleClear }:
             <div className="relative">
                 <select
                     name={normalizeKey(item.label)}
-                    value={selectedValue.status}
+                    value={Object.keys(selectedValue).length == 0 ? "" : selectedValue.status}
                     className="border-1 border-gray-400 rounded-md py-1 px-2 w-full"
                     onChange={(e) => handleSelectChange(e, item.key)}
                 >
