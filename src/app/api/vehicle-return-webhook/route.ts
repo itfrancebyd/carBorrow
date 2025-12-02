@@ -28,13 +28,12 @@ export async function POST(request: Request) {
         const cleaned = Object.fromEntries(
             Object.entries(data).map(([rawKey, value]) => {
                 // remove {}
-                const keyWithoutBrackets = rawKey.replace(/^\{|\}$/g, "");
+                const keyWithoutBrackets = rawKey.replace(/^\{|\}$/g, "")
 
                 // find part after _
-                const parts = keyWithoutBrackets.split("_");
-                const finalKey = parts[1] ?? parts[0];
-
-                return [finalKey, value];
+                const parts = keyWithoutBrackets.split("_")
+                const finalKey = parts[1] ?? parts[0]
+                return [finalKey, value]
             })
         )
 
@@ -59,12 +58,12 @@ export async function POST(request: Request) {
 
         if (error) {
             console.error('Supabase insert error:', error.message)
-            return Response.json({ error: error.message }, { status: 500 })
+            return NextResponse.json({ error: error.message }, { status: 500 })
         }
 
-        return Response.json({ success: true }, { status: 200 })
+        return NextResponse.json({ success: true }, { status: 200 })
     } catch (err) {
         console.error('Webhook error:', err)
-        return Response.json({ error: 'Invalid request' }, { status: 400 })
+        return NextResponse.json({ error: 'Invalid request' }, { status: 400 })
     }
 }
