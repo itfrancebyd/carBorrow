@@ -1,6 +1,7 @@
 'use client'
 import { FC, useRef, useState } from "react"
 import { normalizeKey } from "./forms/newModelForm"
+import SelectWindow from "./selectWindow";
 
 interface FilterProps {
     setFilterInfo: any;
@@ -44,20 +45,13 @@ const FilterVehicle: FC<FilterProps> = ({ setFilterInfo, selectInfo, filterItems
                                 <label className="text-gray-600">{item.label}</label>
                                 {selectInfo[item.label]
                                     ? (
-                                        <select
-                                            name={normalizeKey(item.label)}
-                                            defaultValue=""
-                                            className="border-1 border-gray-400 rounded-md py-1 px-2 w-full"
-                                        >
-                                            <option value="" disabled>
-                                                -- please select --
-                                            </option>
-                                            {selectInfo[item.label].map((option: string) => (
-                                                <option key={option} value={option}>
-                                                    {option}
-                                                </option>
-                                            ))}
-                                        </select>
+                                        <SelectWindow
+                                            item={item}
+                                            selectInfo={selectInfo}
+                                            handleChange={handleChange}
+                                            handleClear={handleClear}
+                                            filters={filters}
+                                        />
                                     )
                                     : (
                                         <div className="relative">
