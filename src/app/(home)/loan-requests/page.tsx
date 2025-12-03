@@ -90,7 +90,8 @@ const LoanReq = () => {
                     new: 1,
                     allocated: 2,
                     issued: 3,
-                    canceled: 4,
+                    completed: 4,
+                    canceled: 5,
                 }
 
                 const sorted = loan_requests.sort((a, b) => {
