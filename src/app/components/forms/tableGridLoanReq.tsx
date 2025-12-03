@@ -27,6 +27,7 @@ interface allocateProp {
     checkout_location: string
     checkout_km: number
     checkout_energy: number
+    key_given_date: string | null
 }
 
 const TableCell = ({
@@ -111,7 +112,8 @@ const TableGridLoanReq: FC<tableGridTableLoanReqProp> = ({
         checkin_energy: 0,
         checkout_location: "loading",
         checkout_km: 0,
-        checkout_energy: 0
+        checkout_energy: 0,
+        key_given_date: null
     })
     const searchParam = useSearchParams()
     const router = useRouter()
@@ -170,7 +172,8 @@ const TableGridLoanReq: FC<tableGridTableLoanReqProp> = ({
             checkin_energy: item.checkin_energy,
             checkout_location: item.checkout_location,
             checkout_km: item.checkout_km,
-            checkout_energy: item.checkout_energy
+            checkout_energy: item.checkout_energy,
+            key_given_date: item.key_given_date
         })
     }
 

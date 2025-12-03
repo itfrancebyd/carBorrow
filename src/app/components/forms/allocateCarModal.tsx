@@ -21,6 +21,7 @@ interface AllocateCarModalProps {
         checkout_location: string
         checkout_km: number
         checkout_energy: number
+        key_given_date: string | null
     }
 }
 
@@ -204,11 +205,11 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
     }
 
     const handleKeyGiven = async () => {
-        console.log('give key')
         const { error } = await supabase
             .from("loan_requests")
             .update({
                 status: "issued",
+                key_given_date: dayjs().format("YYYY-MM-DD"),
             })
             .eq("id", currentRequest.id)
             .select()
@@ -319,8 +320,18 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
                                             </>
                                         ) : (
                                             /* If key_given -> show simple green badge */
-                                            <div className="text-sm text-[#4A7B2C] font-medium bg-[#E3F2D7] px-3 py-1 rounded-md">
-                                                ✓ Key has been given to the user
+                                            <div className="bg-[#E3F2D7] px-4 py-3 rounded-md border border-[#C8DFB8]">
+                                                <div className="flex items-center gap-2">
+                                                    <span className="text-[#4A7B2C] text-base">✓</span>
+                                                    <span className="text-xs text-[#4A7B2C] font-medium">
+                                                        Key has been given to the user
+                                                    </span>
+                                                </div>
+                                                {currentRequest.key_given_date && (
+                                                    <div className="mt-1 text-[10px] text-[#6B8F4E] pl-6 text-end">
+                                                        Given at: <span className="font-semibold">{currentRequest.key_given_date}</span>
+                                                    </div>
+                                                )}
                                             </div>
                                         )}
 
