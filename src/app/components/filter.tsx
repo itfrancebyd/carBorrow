@@ -1,6 +1,7 @@
 'use client'
-import { FC, useRef } from "react"
+import { FC, useRef, useState } from "react"
 import { normalizeKey } from "./forms/newModelForm"
+import SelectWindow from "./selectWindow";
 
 interface FilterProps {
     setFilterInfo: any;
@@ -10,6 +11,15 @@ interface FilterProps {
 
 const Filter: FC<FilterProps> = ({ setFilterInfo, selectInfo, filterItems }) => {
     const formRef = useRef<HTMLFormElement>(null)
+    const [filters, setFilters] = useState<Record<string, string>>({})
+
+    const handleChange = (key: string, value: string) => {
+        setFilters((prev) => ({ ...prev, [key]: value }))
+    }
+
+    const handleClear = (key: string) => {
+        setFilters((prev) => ({ ...prev, [key]: "" }))
+    }
 
     const handleFilterSubmit = (event: React.MouseEvent) => {
         event.preventDefault()
@@ -32,20 +42,13 @@ const Filter: FC<FilterProps> = ({ setFilterInfo, selectInfo, filterItems }) => 
                     {filterItems.map((item: any) => (
                         <div key={item.key} className="flex flex-col flex-1">
                             <label className="text-gray-600">{item.label}</label>
-                            <select
-                                name={normalizeKey(item.label)}
-                                defaultValue=""
-                                className="border-1 border-gray-400 rounded-md py-1 px-2 w-full"
-                            >
-                                <option value="" disabled>
-                                    -- please select --
-                                </option>
-                                {(selectInfo[item.label] ?? []).map((option: string) => (
-                                    <option key={option} value={option}>
-                                        {option}
-                                    </option>
-                                ))}
-                            </select>
+                            <SelectWindow
+                                item={item}
+                                selectInfo={selectInfo}
+                                handleChange={handleChange}
+                                handleClear={handleClear}
+                                filters={filters}
+                            />
                         </div>
                     ))}
                 </div>
