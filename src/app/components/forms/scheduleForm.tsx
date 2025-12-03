@@ -142,9 +142,9 @@ const ScheduleForm = (
                         )}
                     </div>
 
-                    <div>
+                    {/* <div>
                         <button type="button" className="bg-[#26361C] hover:bg-[#425d31] text-white px-2 py-1 hover:cursor-pointer">add schedule</button>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>
