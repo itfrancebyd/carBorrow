@@ -71,7 +71,7 @@ const FilterCell = ({ item, selectInfo, filters, handleChange, handleClear }:
                     <option value="" disabled>
                         -- please select --
                     </option>
-                    {["NEW", "ALLOCATE", "CANCELED"].map((option: string) => (
+                    {["NEW", "ALLOCATE", "ISSUED", "COMPLETED", "CANCELED"].map((option: string) => (
                         <option key={option} value={option}>
                             {option}
                         </option>
