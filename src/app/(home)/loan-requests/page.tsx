@@ -33,6 +33,7 @@ const LoanReq = () => {
     const [isAllLoanData, setAllLoanData] = useState<answerContent[]>([])
     const modelInfo = modelInfoJson as Record<string, string[]>
     const [isFilterInfo, setFilterInfo] = useState<Record<string, string | null>>({})
+    const [isLoading, setLoading] = useState(true)
     const supabase = createClient()
     // const [dataSum, setDataSum] = useState<ModelProps[]>([])
 
@@ -77,6 +78,7 @@ const LoanReq = () => {
 
     useEffect(() => {
         const fetchData = async () => {
+            setLoading(true)
             const { data: loan_requests, error } = await supabase
                 .from('loan_requests')
                 .select('*')
@@ -106,6 +108,7 @@ const LoanReq = () => {
 
                 setLoanData(sorted)
                 setAllLoanData(sorted)
+                setLoading(false)
             }
 
         }
@@ -172,24 +175,35 @@ const LoanReq = () => {
             <DataMeasure dataMeasure={dataMeasure}></DataMeasure>
             <FilterLoan setFilterInfo={setFilterInfo} selectInfo={modelInfo} filterItems={filterTitle}></FilterLoan>
             <div className="flex-1">
-                <Suspense fallback={<div>Loading table...</div>}>
-                    <TableGridLoanReq
-                        formTitle="Loan Requests"
-                        tableTitle={tableTitle}
-                        tableContent={isLoanData}
-                        pushQuery={"loan_id"}
-                        dragDropLink="importvehicle"
-                        buttonLink="addloanrequest"
-                    >
-                        <LoanReqPopModal
-                            fetchData={fetchVehicleDetail}
-                            modelInfo={modelInfo}
-                            popupWindowInfo={popupWindowInfo}
-                            actionDelete={handleDetele}
-                            actionEdit={handleEdit}
-                        ></LoanReqPopModal>
-                    </TableGridLoanReq>
-                </Suspense>
+                {isLoading
+                    ?
+                    <div className="flex items-center justify-center h-full py-5 bg-[#f7f9f4]">
+                        <div className="flex flex-col items-center justify-center p-8 rounded-2xl bg-[#e6ecde] shadow-md mx-8 w-full h-full animate-pulse">
+                            <div className="w-10 h-10 border-4 border-[#b8c4aa] border-t-transparent rounded-full animate-spin mb-4"></div>
+                            <p className="text-[#55624c] text-lg font-medium tracking-wide">Loading...</p>
+                        </div>
+                    </div>
+
+                    :
+                    <Suspense fallback={<div>Loading table...</div>}>
+                        <TableGridLoanReq
+                            formTitle="Loan Requests"
+                            tableTitle={tableTitle}
+                            tableContent={isLoanData}
+                            pushQuery={"loan_id"}
+                            dragDropLink="importvehicle"
+                            buttonLink="addloanrequest"
+                        >
+                            <LoanReqPopModal
+                                fetchData={fetchVehicleDetail}
+                                modelInfo={modelInfo}
+                                popupWindowInfo={popupWindowInfo}
+                                actionDelete={handleDetele}
+                                actionEdit={handleEdit}
+                            ></LoanReqPopModal>
+                        </TableGridLoanReq>
+                    </Suspense>
+                }
             </div>
         </div>
     )

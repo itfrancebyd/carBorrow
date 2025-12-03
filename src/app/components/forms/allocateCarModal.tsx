@@ -221,6 +221,23 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
         }
     }
 
+    const handleComplete = async () => {
+        const { error } = await supabase
+            .from("loan_requests")
+            .update({
+                status: "completed"
+            })
+            .eq("id", currentRequest.id)
+            .select()
+
+        if (error) console.error(error)
+        else {
+            alert("🎉 Request marked as complete!")
+            window.location.href = '/loan-requests'
+        }
+    }
+
+
     return (
         <div className="fixed inset-0 z-50 bg-black/40 flex items-center justify-center" onClick={onClose}>
             <div className="bg-white rounded-xl shadow-xl w-[90%] max-w-lg p-6 relative animate-fadeIn" onClick={(e) => e.stopPropagation()}>
@@ -292,50 +309,67 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
                                     </div>
 
                                     {/* Action */}
-                                    <div className="flex justify-end mt-5 gap-2">
+                                    {currentRequest.status !== "completed" &&
+                                        <div className="flex justify-end mt-5 gap-2">
+                                            {/* If NOT key_given -> show 3 buttons */}
+                                            {currentRequest.status !== "issued" ? (
+                                                <>
+                                                    <button
+                                                        onClick={handleKeyGiven}
+                                                        className="px-4 py-2 bg-[#4A7B2C] text-white rounded-md text-sm hover:bg-[#365b20] transition-colors cursor-pointer"
+                                                    >
+                                                        Key Given
+                                                    </button>
 
-                                        {/* If NOT key_given -> show 3 buttons */}
-                                        {currentRequest.status !== "issued" ? (
-                                            <>
-                                                <button
-                                                    onClick={handleKeyGiven}
-                                                    className="px-4 py-2 bg-[#4A7B2C] text-white rounded-md text-sm hover:bg-[#365b20] transition-colors cursor-pointer"
-                                                >
-                                                    Key Given
-                                                </button>
+                                                    <button
+                                                        onClick={handleCancelAllocation}
+                                                        className="px-4 py-2 border bg-[#26361C] border-[#26361C] text-white rounded-md text-sm hover:text-[#26361C] hover:bg-white transition-colors cursor-pointer"
+                                                    >
+                                                        Cancel allocate
+                                                    </button>
 
-                                                <button
-                                                    onClick={handleCancelAllocation}
-                                                    className="px-4 py-2 border bg-[#26361C] border-[#26361C] text-white rounded-md text-sm hover:text-[#26361C] hover:bg-white transition-colors cursor-pointer"
-                                                >
-                                                    Cancel allocate
-                                                </button>
+                                                    <button
+                                                        onClick={() => setReassignMode(true)}
+                                                        className="px-4 py-2 border border-[#26361C] text-[#26361C] rounded-md text-sm hover:bg-[#26361C] hover:text-white transition-colors cursor-pointer"
+                                                    >
+                                                        Reallocate Vehicle
+                                                    </button>
+                                                </>
+                                            ) : (<>
+                                                {/* Key Given Card */}
+                                                <div className="bg-[#E7F4DB] border border-[#C4E3B2] px-4 py-3 rounded-lg shadow-sm">
+                                                    <div className="flex items-center gap-3">
+                                                        <div className="w-7 h-7 rounded-full bg-[#4A7B2C] flex items-center justify-center text-white text-xs font-bold shadow">
+                                                            ✓
+                                                        </div>
 
+                                                        <div className="flex flex-col">
+                                                            <span className="text-[12px] font-bold text-[#2E4A1F] whitespace-nowrap">
+                                                                Key has been given to the user
+                                                            </span>
+
+                                                            {currentRequest.key_given_date && (
+                                                                <span className="text-[9px] text-[#6B8F4E] mt-0.5">
+                                                                    Given at:{" "}
+                                                                    <span className="font-semibold">{currentRequest.key_given_date}</span>
+                                                                </span>
+                                                            )}
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {/* Complete Button */}
                                                 <button
-                                                    onClick={() => setReassignMode(true)}
-                                                    className="px-4 py-2 border border-[#26361C] text-[#26361C] rounded-md text-sm hover:bg-[#26361C] hover:text-white transition-colors cursor-pointer"
+                                                    onClick={handleComplete}
+                                                    className="mt-4 w-full px-4 py-2 bg-[#26361C] text-white rounded-md text-xs font-medium hover:bg-[#3a5230] hover:cursor-pointer shadow-sm transition-all"
                                                 >
-                                                    Reallocate Vehicle
+                                                    Mark as Complete
                                                 </button>
                                             </>
-                                        ) : (
-                                            /* If key_given -> show simple green badge */
-                                            <div className="bg-[#E3F2D7] px-4 py-3 rounded-md border border-[#C8DFB8]">
-                                                <div className="flex items-center gap-2">
-                                                    <span className="text-[#4A7B2C] text-base">✓</span>
-                                                    <span className="text-xs text-[#4A7B2C] font-medium">
-                                                        Key has been given to the user
-                                                    </span>
-                                                </div>
-                                                {currentRequest.key_given_date && (
-                                                    <div className="mt-1 text-[10px] text-[#6B8F4E] pl-6 text-end">
-                                                        Given at: <span className="font-semibold">{currentRequest.key_given_date}</span>
-                                                    </div>
-                                                )}
-                                            </div>
-                                        )}
 
-                                    </div>
+                                            )}
+                                        </div>
+                                    }
 
                                     {/* Check-in / Check-out Information */}
                                     <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mt-4">
@@ -434,7 +468,7 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
                                                         key={v.id}
                                                         onClick={() => handleVehicleSelect(v)}
                                                         className={`flex justify-between items-center px-3 py-2 cursor-pointer text-sm transition-colors
-                      ${selectedVehicle?.id === v.id
+                                                                ${selectedVehicle?.id === v.id
                                                                 ? "bg-[#C7D3B4] text-[#26361C]"
                                                                 : "hover:bg-gray-100"
                                                             }`}

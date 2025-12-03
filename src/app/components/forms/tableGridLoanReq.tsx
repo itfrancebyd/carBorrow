@@ -62,6 +62,11 @@ const TableCell = ({
                 <div className="bg-[#f4d138] text-white text-[7px] font-semibold px-1 py-0.5 rounded-sm">ISSUED</div>
             )
         }
+        if (item.status === "completed") {
+            return (
+                <div className="bg-[#f43845] text-white text-[7px] font-semibold px-1 py-0.5 rounded-sm">COMPLETED</div>
+            )
+        }
     }
     if (key === "allocate") {
         if (item.status === "canceled") {
