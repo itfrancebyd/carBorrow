@@ -137,9 +137,13 @@ const ModelPage = () => {
             <div className="flex-1">
                 {isLoading
                     ?
-                    <div className="flex items-center justify-center h-full text-white">
-                        <div className="bg-[#7a856b] mx-8 py-6 w-full">Loading...</div>
+                    <div className="flex items-center justify-center h-full py-5 bg-[#f7f9f4]">
+                        <div className="flex flex-col items-center justify-center p-8 rounded-2xl bg-[#e6ecde] shadow-md mx-8 w-full h-full animate-pulse">
+                            <div className="w-10 h-10 border-4 border-[#b8c4aa] border-t-transparent rounded-full animate-spin mb-4"></div>
+                            <p className="text-[#55624c] text-lg font-medium tracking-wide">Loading...</p>
+                        </div>
                     </div>
+
                     :
                     <Suspense fallback={<div>Loading table...</div>}>
                         <TableGrid
