@@ -174,7 +174,7 @@ const LoanReq = () => {
         <div className="flex flex-col h-screen">
             <SubTitle subTitleName="Loan Requests"></SubTitle>
             <DataMeasure dataMeasure={dataMeasure}></DataMeasure>
-            <FilterLoan setFilterInfo={setFilterInfo} selectInfo={modelInfo} filterItems={filterTitle}></FilterLoan>
+            <div className="hidden sm:inline"><FilterLoan setFilterInfo={setFilterInfo} selectInfo={modelInfo} filterItems={filterTitle}></FilterLoan></div>
             <div className="flex-1">
                 {isLoading
                     ?
@@ -184,7 +184,6 @@ const LoanReq = () => {
                             <p className="text-[#55624c] text-lg font-medium tracking-wide">Loading...</p>
                         </div>
                     </div>
-
                     :
                     <Suspense fallback={<div>Loading table...</div>}>
                         <TableGridLoanReq
