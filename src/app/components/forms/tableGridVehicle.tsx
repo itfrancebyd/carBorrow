@@ -146,7 +146,7 @@ const TableGridVehicle: FC<tableGridTableGridVehicleProp> = ({
                         <Link href={`/${buttonLink}`} className="bg-[#26361C] hover:bg-[#7a856b] px-3 text-white cursor-pointer flex items-center">add new</Link>
                     </div>
                 </div>
-                <div className="w-full hidden sm:flex text-[#494949] text-xs lg:text-sm">
+                <div className="w-full hidden sm:inline text-[#494949] text-xs lg:text-sm">
                     <div className="grid" style={{
                         gridTemplateRows: "auto 1fr", // header fixed, content scrollable   
                     }}>
