@@ -146,7 +146,7 @@ const TableGridVehicle: FC<tableGridTableGridVehicleProp> = ({
                         <Link href={`/${buttonLink}`} className="bg-[#26361C] hover:bg-[#7a856b] px-3 text-white cursor-pointer flex items-center">add new</Link>
                     </div>
                 </div>
-                <div className="w-full flex-1 text-[#494949] text-xs lg:text-sm">
+                <div className="w-full hidden sm:flex text-[#494949] text-xs lg:text-sm">
                     <div className="grid" style={{
                         gridTemplateRows: "auto 1fr", // header fixed, content scrollable   
                     }}>
@@ -196,6 +196,62 @@ const TableGridVehicle: FC<tableGridTableGridVehicleProp> = ({
                         </div>
                     </div>
                 </div>
+                {/* Mobile Version */}
+                <div className="sm:hidden w-full flex flex-col gap-3">
+                    {tableContent.map((item, index) => (
+                        <div
+                            key={index}
+                            className="border rounded-md bg-white shadow-sm px-4 py-3 flex justify-between items-start hover:bg-[#B6C6A1]/40 transition"
+                        >
+                            <div className="text-xs flex flex-col gap-1">
+                                <div className="flex">
+                                    <span className="font-semibold text-[#26361C] w-24">VIN:</span>
+                                    <span className="text-[#494949]">{item.vin}</span>
+                                </div>
+
+                                <div className="flex">
+                                    <span className="font-semibold text-[#26361C] w-24">Plate:</span>
+                                    <span className="text-[#494949]">{item.plate_number}</span>
+                                </div>
+
+                                <div className="flex">
+                                    <span className="font-semibold text-[#26361C] w-24">Model:</span>
+                                    <span className="text-[#494949]">{item.model_name}</span>
+                                </div>
+
+                                <div className="flex">
+                                    <span className="font-semibold text-[#26361C] w-24">Version:</span>
+                                    <span className="text-[#494949]">{item.version_name}</span>
+                                </div>
+                            </div>
+
+                            <div className="flex flex-col gap-2 ml-4 shrink-0">
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        handleScheduleOpen(e, item.id)
+                                    }}
+                                    className="cursor-pointer px-2 py-1 text-[10px] bg-[#E3F2D7] text-[#26361C] border border-[#C8DFB8] rounded hover:bg-[#C8DFB8]"
+                                >
+                                    Schedule
+                                </button>
+
+                                <button
+                                    onClick={(e) => {
+                                        e.stopPropagation()
+                                        handleClick(item.id)
+                                    }}
+                                    className="cursor-pointer px-2 py-1 text-[10px] bg-[#26361C] text-white rounded hover:bg-[#7a856b]"
+                                >
+                                    Detail
+                                </button>
+
+                            </div>
+                        </div>
+                    ))}
+                </div>
+
+
             </div>
             {isScheduleOpen
                 &&

@@ -12,7 +12,7 @@ export const DataBlock: FC<DataBlockProps> = ({ color, title, dataCount }) => {
         <div className="flex flex-col gap-2 border-r-1 border-[#26361C]">
             <div className="flex flex-row items-center gap-1">
                 <div className={`${color} w-2 h-2 rounded-full`}></div>
-                <div className="text-xs text-gray-500">{title}: </div>
+                <div className="text-[10px] sm:text-xs text-gray-500">{title}: </div>
             </div>
             <div className="text-xl font-semibold text-[#26361C]">{dataCount}</div>
         </div>

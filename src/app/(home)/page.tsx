@@ -218,7 +218,9 @@ export default function Home() {
     <div className="flex flex-col h-screen">
       <SubTitle subTitleName="Vehicles"></SubTitle>
       <DataMeasure dataMeasure={dataMeasure}></DataMeasure>
-      <FilterVehicle setFilterInfo={setFilterInfo} selectInfo={modelInfo} filterItems={filterTitle}></FilterVehicle>
+      <div className="hidden sm:inline">
+        <FilterVehicle setFilterInfo={setFilterInfo} selectInfo={modelInfo} filterItems={filterTitle}></FilterVehicle>
+      </div>
       <div className="flex-1">
         <Suspense fallback={<div>Loading table...</div>}>
           <TableGridVehicle
