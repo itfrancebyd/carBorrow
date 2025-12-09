@@ -46,15 +46,16 @@ export async function POST(request: Request) {
     const cleaned = Object.fromEntries(
       Object.entries(data).map(([key, value]) => [key.replace(/[{}]/g, ""), value])
     )
-    console.log("🚀 ~ POST ~ cleaned:", cleaned)
 
     // Jotform webhook
     const formatted = {
       request_date: cleaned.dateDemande,
       applicant: cleaned.demandeur,
       applicant_department: cleaned.departementDemandeur,
-      loan_start_date: cleaned.dureeDu + (' ') + cleaned.startTime,
-      loan_end_date: cleaned.dureeDe + (' ') + cleaned.endTime,
+      loan_start_date: cleaned.dureeDu,
+      loan_start_time: cleaned.startTime,
+      loan_end_date: cleaned.dureeDe,
+      loan_end_time: cleaned.endTime,
       loan_intended: cleaned.objPret,
       loan_reason: cleaned.preciserPret,
       driver_name: cleaned.nomConducteur,
@@ -68,7 +69,6 @@ export async function POST(request: Request) {
       manager_approval: extractHref(cleaned.accordDu),
       submission_id: extractSubmissionIdFromUploadUrl(extractHref(cleaned.fileUpload)),
     }
-    console.log("🚀 ~ POST ~ formatted:", formatted)
 
     // write to Supabase
     const { data: inserted, error } = await supabase
