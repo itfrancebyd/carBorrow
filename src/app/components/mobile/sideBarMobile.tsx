@@ -7,7 +7,6 @@ import { useState } from "react"
 
 const SideBarMobile = () => {
     const [isMenuOpen, setMenuOpen] = useState(false)
-    console.log("🚀 ~ SideBarMobile ~ isMenuOpen:", isMenuOpen)
     const [isCurrentUser, setCurrentUser] = useState<string | null>(null)
     const [isUserLoading, setUserLoading] = useState(false)
     const pathname = usePathname()
