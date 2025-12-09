@@ -46,15 +46,14 @@ export async function POST(request: Request) {
     const cleaned = Object.fromEntries(
       Object.entries(data).map(([key, value]) => [key.replace(/[{}]/g, ""), value])
     )
-    console.log("🚀 ~ POST ~ cleaned:", cleaned)
 
     // Jotform webhook
     const formatted = {
       request_date: cleaned.dateDemande,
       applicant: cleaned.demandeur,
       applicant_department: cleaned.departementDemandeur,
-      loan_start_date: cleaned.dureeDu,
-      loan_end_date: cleaned.dureeDe,
+      loan_start_date: cleaned.dureeDu + (' ') + cleaned.startTime,
+      loan_end_date: cleaned.dureeDe + (' ') + cleaned.endTime,
       loan_intended: cleaned.objPret,
       loan_reason: cleaned.preciserPret,
       driver_name: cleaned.nomConducteur,
