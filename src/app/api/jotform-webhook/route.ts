@@ -46,6 +46,7 @@ export async function POST(request: Request) {
     const cleaned = Object.fromEntries(
       Object.entries(data).map(([key, value]) => [key.replace(/[{}]/g, ""), value])
     )
+    console.log("🚀 ~ POST ~ cleaned:", cleaned)
 
     // Jotform webhook
     const formatted = {
@@ -67,6 +68,7 @@ export async function POST(request: Request) {
       manager_approval: extractHref(cleaned.accordDu),
       submission_id: extractSubmissionIdFromUploadUrl(extractHref(cleaned.fileUpload)),
     }
+    console.log("🚀 ~ POST ~ formatted:", formatted)
 
     // write to Supabase
     const { data: inserted, error } = await supabase
