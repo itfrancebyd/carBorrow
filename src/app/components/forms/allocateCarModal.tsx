@@ -11,7 +11,9 @@ interface AllocateCarModalProps {
         applicant: string
         department: string
         loan_start_date: string
+        loan_start_time: string
         loan_end_date: string
+        loan_end_time: string
         prefered_model: string
         allocated_vehicle_id: string | null
         status: string
@@ -111,19 +113,19 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
         // 获取当前所有已分配的车辆借用记录
         const { data: requests } = await supabase
             .from("loan_requests")
-            .select("allocated_vehicle_id,loan_start_date,loan_end_date")
+            .select("allocated_vehicle_id,loan_start_date,loan_start_time,loan_end_time,loan_end_date")
             .not("allocated_vehicle_id", "is", null)
 
-        const startDate = currentRequest.loan_start_date
-        const endDate = currentRequest.loan_end_date
+        const startDate = currentRequest.loan_start_date + ' ' + currentRequest.loan_start_time
+        const endDate = currentRequest.loan_end_date + ' ' + currentRequest.loan_end_time
 
         // 排除时间冲突车辆
         const available = flattenVehicles.filter((v) => {
             const conflict = requests?.some(
                 (r) =>
                     r.allocated_vehicle_id === v.id &&
-                    dayjs(r.loan_start_date).isBefore(endDate) &&
-                    dayjs(r.loan_end_date).isAfter(startDate)
+                    dayjs(r.loan_start_date + ' ' + r.loan_start_time).isBefore(endDate) &&
+                    dayjs(r.loan_end_date + ' ' + r.loan_end_time).isAfter(startDate)
             )
             return !conflict
         })
@@ -258,7 +260,7 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
                         <p><strong>Department:</strong> {currentRequest.department}</p>
                         <p>
                             <strong>Loan Period:</strong>{" "}
-                            {currentRequest.loan_start_date} → {currentRequest.loan_end_date}
+                            {currentRequest.loan_start_date + ' ' + currentRequest.loan_start_time} → {currentRequest.loan_end_date + ' ' + currentRequest.loan_end_time}
                         </p>
                         <p><strong>Preferred Model:</strong> {currentRequest.prefered_model}</p>
                     </div>
