@@ -3,10 +3,13 @@ import { createClient } from "@/utils/supabase/client"
 import Link from "next/link"
 import { usePathname, useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
+import { useAppContext } from "./context"
 
 const SideBar = () => {
-    const [isCurrentUser, setCurrentUser] = useState<string | null>(null)
+    const [isCurrentUserEmail, setCurrentUserEmail] = useState<string | null>(null)
     const [isUserLoading, setUserLoading] = useState(false)
+    const [isAdmin, setAdmin] = useState(false)
+    const { isCurrentUser } = useAppContext()
     const pathname = usePathname()
     const supabase = createClient()
     const router = useRouter()
@@ -19,13 +22,21 @@ const SideBar = () => {
                 console.error("use not find: " + error)
             } else {
                 if (data.user?.email) {
-                    setCurrentUser(data.user.email)
+                    setCurrentUserEmail(data.user.email)
                     setUserLoading(false)
                 }
             }
         }
+        const show_log = () => {
+            if (isCurrentUser) {
+                if (isCurrentUser.user_metadata.role === 'admin') {
+                    setAdmin(true)
+                }
+            }
+        }
         getCurrentUser()
-    }, [])
+        show_log()
+    }, [isCurrentUser])
 
     const handleLogout = async () => {
         const { error } = await supabase.auth.signOut()
@@ -51,6 +62,12 @@ const SideBar = () => {
                     <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="10609" width="16" height="16"><path d="M945.371429 427.154286a22.820571 22.820571 0 0 1-22.784 22.820571l-30.281143 5.12c10.422857 20.589714 15.725714 43.410286 15.469714 66.56l0.512 6.217143h-258.56v109.714286h-85.284571v140.8H243.273143v50.688a40.594286 40.594286 0 0 1-40.594286 40.594285H140.726857a40.594286 40.594286 0 0 1-40.630857-40.594285v-157.549715c0-2.486857 0.256-4.937143 0.731429-7.350857a101.668571 101.668571 0 0 1-0.731429-11.556571l11.373714-130.998857c0-25.490286 5.558857-47.213714 15.286857-66.413715l-30.866285-5.229714A22.710857 22.710857 0 0 1 73.142857 427.154286v-19.785143a22.747429 22.747429 0 0 1 22.784-22.784h81.700572c3.949714 0 7.826286 1.097143 11.227428 3.145143l36.864-111.36C235.776 223.780571 273.846857 182.857143 336.530286 182.857143h345.965714c54.528 0 99.072 30.427429 110.738286 93.549714l36.864 110.921143a21.321143 21.321143 0 0 1 10.642285-2.852571h81.700572a22.747429 22.747429 0 0 1 22.784 22.784v19.931428h0.146286zM238.153143 590.994286a61.44 61.44 0 1 0 68.278857 102.217143 61.44 61.44 0 0 0-68.278857-102.180572z m471.405714-136.996572c29.366857 0 64.621714-23.222857 66.852572-52.443428l-10.057143-40.192-27.428572-73.874286c-1.901714-10.349714-5.485714-14.555429-10.861714-20.845714a167.936 167.936 0 0 1-6.070857-7.350857H298.422857c-2.304 2.925714-4.388571 5.266286-6.326857 7.387428-5.412571 5.997714-9.216 10.203429-11.190857 20.918857l-0.475429 1.682286-26.953143 71.936-10.057142 40.155429c2.084571 29.403429 37.485714 52.662857 66.852571 52.662857h399.323429zM877.714286 859.428571h-142.226286V804.571429H877.714286v54.857142z" p-id="10610" fill="#26361C"></path><path d="M877.714286 640h-170.642286V585.142857H877.714286v54.857143zM621.714286 749.714286h256V694.857143h-256v54.857143z" p-id="10611" fill="#26361C"></path></svg>
                     <div className="hidden lg:inline">Manage Models</div>
                 </Link>
+                {isAdmin &&
+                    <Link className={`flex flex-row justify-center lg:justify-start lg:gap-2 text-[#26361C] py-3 lg:py-2 px-3 rounded-md  ${pathname == '/logs' ? 'bg-[#B6C6A1]' : 'hover:bg-[#e1e6d9]'}`} href="/logs">
+                        <svg viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="9056" width="16" height="16"><path d="M916 770.3H106c-11 0-20-9-20-20V167.7c0-11 9-20 20-20h810c11 0 20 9 20 20v582.6c0 11.1-9 20-20 20z m-780-50h750V197.7H136v522.6z" p-id="9057" fill="#26361C"></path><path d="M349.5 635c-13.8 0-25-11.2-25-25V395.3c0-13.8 11.2-25 25-25s25 11.2 25 25V610c0 13.9-11.1 25-25 25zM523.4 635.3c-13.8 0-25-11.2-25-25V285.5c0-13.8 11.2-25 25-25s25 11.2 25 25v324.8c0 13.8-11.2 25-25 25zM697.1 635.3c-13.8 0-25-11.2-25-25V366c0-13.8 11.2-25 25-25s25 11.2 25 25v244.3c0 13.8-11.2 25-25 25zM821.6 876.5H212.3c-13.8 0-25-11.2-25-25s11.2-25 25-25h609.2c13.8 0 25 11.2 25 25s-11.1 25-24.9 25z" p-id="9058" fill="#26361C"></path></svg>
+                        <div className="hidden lg:inline">Logs</div>
+                    </Link>
+                }
             </div>
             <div className="row-span-1 justify-self-stretch self-end w-full">
                 <div className="flex flex-col gap-2 items-center lg:items-start border-t border-gray-200 pt-3">
@@ -64,10 +81,10 @@ const SideBar = () => {
                         ) : (
                             <>
                                 <div className="flex w-7 h-7 items-center justify-center rounded-full bg-[#B6C6A1] text-[#26361C] font-semibold shadow-sm">
-                                    {isCurrentUser?.charAt(0)?.toUpperCase()}
+                                    {isCurrentUserEmail?.charAt(0)?.toUpperCase()}
                                 </div>
                                 <span className="hidden lg:inline truncate max-w-[120px] font-medium text-[#26361C] text-xs">
-                                    {isCurrentUser}
+                                    {isCurrentUserEmail}
                                 </span>
                             </>
                         )}
