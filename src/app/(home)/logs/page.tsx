@@ -5,7 +5,7 @@ import TableGridLog from "@/app/components/forms/tableGridLog"
 import SubTitle from "@/app/components/subTitle"
 import { createClient } from "@/utils/supabase/client"
 import { redirect } from "next/navigation"
-import { useEffect, useState } from "react"
+import { Suspense, useEffect, useState } from "react"
 
 type LogDataProp = {
     id: string
@@ -55,7 +55,9 @@ const LogPage = () => {
         <div className="flex flex-col h-screen">
             <SubTitle subTitleName="Logs"></SubTitle>
             <div className="flex-1">
-                <TableGridLog formTitle="Logs" tableTitle={tableTitle} tableContent={isLogData} />
+                <Suspense fallback={<div>Loading table...</div>}>
+                    <TableGridLog formTitle="Logs" tableTitle={tableTitle} tableContent={isLogData} />
+                </Suspense>
             </div>
         </div>
     )
