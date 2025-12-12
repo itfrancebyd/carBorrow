@@ -2,6 +2,7 @@
 import { createClient } from "@/utils/supabase/client"
 import React, { useRef, useState } from "react"
 import { useRouter } from "next/navigation"
+import AddAction from "../addAction"
 
 const LoginForm = () => {
     const [isShowPass, setShowPass] = useState(false)
@@ -26,6 +27,22 @@ const LoginForm = () => {
             return
         }
 
+        const { data, error: userErr } = await supabase.auth.getUser()
+        if (userErr) {
+            console.error("use not find: " + error)
+            return
+        } 
+        if (!data.user.email) {
+            console.error("❌ AddAction called without a user_id")
+            return
+        }
+        await AddAction({
+            action_at: new Date().toISOString(),
+            action: "LOGIN",
+            target: "-",
+            detail: "User logged in successfully",
+            user_email: data.user.email,
+        })
         router.push('/')
     }
 
