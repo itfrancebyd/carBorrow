@@ -80,42 +80,12 @@ const TableGridLog: FC<tableGridLogProp> = ({
         }
     }, [isOpen])
 
-    // const handleClick = (getPushQuery: string) => {
-    //     router.push(`?${pushQuery}=${getPushQuery}`)
-    //     setCurrentNumber(getPushQuery)
-    //     setIsOpen(true)
-    // }
-
-    // const handleClose = () => {
-    //     const params = new URLSearchParams(window.location.search)
-    //     params.delete(pushQuery)
-    //     const queryString = params.toString()
-    //     const currentPath = window.location.pathname
-    //     router.replace(queryString ? `?${queryString}` : currentPath)
-    //     setIsOpen(false)
-    //     setCurrentNumber('')
-    // }
-
-    // useEffect(() => {
-    //     if (searchParam.has(pushQuery)) {
-    //         const requestQuery = searchParam.get(pushQuery)
-    //         if (requestQuery) {
-    //             setCurrentNumber(requestQuery)
-    //             setIsOpen(true)
-    //         }
-    //     }
-    // }, [])
 
     return (
         <div className="w-full h-full overflow-hidden flex px-6 text-[#494949] text-xs lg:text-sm">
             <div className="bg-white w-full flex flex-col mb-4">
                 <div className="flex justify-between py-5">
                     <div className="font-semibold text-sm lg:text-base">{formTitle}</div>
-                    <div className="flex gap-3">
-                        {/* <Link href={`/${dragDropLink}`} className="bg-[#26361C] hover:bg-[#7a856b] text-white px-3 cursor-pointer flex items-center">import</Link> */}
-                        {/* <button className="bg-[#26361C] hover:bg-[#7a856b] text-white px-3 cursor-pointer flex items-center">export</button> */}
-                        {/* <Link href={`/${buttonLink}`} className="bg-[#26361C] hover:bg-[#7a856b] px-3 text-white cursor-pointer flex items-center">add new</Link> */}
-                    </div>
                 </div>
                 <div className="w-full flex-1 text-[#494949] text-xs lg:text-sm">
                     <div className="grid" style={{
@@ -171,16 +141,6 @@ const TableGridLog: FC<tableGridLogProp> = ({
                     </div>
                 </div>
             </div>
-            {/* <div
-                className={`${isOpen ? 'fixed inset-0 w-full h-screen overflow-hidden bg-gray-400/50 z-40 p-7' : 'hidden'} `}
-                onClick={handleClose}
-            >
-                {children &&
-                    cloneElement(children as React.ReactElement<any>, {
-                        closeEvent: handleClose,
-                        currentID: currentNumber
-                    })}
-            </div> */}
         </div>
     )
 }
