@@ -1,7 +1,6 @@
 'use client'
 import { useRouter, useSearchParams } from "next/navigation";
-import React, { cloneElement, FC, ReactNode, useEffect, useState } from "react"
-import Link from "next/link";
+import React, { FC, useEffect, useState } from "react"
 
 interface tableGridLogProp {
     formTitle: string;
@@ -14,7 +13,22 @@ interface tableGridLogProp {
 }
 
 type DetailDiff = Record<string, { old: string; new: string }>
-const renderDetail = (detail: any) => {
+const renderDetail = (item: any) => {
+    const detail = item.detail
+
+    if (item.action == "INSERT" && item.target == "loan_requests") {
+        return (
+            <div className="truncate text-xs">
+                New loan request is submitted from jotform.
+            </div>)
+    }
+    if (item.action == "UPDATE" && item.target == "loan_requests") {
+        return (
+            <div className="truncate text-xs">
+                User submitted a check-in check-out form.
+            </div>)
+    }
+
     let parsedDetail: DetailDiff = detail
 
     if (typeof detail === "string") {
@@ -145,7 +159,7 @@ const TableGridLog: FC<tableGridLogProp> = ({
                                             className="px-3 py-2 flex items-center truncate whitespace-nowrap"
                                         >
                                             {field.key.toLowerCase() === "detail" ? (
-                                                renderDetail(item.detail)
+                                                renderDetail(item)
                                             ) : (
                                                 <p className="truncate text-xs">{item[field.key as keyof typeof item]}</p>
                                             )}
