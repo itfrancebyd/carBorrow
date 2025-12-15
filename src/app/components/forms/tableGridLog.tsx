@@ -16,13 +16,13 @@ type DetailDiff = Record<string, { old: string; new: string }>
 const renderDetail = (item: any) => {
     const detail = item.detail
 
-    if (item.action == "INSERT" && item.target == "loan_requests") {
+    if (item.action == "INSERT" && item.target == "loan_requests" && !item.user_email) {
         return (
             <div className="truncate text-xs">
                 New loan request is submitted from jotform.
             </div>)
     }
-    if (item.action == "UPDATE" && item.target == "loan_requests") {
+    if (item.action == "UPDATE" && item.target == "loan_requests" && !item.user_email) {
         return (
             <div className="truncate text-xs">
                 User submitted a check-in check-out form.
