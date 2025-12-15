@@ -46,7 +46,10 @@ const LogPage = () => {
                 console.error("Error get logs! " + error)
                 return
             }
-            setLogData(data)
+            const sortedData = data.sort((a, b) => {
+                return new Date(b.action_at).getTime() - new Date(a.action_at).getTime()
+            })
+            setLogData(sortedData)
         }
         getLogs()
     }, [])

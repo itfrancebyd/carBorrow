@@ -1,7 +1,7 @@
 import { createClient } from "@/utils/supabase/client"
 
 type AddActionProps = {
-    action_at: string
+    action_at: Date
     user_email: string
     action: string
     target: string
@@ -17,7 +17,7 @@ const AddAction = async ({ action_at, user_email, action, target, detail }: AddA
             { action_at, user_email, action, target, detail },
         ])
         .select()
-    if(error){
+    if (error) {
         console.error("error:", error)
         return
     }

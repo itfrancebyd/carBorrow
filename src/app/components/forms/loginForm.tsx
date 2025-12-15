@@ -37,7 +37,7 @@ const LoginForm = () => {
             return
         }
         await AddAction({
-            action_at: new Date().toISOString(),
+            action_at: new Date(),
             action: "LOGIN",
             target: "-",
             detail: "User logged in successfully",
