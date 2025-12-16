@@ -162,7 +162,7 @@ const TableGridVehicle: FC<tableGridTableGridVehicleProp> = ({
                             }}
                         >
                             {tableTitle.map((item, index) => (
-                                <div key={index} className="px-3 py-2 whitespace-nowrap border-r border-[#394d2d]">
+                                <div key={index} className="px-3 py-2 whitespace-nowrap border-r border-[#394d2d] truncate  ">
                                     {item.label}
                                 </div>
                             ))}
