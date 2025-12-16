@@ -56,7 +56,7 @@ const NewModelForm = () => {
                 exterior_colour: exteriorColour,
                 status
             }
-        ];
+        ]
 
         const { error } = await supabase.from('vehicle_model').insert(newModel).select()
         if (error) {

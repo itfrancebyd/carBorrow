@@ -2,6 +2,7 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import React, { cloneElement, FC, ReactNode, useEffect, useState } from "react"
 import AllocateCarModal from "./allocateCarModal";
+import Link from "next/link";
 
 interface tableGridTableLoanReqProp {
     formTitle: string;
@@ -196,7 +197,7 @@ const TableGridLoanReq: FC<tableGridTableLoanReqProp> = ({
                     <div className="flex gap-3">
                         {/* <Link href={`/${dragDropLink}`} className="bg-[#26361C] hover:bg-[#7a856b] text-white px-3 cursor-pointer flex items-center">import</Link> */}
                         {/* <button className="bg-[#26361C] hover:bg-[#7a856b] text-white px-3 cursor-pointer flex items-center">export</button> */}
-                        {/* <Link href={`/${buttonLink}`} className="bg-[#26361C] hover:bg-[#7a856b] px-3 text-white cursor-pointer flex items-center">add new</Link> */}
+                        <Link href={`/${buttonLink}`} className="bg-[#26361C] hover:bg-[#7a856b] px-3 text-white cursor-pointer flex items-center">add new</Link>
                     </div>
                 </div>
                 <div className="w-full flex-1 text-[#494949] text-xs lg:text-sm">
