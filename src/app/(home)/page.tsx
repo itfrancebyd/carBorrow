@@ -133,7 +133,7 @@ export default function Home() {
     const { data, error } = await supabase
       .from("loan_requests")
       .select('*')
-      .eq("allocated_vehicle_id", id)
+      .contains("allocated_vehicle_id", [id])
     if (error) throw error
     return data
   }

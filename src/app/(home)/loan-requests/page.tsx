@@ -46,6 +46,7 @@ const LoanReq = () => {
         { key: "loan_start_date", label: "Borrow date" },
         { key: "loan_end_date", label: "Return date" },
         { key: "prefered_model", label: "Preferred Model" },
+        { key: "vehicle_number", label: "Vehicle Number" },
     ]
 
     const filterTitle = [

@@ -15,7 +15,8 @@ interface AllocateCarModalProps {
         loan_end_date: string
         loan_end_time: string
         prefered_model: string
-        allocated_vehicle_id: string | null
+        vehicle_number: number
+        allocated_vehicle_id: string[] | null
         status: string
         checkin_location: string
         checkin_km: number
@@ -45,19 +46,27 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
     const modelInfo = modelInfoJson as Record<string, string[]>
     const [selectedModelName, setSelectedModelName] = useState("")
     const [availableVehicles, setAvailableVehicles] = useState<any[]>([])
-    const [isAllocatedInfo, setAllocatedInfo] = useState<any>()
+    const [isAllocatedInfo, setAllocatedInfo] = useState<any[]>([])
     const [reassignMode, setReassignMode] = useState(false)
     const [isLoading, setLoading] = useState(false)
+    const [selectedVehicles, setSelectedVehicles] = useState<FilterVehicleProp[]>([])
     const supabase = createClient()
 
-    const flattenData = (data: any[]) =>
-        data.map(({ model_information, ...rest }) => ({
-            ...rest,
-            model_name: model_information?.model_name ?? undefined,
-            version_name: model_information?.version_name ?? undefined,
-            interior_colour: model_information?.interior_colour ?? undefined,
-            exterior_colour: model_information?.exterior_colour ?? undefined,
-        }))
+    const flattenData = (data: any[] = []) => {
+        return data.map((item) => {
+            const modelInfo = Array.isArray(item.model_information)
+                ? item.model_information[0]
+                : item.model_information
+
+            return {
+                ...item,
+                model_name: modelInfo?.model_name,
+                version_name: modelInfo?.version_name,
+                interior_colour: modelInfo?.interior_colour,
+                exterior_colour: modelInfo?.exterior_colour,
+            }
+        })
+    }
 
     const handleModelChange = async (e: React.ChangeEvent<HTMLSelectElement>) => {
         const modelName = e.target.value
@@ -133,13 +142,34 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
         setAvailableVehicles(available)
     }
 
-    const handleVehicleSelect = (vehicle: any) => {
-        setSelectedVehicle(vehicle);
+    const handleVehicleSelect = (vehicle: FilterVehicleProp) => {
+        setSelectedVehicle(vehicle)
+        const exists = selectedVehicles.some(v => v.id === vehicle.id)
+
+        // already selected → romove
+        if (exists) {
+            setSelectedVehicles(prev =>
+                prev.filter(v => v.id !== vehicle.id)
+            )
+            return
+        }
+
+        // all selected → no more alowed
+        if (selectedVehicles.length >= currentRequest.vehicle_number) {
+            return
+        }
+
+        // selection does not exit & not all selected → add
+        setSelectedVehicles(prev => [...prev, vehicle])
     }
 
     useEffect(() => {
         setLoading(true)
-        const fetchVehicleDetail = async (id: string) => {
+        const fetchVehicleDetail = async (ids: string[]) => {
+            if (!ids || ids.length === 0) {
+                setAllocatedInfo([])
+                return
+            }
             const { data, error } = await supabase
                 .from("car_fleet")
                 .select(
@@ -157,13 +187,12 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
             status
             `
                 )
-                .eq("id", id)
-                .single()
+                .in("id", ids)
             if (error) throw error
-            setAllocatedInfo(flattenData([data])[0] ?? null)
+            setAllocatedInfo(flattenData(data) ?? null)
             setLoading(false)
         }
-        if (currentRequest.allocated_vehicle_id) {
+        if (Array.isArray(currentRequest.allocated_vehicle_id) && currentRequest.allocated_vehicle_id.length > 0) {
             fetchVehicleDetail(currentRequest.allocated_vehicle_id)
         }
         setLoading(false)
@@ -189,10 +218,12 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
     const handleAssign = async () => {
         if (!selectedVehicle) return alert("Please select a vehicle")
 
+        const allocatedId = selectedVehicles.map((item) => item.id)
+
         const { error } = await supabase
             .from("loan_requests")
             .update({
-                allocated_vehicle_id: selectedVehicle.id,
+                allocated_vehicle_id: allocatedId,
                 status: "allocated",
             })
             .eq("id", currentRequest.id)
@@ -204,6 +235,12 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
             window.location.href = '/loan-requests'
             setReassignMode(false)
         }
+    }
+
+    const removeVehicle = (id: string) => {
+        setSelectedVehicles(prev =>
+            prev.filter(v => v.id !== id)
+        )
     }
 
     const handleKeyGiven = async () => {
@@ -263,51 +300,80 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
                             {currentRequest.loan_start_date + ' ' + currentRequest.loan_start_time} → {currentRequest.loan_end_date + ' ' + currentRequest.loan_end_time}
                         </p>
                         <p><strong>Preferred Model:</strong> {currentRequest.prefered_model}</p>
+                        <p><strong>Vehicle Number:</strong> {currentRequest.vehicle_number}</p>
                     </div>
                     {isLoading
                         ?
                         <div className="bg-[#F7F8F5] text-5xl text-gray-700 h-[300px] p-4">...</div>
                         :
-                        (currentRequest.allocated_vehicle_id && isAllocatedInfo && !reassignMode
+                        (currentRequest.allocated_vehicle_id && isAllocatedInfo.length > 0 && !reassignMode
                             ? (
                                 <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mt-4">
                                     <h3 className="text-sm font-semibold text-[#26361C] mb-3">
                                         Assigned Vehicle
                                     </h3>
+                                    <div className="space-y-4">
+                                        {isAllocatedInfo.map((vehicle) => (
+                                            <div
+                                                key={vehicle.id}
+                                                className="border border-gray-200 rounded-lg bg-white px-4 py-3"
+                                            >
+                                                {/* Header */}
+                                                <div className="mb-3 flex justify-between items-center">
+                                                    <span className="text-sm font-semibold text-[#26361C]">
+                                                        {vehicle.plate_number}
+                                                    </span>
+                                                    <span className="text-xs text-gray-500">
+                                                        VIN: {vehicle.vin}
+                                                    </span>
+                                                </div>
 
-                                    <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-sm text-gray-700">
-                                        <div>
-                                            <span className="font-medium text-[#26361C]">Model:</span>{" "}
-                                            {isAllocatedInfo.model_name}
-                                        </div>
-                                        <div>
-                                            <span className="font-medium text-[#26361C]">Version:</span>{" "}
-                                            {isAllocatedInfo.version_name}
-                                        </div>
-                                        <div>
-                                            <span className="font-medium text-[#26361C]">Plate No.:</span>{" "}
-                                            {isAllocatedInfo.plate_number}
-                                        </div>
-                                        <div>
-                                            <span className="font-medium text-[#26361C]">VIN:</span>{" "}
-                                            {isAllocatedInfo.vin}
-                                        </div>
-                                        <div>
-                                            <span className="font-medium text-[#26361C]">Interior:</span>{" "}
-                                            {isAllocatedInfo.interior_colour}
-                                        </div>
-                                        <div>
-                                            <span className="font-medium text-[#26361C]">Exterior:</span>{" "}
-                                            {isAllocatedInfo.exterior_colour}
-                                        </div>
-                                        <div>
-                                            <span className="font-medium text-[#26361C]">Location:</span>{" "}
-                                            {isAllocatedInfo.current_location ?? "N/A"}
-                                        </div>
-                                        <div>
-                                            <span className="font-medium text-[#26361C]">Key:</span>{" "}
-                                            {isAllocatedInfo.key_1 ?? "N/A"}
-                                        </div>
+                                                {/* Content */}
+                                                <div className="grid grid-cols-2 gap-x-6 gap-y-2 text-xs">
+                                                    <div className="flex justify-between gap-2">
+                                                        <span className="text-gray-500">Model</span>
+                                                        <span className="font-medium text-[#26361C]">
+                                                            {vehicle.model_name}
+                                                        </span>
+                                                    </div>
+
+                                                    <div className="flex justify-between gap-2">
+                                                        <span className="text-gray-500">Version</span>
+                                                        <span className="font-medium text-[#26361C]">
+                                                            {vehicle.version_name}
+                                                        </span>
+                                                    </div>
+
+                                                    <div className="flex justify-between gap-2">
+                                                        <span className="text-gray-500">Interior</span>
+                                                        <span className="font-medium text-[#26361C]">
+                                                            {vehicle.interior_colour}
+                                                        </span>
+                                                    </div>
+
+                                                    <div className="flex justify-between gap-2">
+                                                        <span className="text-gray-500">Exterior</span>
+                                                        <span className="font-medium text-[#26361C]">
+                                                            {vehicle.exterior_colour}
+                                                        </span>
+                                                    </div>
+
+                                                    <div className="flex justify-between gap-2">
+                                                        <span className="text-gray-500">Location</span>
+                                                        <span className="font-medium text-[#26361C]">
+                                                            {vehicle.current_location ?? "N/A"}
+                                                        </span>
+                                                    </div>
+
+                                                    <div className="flex justify-between gap-2">
+                                                        <span className="text-gray-500">Key</span>
+                                                        <span className="font-medium text-[#26361C]">
+                                                            {vehicle.key_1 || vehicle.key_2 ? vehicle.key_1 + '+' + vehicle.key_2 : "N/A"}
+                                                        </span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        ))}
                                     </div>
 
                                     {/* Action */}
@@ -462,7 +528,15 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
                                 {/* Available Vehicles List */}
                                 {selectedModelName && (
                                     <div className="mt-3">
-                                        <h3 className="text-sm font-medium text-[#26361C] mb-2">Available Vehicles</h3>
+                                        <div className="flex justify-between items-center mb-2">
+                                            <h3 className="text-sm font-medium text-[#26361C]">
+                                                Available Vehicles
+                                            </h3>
+                                            <span className="text-xs text-[#26361C] bg-[#E8EDE1] px-2 py-1 rounded-md">
+                                                Selected {selectedVehicles.length} / {currentRequest.vehicle_number}
+                                            </span>
+                                        </div>
+
                                         {availableVehicles.length > 0 ? (
                                             <div className="max-h-40 overflow-y-auto border border-gray-200 rounded-md divide-y divide-gray-100">
                                                 {availableVehicles.map((v) => (
@@ -492,6 +566,36 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
                                         )}
                                     </div>
                                 )}
+                                {selectedVehicles.length > 0 && (
+                                    <div className="mt-4">
+                                        <h4 className="text-xs font-medium text-[#26361C] mb-2">
+                                            Selected Vehicles
+                                        </h4>
+
+                                        <div className="border border-gray-400 bg-gray-200 rounded-md divide-y divide-gray-400">
+                                            {selectedVehicles.map(v => (
+                                                <div
+                                                    key={v.id}
+                                                    className="flex justify-between items-center px-3 py-2 text-xs"
+                                                >
+                                                    <div>
+                                                        <div className="font-medium">{v.plate_number}</div>
+                                                        <div className="text-gray-500">
+                                                            {v.interior_colour}, {v.exterior_colour}
+                                                        </div>
+                                                    </div>
+
+                                                    <button
+                                                        onClick={() => removeVehicle(v.id)}
+                                                        className="text-red-500 hover:underline cursor-pointer"
+                                                    >
+                                                        Remove
+                                                    </button>
+                                                </div>
+                                            ))}
+                                        </div>
+                                    </div>
+                                )}
 
                                 {/* Action Buttons */}
                                 <div className="flex justify-end gap-3 mt-6">
@@ -502,14 +606,14 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
                                         Cancel
                                     </button>
                                     <button
-                                        disabled={!selectedVehicle}
+                                        disabled={selectedVehicles.length !== currentRequest.vehicle_number}
                                         onClick={handleAssign}
-                                        className={`px-4 py-2 rounded-md text-white transition-colors ${selectedVehicle
-                                            ? "bg-[#26361C] hover:bg-[#4a5b38]"
+                                        className={`px-4 py-2 rounded-md text-white transition-colors ${selectedVehicles.length == currentRequest.vehicle_number
+                                            ? "bg-[#26361C] hover:bg-[#4a5b38] cursor-pointer"
                                             : "bg-gray-400 cursor-not-allowed"
                                             }`}
                                     >
-                                        Confirm Allocation
+                                        Confirm Allocation ({selectedVehicles.length}/{currentRequest.vehicle_number})
                                     </button>
                                 </div>
                             </>

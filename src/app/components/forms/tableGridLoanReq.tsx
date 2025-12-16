@@ -22,7 +22,8 @@ interface allocateProp {
     loan_end_time: string
     loan_end_date: string
     prefered_model: string
-    allocated_vehicle_id: string | null
+    vehicle_number: number
+    allocated_vehicle_id: string[] | null
     status: string
     checkin_location: string
     checkin_km: number
@@ -115,7 +116,8 @@ const TableGridLoanReq: FC<tableGridTableLoanReqProp> = ({
         loan_end_time: "00:00:00",
         loan_end_date: "loading",
         prefered_model: "loading",
-        allocated_vehicle_id: "loading",
+        vehicle_number: 0,
+        allocated_vehicle_id: [],
         status: "loading",
         checkin_location: "loading",
         checkin_km: 0,
@@ -177,6 +179,7 @@ const TableGridLoanReq: FC<tableGridTableLoanReqProp> = ({
             loan_end_date: item.loan_end_date,
             loan_end_time: item.loan_end_time,
             prefered_model: item.prefered_model,
+            vehicle_number: item.vehicle_number,
             allocated_vehicle_id: item.allocated_vehicle_id,
             status: item.status,
             checkin_location: item.checkin_location,
