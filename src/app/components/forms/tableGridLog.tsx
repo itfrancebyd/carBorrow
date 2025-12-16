@@ -28,6 +28,12 @@ const renderDetail = (item: any) => {
                 User submitted a check-in check-out form.
             </div>)
     }
+    if (item.action == "DELETE" && item.target == "loan_requests" && !item.user_email) {
+        return (
+            <div className="truncate text-xs">
+                One loan request has been deleted.
+            </div>)
+    }
 
     let parsedDetail: DetailDiff = detail
 
