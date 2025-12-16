@@ -64,6 +64,7 @@ export async function POST(request: Request) {
       licence_issue_city: cleaned.typeA83,
       licence_expiration_date: cleaned.date,
       prefered_model: cleaned.modele,
+      vehicle_number: cleaned.nombreDe,
       licence_photo: extractHref(cleaned.fileUpload),
       applicant_declaration: extractHref(cleaned.televerserLe),
       manager_approval: extractHref(cleaned.accordDu),
