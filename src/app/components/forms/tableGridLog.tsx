@@ -22,6 +22,12 @@ const renderDetail = (item: any) => {
                 New loan request is submitted from jotform.
             </div>)
     }
+    if (item.action == "INSERT" && item.target == "loan_requests" && item.user_email) {
+        return (
+            <div className="truncate text-xs">
+                New loan request is added by the user.
+            </div>)
+    }
     if (item.action == "UPDATE" && item.target == "loan_requests" && !item.user_email) {
         return (
             <div className="truncate text-xs">
