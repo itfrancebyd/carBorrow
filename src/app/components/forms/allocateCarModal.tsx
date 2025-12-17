@@ -551,7 +551,7 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
                                                     >
                                                         <div className="flex flex-col">
                                                             <span className="font-medium">{v.plate_number}</span>
-                                                            <span className="text-gray-500 text-xs">{v.interior_colour}, {v.exterior_colour}</span>
+                                                            <span className="text-gray-500 text-xs">{v.interior_colour}, {v.exterior_colour}, {v.model_name}</span>
                                                         </div>
                                                         <span className="text-xs bg-[#E8EDE1] text-[#26361C] px-2 py-0.5 rounded-md">
                                                             {v.version_name ?? "N/A"}
@@ -581,7 +581,7 @@ const AllocateCarModal: React.FC<AllocateCarModalProps> = ({
                                                     <div>
                                                         <div className="font-medium">{v.plate_number}</div>
                                                         <div className="text-gray-500">
-                                                            {v.interior_colour}, {v.exterior_colour}
+                                                            {v.interior_colour}, {v.exterior_colour}, {v.model_name}
                                                         </div>
                                                     </div>
 
