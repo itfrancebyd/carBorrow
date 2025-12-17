@@ -25,6 +25,7 @@ const NewLoanRequest = () => {
         const loan_intended = formData.get("intend")
         const loan_reason = formData.get("comment")
         const prefered_model = formData.get("modelname")
+        const vehicle_number = formData.get("vehicle_number")
 
         const fields = [
             { key: "applicant", label: "Applicant", value: applicant },
@@ -37,6 +38,7 @@ const NewLoanRequest = () => {
             { key: "loan_intended", label: "Intend", value: loan_intended },
             { key: "loan_reason", label: "Comment", value: loan_reason },
             { key: "prefered_model", label: "Prefered Model", value: prefered_model },
+            { key: "vehicle_number", label: "Vehicle Number", value: vehicle_number },
         ]
 
         const empty = fields.find(
@@ -58,7 +60,8 @@ const NewLoanRequest = () => {
             loan_end_time,
             loan_intended,
             loan_reason,
-            prefered_model
+            prefered_model,
+            vehicle_number
         }]
 
         const { error } = await supabase.from('loan_requests').insert(submitData).select()
@@ -187,23 +190,29 @@ const NewLoanRequest = () => {
             case "Model":
                 return (
                     <>
-                        <div className="flex flex-col">
-                            <label className="text-gray-500 text-xs">Prefered Model</label>
-                            <select
-                                required
-                                name="modelname"
-                                defaultValue=""
-                                className="border-1 border-gray-400 rounded-md py-1 px-2"
-                            >
-                                <option value="" disabled>
-                                    -- please select --
-                                </option>
-                                {(modelInfo["Model Name"] ?? []).map((option) => (
-                                    <option key={option} value={option} className="text-xs">
-                                        {option}
+                        <div className="flex flex-row gap-2">
+                            <div className="flex flex-col">
+                                <label className="text-gray-500 text-xs">Prefered Model</label>
+                                <select
+                                    required
+                                    name="modelname"
+                                    defaultValue=""
+                                    className="border-1 border-gray-400 rounded-md py-1 px-2"
+                                >
+                                    <option value="" disabled>
+                                        -- please select --
                                     </option>
-                                ))}
-                            </select>
+                                    {(modelInfo["Model Name"] ?? []).map((option) => (
+                                        <option key={option} value={option} className="text-xs">
+                                            {option}
+                                        </option>
+                                    ))}
+                                </select>
+                            </div>
+                            <div className="flex flex-col">
+                                <label className="text-gray-500 text-xs">Vehicle Number</label>
+                                <input name="vehicle_number" type="number" className="border-1 border-gray-400 rounded-md py-1 px-2" />
+                            </div>
                         </div>
                     </>
                 )

@@ -175,7 +175,7 @@ const PopUpInput = ({
                         </Link>
                         :
                         <p>Ops..No file has been uploaded</p>
-                        }
+                    }
                 </div>
             )
 
@@ -214,6 +214,7 @@ const LoanReqPopModal: FC<LoanReqPopModalProp> = ({
         "applicant_department",
         "loan_intended",
         "loan_reason",
+        "comment",
         "driver_name",
         "license_no",
         "licence_obtained_date",

@@ -67,6 +67,7 @@ const LoanReq = () => {
         { key: "loan_intended", label: "Intend" },
         { key: "loan_reason", label: "Comment" },
         { key: "prefered_model", label: "Preferred Model" },
+        { key: "comment", label: "User Comment" },
         { key: "driver_name", label: "Driver name" },
         { key: "license_no", label: "License number" },
         { key: "licence_obtained_date", label: "licence obtain date" },
