@@ -1,11 +1,11 @@
 import pandas as pd
 
-read_file = pd.read_excel("vehicles_info.xlsx")
-read_file.to_csv("vehicles_info.csv", index=None)
+read_file = pd.read_excel("./doc/vehicle/vehicles_info_version_1.xlsx")
+read_file.to_csv("./doc/vehicle/vehicles_info_version_1.csv", index=None)
 
 # Read both CSV files
-vehicles = pd.read_csv("vehicles_info.csv")
-models = pd.read_csv("vehicle_model_rows.csv")
+vehicles = pd.read_csv("./doc/vehicle/vehicles_info_version_1.csv")
+models = pd.read_csv("./doc/vehicle/vehicle_model_rows.csv")
 
 # Merge the two files based on shared columns
 merged = pd.merge(
@@ -19,7 +19,7 @@ merged = pd.merge(
 merged.rename(columns={"id": "model_information"}, inplace=True)
 
 # Save to new CSV file
-merged.to_csv("vehicles_info_with_id.csv", index=False, encoding="utf-8")
+merged.to_csv("./doc/vehicle/vehicles_info_with_id_version_1.csv", index=False, encoding="utf-8")
 
 print(
     f"✅ Done! File 'vehicles_info_with_id.csv' created successfully with {merged.shape[0]} rows."

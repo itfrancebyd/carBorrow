@@ -1,12 +1,12 @@
 import pandas as pd
 import csv
 
-read_file = pd.read_excel("models.xlsx")
-read_file.to_csv("vehicles.csv", index=None)
+read_file = pd.read_excel("./doc/model/models_version_1.xlsx")
+read_file.to_csv("./doc/vehicle/vehicles_version_1.csv", index=None)
 
 # Input and output file names
-input_file = "vehicles.csv"  # change this to your CSV file name
-output_file = "models.csv"  # new file with unique rows
+input_file = "./doc/vehicle/vehicles_version_1.csv" 
+output_file = "./doc/model/models_version_1.csv"
 
 # Use a set to track unique rows
 unique_rows = set()
