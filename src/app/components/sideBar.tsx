@@ -46,8 +46,8 @@ const SideBar = () => {
     return (
         <div className="bg-white grid grid-rows-11 py-5 px-1 lg:px-4 h-full justify-items-stretch border-r-[1px] border-gray-400/20 shadow-xl">
             <div className="row-span-1 font-extrabold text-xl text-center lg:text-start px-3">
-                <p className="hidden lg:inline">MMCar</p>
-                <p className="lg:hidden inline text-center">M</p>
+                <p className="hidden lg:inline">BYDVM</p>
+                <p className="lg:hidden inline text-center">VM</p>
             </div>
             <div className="row-span-9 flex flex-col gap-2 justify-start text-xs lg:text-sm font-semibold">
                 <Link className={`flex flex-row justify-center lg:justify-start lg:gap-2 text-[#26361C] py-3 lg:py-2 px-3 rounded-md ${pathname == '/' ? 'bg-[#B6C6A1]' : 'hover:bg-[#e1e6d9]'}`} href="/">

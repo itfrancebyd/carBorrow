@@ -5,7 +5,7 @@ import { Suspense } from 'react';
 export default function LoginPage() {
     return (
         <div className="flex flex-col items-center justify-center h-screen">
-            <div className="font-extrabold text-2xl mb-10">MMCar</div>
+            <div className="font-extrabold text-2xl mb-10">BYDVM</div>
             <Suspense>
                 <LoginForm />
             </Suspense>

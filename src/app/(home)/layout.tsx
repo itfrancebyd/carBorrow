@@ -16,8 +16,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "MMCar",
-  description: "Manage your company car fleet",
+  title: "BYD VM",
+  description: "BYD Vehicle Management System",
 };
 
 export default function HomeLayout({
